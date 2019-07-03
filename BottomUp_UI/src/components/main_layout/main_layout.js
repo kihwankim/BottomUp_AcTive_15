@@ -21,18 +21,18 @@ class MainLayout extends Component{
   }
 
   render() {
-    if(!this.props.row || this.props.row == 0
-      || !this.props.col || this.props.col == 0){
-        return <div> please wait...</div>
-      }
+      if(!this.props.row || this.props.row == 0
+        || !this.props.col || this.props.col == 0){
+          return <div> please wait...</div>
+        }
 
-      return (
-        <div>
-          <table className="main-layout">
-            { this.createTable() }
-          </table>
-        </div>
-      );
+        return (
+          <div>
+            <table className="main-layout">
+              { this.createTable() }
+            </table>
+          </div>
+        );
+      }
     }
-  }
-  export default MainLayout;
+    export default MainLayout;
