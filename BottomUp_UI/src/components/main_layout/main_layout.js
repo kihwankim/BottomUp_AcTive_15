@@ -5,8 +5,8 @@ class MainLayout extends Component {
         super(props);
     }
 
-    writeContent(data) {
-        console.log(data);
+    writeContent(td) {
+        td.innerText = "hi";
     }
 
     createTable = () => {

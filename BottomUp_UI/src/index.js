@@ -11,7 +11,7 @@ class App extends Component {
         this.state = {
             row: '0',
             col: '0',
-            width: '0'
+            width: '0',
         };
     }
 
