@@ -24,21 +24,21 @@ class Header extends Component {
   render(){
     return (
       <div className= "header-list">
-        <div className="row-input">
+        <div className="row">
           <span className = "row-input">row : </span>
           <input
             value = {this.state.row}
             onChange = { event => this.onInputChagne(event.target.value, this.state.col, this.state.width) }
           />
         </div>
-        <div className="col-input">
+        <div className="col">
           <span className= "col-input">col : </span>
           <input
             value = {this.state.col}
             onChange = { event => this.onInputChagne(this.state.row, event.target.value, this.state.width) }
           />
         </div>
-        <div className="width-input">
+        <div className="width">
           <span className = "width-input">width : </span>
           <input
             value = {this.state.width}
