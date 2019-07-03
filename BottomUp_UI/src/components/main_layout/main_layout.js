@@ -5,8 +5,17 @@ class MainLayout extends Component {
         super(props);
     }
 
-    writeContent(data) {
-        console.log(data);
+    writeContent(td) {
+        let printCase = this.props.printCase;
+        if(printCase == 0){
+            td.innerText = "W";
+        }else if(printCase == 1){
+            td.innerText = "D";
+        }else if(printCase == 2){
+            td.innerText = "Pi";
+        }else if(printCase == 3){
+            td.innerText = "B";
+        }
     }
 
     createTable = () => {

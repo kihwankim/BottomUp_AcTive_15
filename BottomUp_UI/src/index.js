@@ -11,7 +11,8 @@ class App extends Component {
         this.state = {
             row: '0',
             col: '0',
-            width: '0'
+            width: '0',
+            printCase: 0
         };
     }
 
@@ -35,10 +36,13 @@ class App extends Component {
                     <MainLayout
                         row={this.state.row}
                         col={this.state.col}
+                        printCase={this.state.printCase}
                     />
                 </div>
                 <div className="right">
-                    <ButtonList/>
+                    <ButtonList
+                        onPrintCaseSelect = {printCase => this.setState({printCase})}
+                    />
                 </div>
             </div>
 
