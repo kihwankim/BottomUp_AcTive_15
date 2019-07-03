@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class ButtonList extends Component{
     constructor(props){
         super(props);
-        this.state = {case : 0};
+        this.state = {case : 4};
     }
 
     printCaseSelect(printCase){
@@ -20,7 +20,8 @@ class ButtonList extends Component{
                 <button className="button" onClick={event => this.printCaseSelect(2)}>Pi</button>
                 <br/><br/>
                 <button className="button" onClick={event => this.printCaseSelect(3)}>Bridge</button>
-
+                <br/><br/>
+                <button className="button" onClick={event => this.printCaseSelect(4)}>Empty</button>
             </div>
         );
     }
