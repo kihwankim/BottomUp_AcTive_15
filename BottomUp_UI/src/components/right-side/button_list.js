@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import SettingButton from './button_setting';
 
 class ButtonList extends Component{
     constructor(props){
@@ -22,6 +23,8 @@ class ButtonList extends Component{
                 <button className="button" onClick={event => this.printCaseSelect(3)}>Bridge</button>
                 <br/><br/>
                 <button className="button" onClick={event => this.printCaseSelect(4)}>Empty</button>
+                <br/><br/>
+                <SettingButton />
             </div>
         );
     }
