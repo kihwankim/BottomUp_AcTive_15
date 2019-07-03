@@ -18,41 +18,75 @@ td, th {
     padding: 6px;
     border: 1px solid #ccc;
     text-align: center;
+    height: 60px
 }
 
 
 .wrapper {
     margin-top: 10px;
-    background-color: aqua;
-    height: 100%;
-    width: 100%;
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: 90% 10%;
     grid-template-rows: repeat(2, 1fr);
-
     grid-gap: 10px;
-    grid-auto-rows: minmax(100px, auto);
+    grid-auto-rows: minmax(200px, auto);
 }
 
 .head {
-    background-color: red;
-    grid-column: 1 / 5;
+    text-align: center;
+    height: 50px;
+    grid-column: 1 / 3;
     grid-row: 1;
 }
 
 .left {
-    background-color: yellow;
+    background-color: aquamarine;
     grid-row: 2 / 5;
-    grid-column: 1 / 4;
+    grid-column: 1 / 2;
 }
 
 .right {
-    background-color: blue;
-    grid-column: 4 / 5;
+    grid-column: 2 / 3;
     grid-row: 2 / 5;
+}
+
+.button-list{
+    text-align:center;
 }
 
 html, body {
     width: 100%;
     height: 100%;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 140px;
+    cursor: pointer;
+}
+
+.button2 {background-color: #008CBA;} /* Blue */
+.button3 {background-color: #f44336;} /* Red */
+.button4 {background-color: #e7e7e7; color: black;} /* Gray */
+.button5 {background-color: #555555;} /* Black */
+
+.row{
+    float: left;
+}
+
+.col{
+    float: left;
+    margin-left: 30px;
+}
+
+.width{
+    float: left;
+    margin-left: 30px;
 }
