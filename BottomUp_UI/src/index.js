@@ -12,7 +12,7 @@ class App extends Component {
             row: '0',
             col: '0',
             width: '0',
-            printCase: 0
+            printCase: 4
         };
     }
 

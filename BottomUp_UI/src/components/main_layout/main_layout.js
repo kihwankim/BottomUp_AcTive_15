@@ -15,6 +15,8 @@ class MainLayout extends Component {
             td.innerText = "Pi";
         }else if(printCase == 3){
             td.innerText = "B";
+        }else{
+          td.innerText = "";
         }
     }
 
