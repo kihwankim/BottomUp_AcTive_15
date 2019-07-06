@@ -14,7 +14,6 @@ class SettingButton extends Component{
   }
 
   onClickAndStoreAtDB(){
-    console.log(this.props.activeArray);
     if(!this.props.activeArray || this.props.activeArray.length == 0){
       alert("this is not correct data or Empty data");
     }else{
