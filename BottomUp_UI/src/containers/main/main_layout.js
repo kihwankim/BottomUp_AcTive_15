@@ -12,10 +12,14 @@ class MainLayout extends Component {
         return (
             <div>
                 <table className="main-layout">
+<<<<<<< HEAD
                     <thead></thead>
                     <tbody>
                         { this.props.activeArray }
                     </tbody>
+=======
+                    { this.props.activeArray }
+>>>>>>> 51e1f1cbf67f484fbd3d7f174029a19674c52336
                 </table>
             </div>
         );
