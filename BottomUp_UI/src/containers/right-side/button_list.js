@@ -25,10 +25,10 @@ class ButtonList extends Component{
         let children = [];
         //Inner loop to create children
         for (let j = 0; j < parseInt(col); j++) {
-          children.push(<td onClick={event => this.writeContent(event.target)}></td>);
+          children.push(<td key={j} onClick={event => this.writeContent(event.target)}></td>);
         }
         //Create the parent and add the children
-        table.push(<tr>{children}</tr>);
+        table.push(<tr key={i}>{children}</tr>);
       }
 
       this.props.makeArray(table);

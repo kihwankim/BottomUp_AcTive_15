@@ -16,6 +16,8 @@ class SettingButton extends Component{
   onClickAndStoreAtDB(){
     if(!this.props.activeArray || this.props.activeArray.length == 0){
       alert("this is not correct data or Empty data");
+    }else{
+
     }
     //여기에 디비 연결 코드 작성 하면되 activeArray 변수이고 이 변수는 this.props.activeArray
     //이렇게 쓰면되
