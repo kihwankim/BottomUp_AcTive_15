@@ -8,7 +8,9 @@ import { makeArray } from '../../actions/make_array';
 class ButtonList extends Component{
     constructor(props){
         super(props);
-        this.state = {case : 4};
+        this.state = {
+          case : 4,
+        };
     }
 
     printCaseSelect(printCase){
@@ -18,6 +20,7 @@ class ButtonList extends Component{
     }
 
     setDataAndMakeArray(row, col){
+      this.props.onSetData(1);
       let table = [];
       // Outer loop to create parent
 

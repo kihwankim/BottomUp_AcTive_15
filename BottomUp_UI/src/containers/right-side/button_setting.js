@@ -6,8 +6,8 @@ import firebase from 'firebase';
 class SettingButton extends Component {
 
     // render 전에 실행
-    componentWillMount() {
-        var firebaseConfig = {
+    componentWillMount() {//firebase연결 부분
+        const firebaseConfig = {
             apiKey: "AIzaSyAllT3vsvGW9wv63Azr4tA_rkeLNcYL3lA",
             authDomain: "bottomup-sync.firebaseapp.com",
             databaseURL: "https://bottomup-sync.firebaseio.com",
@@ -59,7 +59,9 @@ class SettingButton extends Component {
 
 function mapStateToProps(state) {
     return {
-        activeArray: state.activeArray
+        activeArray: state.activeArray,
+        row: state.activeRow,
+        col: state.activeCol
     };
 }
 

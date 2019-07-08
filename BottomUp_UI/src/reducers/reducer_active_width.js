@@ -3,6 +3,6 @@ export default function(state = '0', action){
     case 'CHANGE_WIDTH':
         console.log("width : " + action.payload);
         return action.payload;
-      }
+    }
   return state;
 }

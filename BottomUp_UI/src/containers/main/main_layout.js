@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
 class MainLayout extends Component {
+    constructor(props){
+      super(props);
+    }
 
     render() {
-        if (!this.props.activeRow || this.props.activeRow == 0
-            || !this.props.activeCol || this.props.activeCol == 0) {
-            return <div> please wait...</div>
+        if (this.props.isSetting == 0) {
+            return (<div> please wait...</div>);
         }
 
         return (
