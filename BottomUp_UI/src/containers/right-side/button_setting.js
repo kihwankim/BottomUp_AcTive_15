@@ -59,7 +59,9 @@ class SettingButton extends Component {
 
 function mapStateToProps(state) {
     return {
-        activeArray: state.activeArray
+        activeArray: state.activeArray,
+        row: state.activeRow,
+        col: state.activeCol
     };
 }
 
