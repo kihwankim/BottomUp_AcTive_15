@@ -7,20 +7,23 @@ import Header from '../containers/header_bar/header';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isSetting: 0
+    };
   }
 
   render() {
-
     return (
       <div className="wrapper">
           <div className="head">
               <Header />
           </div>
           <div className="left">
-              <MainLayout />
+              <MainLayout isSetting={ this.state.isSetting }/>
           </div>
           <div className="right">
-              <ButtonList />
+              <ButtonList onSetData={ isSetting => this.setState({isSetting}) } />
           </div>
       </div>
     );
