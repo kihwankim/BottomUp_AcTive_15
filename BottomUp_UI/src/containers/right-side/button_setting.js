@@ -49,7 +49,7 @@ class SettingButton extends Component {
             // document.getElementById("table-body")
             let myTableArray = [];
             let piCount = 1;
-            let direction=[[-1,0],[0,1],[1,0], [0,-1]];
+            let directionInfo=[[-1,0],[0,1],[1,0], [0,-1]];
 
             // 테이블을 2차원 배열로 생성
             // 동시에 라즈베리파이 인덱싱
@@ -78,25 +78,36 @@ class SettingButton extends Component {
                 for(let j = 0; j < myTableArray[i].length; j++){
                     if($.isNumeric(myTableArray[i][j])){
                         let piNumber = myTableArray[i][j];
+                        let startRow, startCol, data;
+                        let directionalDatas = [];
+                        for (let direction = 0; direction < 4; direction++) {
+                            data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
+                                myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
+                            if(data == "B"){
+                                startRow = i;
+                                startCol = j;
+                                while(indexGuard(startRow+directionInfo[direction][0], startCol+directionInfo[direction][1], myTableArray.length, myTableArray[i].length)){
+                                    startRow = startRow+directionInfo[direction][0];
+                                    startCol = startCol+directionInfo[direction][1];
+                                    if(myTableArray[startRow][startCol] == "B"){
+                                        continue;
+                                    }else if($.isNumeric(myTableArray[startRow][startCol])){
+                                        data = myTableArray[startRow][startCol];
+                                    }else{
+                                        break;
+                                    }
+                                }
+                            }
+                            directionalDatas.push(data);
+                        }
 
-                        let top = indexGuard(i+direction[0][0], j+direction[0][1], myTableArray.length, myTableArray[i].length) ?
-                            myTableArray[i+direction[0][0]][j+direction[0][1]] : "N";
-
-                        let right = indexGuard(i+direction[1][0], j+direction[1][1], myTableArray.length, myTableArray[i].length) ?
-                            myTableArray[i+direction[1][0]][j+direction[1][1]] : "N";
-
-                        let bottom = indexGuard(i+direction[2][0], j+direction[2][1], myTableArray.length, myTableArray[i].length) ?
-                            myTableArray[i+direction[2][0]][j+direction[2][1]] : "N";
-
-                        let left = indexGuard(i+direction[3][0], j+direction[3][1], myTableArray.length, myTableArray[i].length) ?
-                            myTableArray[i+direction[3][0]][j+direction[3][1]] : "N";
-
+                        console.log(directionalDatas);
                         let pi ={
                             piNumber : piNumber,
-                            top : top,
-                            right : right,
-                            bottom : bottom,
-                            left : left
+                            top : directionalDatas[0],
+                            right : directionalDatas[1],
+                            bottom : directionalDatas[2],
+                            left : directionalDatas[3]
                         }
                         firebase.database().ref('bottomup').push(pi)
                             // 이곳에 원하는 요소 추가하면 된다.
