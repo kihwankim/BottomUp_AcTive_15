@@ -19,22 +19,24 @@ class ButtonList extends Component{
       });
     }
 
-    setDataAndMakeArray(row, col){
+    setDataAndMakeArray(row, col, height){
       this.props.onSetData(1);
+      let tables = [];
       let table = [];
       // Outer loop to create parent
-
-      for (let i = 0; i < parseInt(row); i++) {
-        let children = [];
-        //Inner loop to create children
-        for (let j = 0; j < parseInt(col); j++) {
-          children.push(<td key={j} onClick={event => this.writeContent(event.target)}></td>);
+      for(let indexOfHeights = 0; indexOfHeights < parseInt(height); indexOfHeights++){
+        for (let i = 0; i < parseInt(row); i++) {
+          let children = [];
+          //Inner loop to create children
+          for (let j = 0; j < parseInt(col); j++) {
+            children.push(<td key={j} onClick={event => this.writeContent(event.target)}></td>);
+          }
+          //Create the parent and add the children
+          table.push(<tr key={i}>{children}</tr>);
         }
-        //Create the parent and add the children
-        table.push(<tr key={i}>{children}</tr>);
+        tables.push(table);
       }
-
-      this.props.makeArray(table);
+      this.props.makeArray(tables);
     }
 
     writeContent(td) {
@@ -55,7 +57,7 @@ class ButtonList extends Component{
     render() {
         return (
             <div className="button-list">
-                <button className="button" onClick={ () => this.setDataAndMakeArray(this.props.activeRow, this.props.activeCol) }>data setting</button>
+                <button className="button" onClick={ () => this.setDataAndMakeArray(this.props.activeRow, this.props.activeCol, this.props.activeMaxHeight) }>data setting</button>
                 <br/><br/>
                 <button className="button" onClick={event => this.printCaseSelect(0)}>Window</button>
                 <br/><br/>
@@ -76,7 +78,8 @@ class ButtonList extends Component{
 function mapStateToProps(state){
   return {
     activeRow: state.activeRow,
-    activeCol: state.activeCol
+    activeCol: state.activeCol,
+    activeMaxHeight: state.activeMaxHeight
   };
 }
 
