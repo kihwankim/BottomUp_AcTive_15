@@ -15,14 +15,12 @@ class MainLayout extends Component {
             <div>
               {number}
             </div>
-            <div>
-              <table className="main-layout" id="setting-table" key ={number}>
-                <thead></thead>
-                <tbody>
-                    {table}
-                  </tbody>
-              </table>
-            </div>
+            <table className="main-layout" id="setting-table">
+              <thead></thead>
+              <tbody>
+                  {table}
+              </tbody>
+            </table>
           </div>
         );
       });

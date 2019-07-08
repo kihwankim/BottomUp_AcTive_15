@@ -49,6 +49,8 @@ class ButtonList extends Component{
             td.innerText = "Pi";
         }else if(printCase == 3){
             td.innerText = "B";
+        }else if(printCase == 5){
+            td.innerText = "S";
         }else{
           td.innerText = "";
         }
@@ -68,6 +70,8 @@ class ButtonList extends Component{
                 <button className="button" onClick={event => this.printCaseSelect(3)}>Bridge</button>
                 <br/><br/>
                 <button className="button" onClick={event => this.printCaseSelect(4)}>Empty</button>
+                <br/><br/>
+                <button className="button" onClick={event => this.printCaseSelect(5)}>Stairs</button>
                 <br/><br/>
                 <SettingButton />
             </div>
