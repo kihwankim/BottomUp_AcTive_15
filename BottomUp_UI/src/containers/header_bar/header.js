@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { changeRow } from '../../actions/change_row';
 import { changeCol } from '../../actions/change_col';
 import { changeWidth } from '../../actions/change_width';
+import { changeMaxHeight } from '../../actions/change_max_height';
 import { bindActionCreators } from 'redux';
 
 class Header extends Component {
@@ -40,7 +41,8 @@ function mapStateToProps(state){
   return {
     activeRow: state.activeRow,
     activeCol: state.activeCol,
-    activeWidth: state.activeWidth
+    activeWidth: state.activeWidth,
+    activeMaxHeight: state.activeMaxHeight
   };
 }
 
@@ -48,7 +50,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators( {
     changeRow : changeRow,
     changeCol : changeCol,
-    changeWidth : changeWidth
+    changeWidth : changeWidth,
+      changeMaxHeight: changeMaxHeight
    }, dispatch);
 }
 

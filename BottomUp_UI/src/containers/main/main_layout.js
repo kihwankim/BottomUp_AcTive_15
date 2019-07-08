@@ -6,6 +6,28 @@ class MainLayout extends Component {
       super(props);
     }
 
+    renderTables(){
+      let number = 0;
+      return this.props.activeArray.map((table) => {
+        number +=1;
+        return (
+          <div>
+            <div>
+              {number}
+            </div>
+            <div>
+              <table className="main-layout" id="setting-table" key ={number}>
+                <thead></thead>
+                <tbody>
+                    {table}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      });
+    }
+
     render() {
         if (this.props.isSetting == 0) {
             return (<div> please wait...</div>);
@@ -13,12 +35,7 @@ class MainLayout extends Component {
 
         return (
             <div>
-                <table className="main-layout" id="setting-table">
-                    <thead></thead>
-                    <tbody>
-                        { this.props.activeArray }
-                    </tbody>
-                </table>
+              { this.renderTables() }
             </div>
         );
     }
@@ -26,8 +43,6 @@ class MainLayout extends Component {
 
 function mapStateToProps(state){
   return {
-    activeRow: state.activeRow,
-    activeCol: state.activeCol,
     activeArray: state.activeArray
   };
 }//객체 상태로 넘겨줘야함
