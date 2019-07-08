@@ -49,7 +49,6 @@ class SettingButton extends Component {
             // document.getElementById("table-body")
             let myTableArray = [];
             let piCount = 1;
-            let pis = [];
             let direction=[[-1,0],[0,1],[1,0], [0,-1]];
             $("table#setting-table tr").each(function () {
                 let arrayOfThisRow = [];
@@ -100,16 +99,9 @@ class SettingButton extends Component {
                         }).catch((error) => {
                             console.log(error);
                         })
-                        pis.push(pi);
                     }
                 }
             }
-
-            pis.map((item, i) =>{
-                console.log(item);
-                const { piNumber, top, right, bottom, left } = item;
-            })
-
 
         }
         //여기에 디비 연결 코드 작성 하면되 activeArray 변수이고 이 변수는 this.props.activeArray
