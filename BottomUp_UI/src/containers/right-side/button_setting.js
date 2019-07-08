@@ -7,7 +7,7 @@ class SettingButton extends Component {
 
     // render 전에 실행
     componentWillMount() {
-        var firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyAllT3vsvGW9wv63Azr4tA_rkeLNcYL3lA",
             authDomain: "bottomup-sync.firebaseapp.com",
             databaseURL: "https://bottomup-sync.firebaseio.com",
@@ -17,7 +17,6 @@ class SettingButton extends Component {
             appId: "1:384565070097:web:9682fe90dcfa7724"
         };
 
-// Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
         console.log(firebase);
@@ -34,11 +33,12 @@ class SettingButton extends Component {
         );
     }
 
-
     onClickAndStoreAtDB() {
         if (!this.props.activeArray || this.props.activeArray.length == 0) {
             alert("this is not correct data or Empty data");
         } else {
+            // document.getElementById("table-body")
+            console.log(Object.keys());
             firebase.database().ref('bottomup').set(
                 // 이곳에 원하는 요소 추가하면 된다.
                 {

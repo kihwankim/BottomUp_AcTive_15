@@ -13,7 +13,7 @@ class MainLayout extends Component {
             <div>
                 <table className="main-layout">
                     <thead></thead>
-                    <tbody>
+                    <tbody id="table-body">
                         { this.props.activeArray }
                     </tbody>
                 </table>
