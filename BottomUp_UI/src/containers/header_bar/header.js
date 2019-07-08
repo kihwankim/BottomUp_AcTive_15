@@ -32,6 +32,13 @@ class Header extends Component {
                       onChange={ event => this.props.changeWidth(event.target.value) }
                   />
               </div>
+              <div className="max-height">
+                  <span className="max-hegith-input">max height : </span>
+                  <input
+                      value = { this.props.activeMaxHeight }
+                      onChange={ event => this.props.changeMaxHeight(event.target.value) }
+                  />
+              </div>
           </div>
         );
     }
