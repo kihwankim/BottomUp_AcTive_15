@@ -36,8 +36,8 @@ class SettingButton extends Component {
     }
 
     onClickAndStoreAtDB() {
-        function indexGuard(row, col, maxR, maxC) {
-            if(row < 0 || col < 0 || row >= maxR || col >= maxR){
+        function indexGuard(row, col, maxRow, maxCol) {
+            if(row < 0 || col < 0 || row >= maxRow || col >= maxCol){
                 return false;
             }else{
                 return true;
@@ -50,6 +50,9 @@ class SettingButton extends Component {
             let myTableArray = [];
             let piCount = 1;
             let direction=[[-1,0],[0,1],[1,0], [0,-1]];
+
+            // 테이블을 2차원 배열로 생성
+            // 동시에 라즈베리파이 인덱싱
             $("table#setting-table tr").each(function () {
                 let arrayOfThisRow = [];
                 let tableData = $(this).find('td');
@@ -66,8 +69,11 @@ class SettingButton extends Component {
                 }
             });
 
+            // 기존 데이터 베이스 삭제
             firebase.database().ref('bottomup').remove();
 
+            // 라즈베리파이 주변 값 확인
+            // 동시에 객체 생성하여 데이터 베이스에 업로드
             for(let i = 0; i < myTableArray.length; i++){
                 for(let j = 0; j < myTableArray[i].length; j++){
                     if($.isNumeric(myTableArray[i][j])){
@@ -104,9 +110,6 @@ class SettingButton extends Component {
             }
 
         }
-        //여기에 디비 연결 코드 작성 하면되 activeArray 변수이고 이 변수는 this.props.activeArray
-        //이렇게 쓰면되
-
     }
 }
 
