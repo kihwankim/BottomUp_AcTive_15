@@ -25,14 +25,17 @@ class ButtonList extends Component{
       let table = [];
       // Outer loop to create parent
       for(let indexOfHeights = 0; indexOfHeights < parseInt(height); indexOfHeights++){
+        let keyData = indexOfHeights.toString();
         for (let i = 0; i < parseInt(row); i++) {
           let children = [];
           //Inner loop to create children
+          let keyDataAndI = i.toString() + keyData;
           for (let j = 0; j < parseInt(col); j++) {
-            children.push(<td key={j} onClick={event => this.writeContent(event.target)}></td>);
+            let keyDataAndIAndJ = keyDataAndI + j.toString();
+            children.push(<td key={keyDataAndIAndJ} onClick={event => this.writeContent(event.target)}></td>);
           }
           //Create the parent and add the children
-          table.push(<tr key={i}>{children}</tr>);
+          table.push(<tr key={keyDataAndI}>{children}</tr>);
         }
         tables.push(table);
       }
