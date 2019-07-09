@@ -22,9 +22,9 @@ class ButtonList extends Component{
     setDataAndMakeArray(row, col, height){
       this.props.onSetData(1);
       let tables = [];
-      let table = [];
       // Outer loop to create parent
       for(let indexOfHeights = 0; indexOfHeights < parseInt(height); indexOfHeights++){
+        let table = [];
         let keyData = indexOfHeights.toString();
         for (let i = 0; i < parseInt(row); i++) {
           let children = [];
