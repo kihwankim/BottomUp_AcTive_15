@@ -128,7 +128,8 @@ function mapStateToProps(state) {
     return {
         activeArray: state.activeArray,
         row: state.activeRow,
-        col: state.activeCol
+        col: state.activeCol,
+        maxNumber: state.activeMaxHeight
     };
 }
 
