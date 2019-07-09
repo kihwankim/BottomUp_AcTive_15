@@ -10,12 +10,11 @@ class MainLayout extends Component {
       let number = 0;
       return this.props.activeArray.map((table) => {
         number +=1;
+        let data = number.toString() + "-1";
         return (
-          <div>
-            <div>
-              {number}
-            </div>
-            <table className="main-layout" id="setting-table">
+          <div key={data}>
+            {number}
+            <table key={number} className="main-layout" id={number}>
               <thead></thead>
               <tbody>
                   {table}
