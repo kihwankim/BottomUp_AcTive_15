@@ -46,7 +46,6 @@ class SettingButton extends Component {
         if (!this.props.activeArray || this.props.activeArray.length == 0) {
             alert("this is not correct data or Empty data");
         } else {
-
             // 기존 데이터 베이스 삭제
             firebase.database().ref('bottomup').remove();
 
