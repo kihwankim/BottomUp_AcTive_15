@@ -46,80 +46,91 @@ class SettingButton extends Component {
         if (!this.props.activeArray || this.props.activeArray.length == 0) {
             alert("this is not correct data or Empty data");
         } else {
-            // document.getElementById("table-body")
-            let myTableArray = [];
-            let piCount = 1;
-            let directionInfo=[[-1,0],[0,1],[1,0], [0,-1]];
-
-            // 테이블을 2차원 배열로 생성
-            // 동시에 라즈베리파이 인덱싱
-            $("table#setting-table tr").each(function () {
-                let arrayOfThisRow = [];
-                let tableData = $(this).find('td');
-                if (tableData.length > 0) {
-                    tableData.each(function () {
-                        if($(this).text() == "Pi"){
-                            arrayOfThisRow.push(piCount.toString());
-                            ++piCount;
-                        }else{
-                            arrayOfThisRow.push($(this).text());
-                        }
-                    });
-                    myTableArray.push(arrayOfThisRow);
-                }
-            });
-
             // 기존 데이터 베이스 삭제
             firebase.database().ref('bottomup').remove();
 
-            // 라즈베리파이 주변 값 확인
-            // 동시에 객체 생성하여 데이터 베이스에 업로드
-            for(let i = 0; i < myTableArray.length; i++){
-                for(let j = 0; j < myTableArray[i].length; j++){
-                    if($.isNumeric(myTableArray[i][j])){
-                        let piNumber = myTableArray[i][j];
-                        let startRow, startCol, data;
-                        let directionalDatas = [];
-                        for (let direction = 0; direction < 4; direction++) {
-                            data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
-                                myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
-                            if(data == "B"){
-                                startRow = i;
-                                startCol = j;
-                                while(indexGuard(startRow+directionInfo[direction][0], startCol+directionInfo[direction][1], myTableArray.length, myTableArray[i].length)){
-                                    startRow = startRow+directionInfo[direction][0];
-                                    startCol = startCol+directionInfo[direction][1];
-                                    if(myTableArray[startRow][startCol] == "B"){
-                                        continue;
-                                    }else if($.isNumeric(myTableArray[startRow][startCol])){
-                                        data = myTableArray[startRow][startCol];
-                                    }else{
-                                        break;
+            let directionInfo=[[-1,0],[0,1],[1,0], [0,-1]];
+
+            for (let height = 1; height <= this.props.maxNumber; height++) {
+
+                // document.getElementById("table-body")
+                let myTableArray = [];
+                let piCount = 1;
+
+
+                // 테이블을 2차원 배열로 생성
+                // 동시에 라즈베리파이 인덱싱
+                let pis = [
+                    {height: height}
+                ];
+
+
+                $(`table#${height} tr`).each(function () {
+                    let arrayOfThisRow = [];
+                    let tableData = $(this).find('td');
+                    if (tableData.length > 0) {
+                        tableData.each(function () {
+                            if($(this).text() == "Pi"){
+                                arrayOfThisRow.push(piCount.toString());
+                                ++piCount;
+                            }else{
+                                arrayOfThisRow.push($(this).text());
+                            }
+                        });
+                        myTableArray.push(arrayOfThisRow);
+                    }
+                });
+
+                // 라즈베리파이 주변 값 확인
+                // 동시에 객체 생성하여 데이터 베이스에 업로드
+                for(let i = 0; i < myTableArray.length; i++){
+                    for(let j = 0; j < myTableArray[i].length; j++){
+                        if($.isNumeric(myTableArray[i][j])){
+                            let piNumber = myTableArray[i][j];
+                            let startRow, startCol, data;
+                            let directionalDatas = [];
+                            for (let direction = 0; direction < 4; direction++) {
+                                data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
+                                    myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
+                                if(data == "B"){
+                                    startRow = i;
+                                    startCol = j;
+                                    while(indexGuard(startRow+directionInfo[direction][0], startCol+directionInfo[direction][1], myTableArray.length, myTableArray[i].length)){
+                                        startRow = startRow+directionInfo[direction][0];
+                                        startCol = startCol+directionInfo[direction][1];
+                                        if(myTableArray[startRow][startCol] == "B"){
+                                            continue;
+                                        }else if($.isNumeric(myTableArray[startRow][startCol])){
+                                            data = myTableArray[startRow][startCol];
+                                        }else{
+                                            break;
+                                        }
                                     }
                                 }
+                                directionalDatas.push(data);
                             }
-                            directionalDatas.push(data);
-                        }
 
-                        console.log(directionalDatas);
-                        let pi ={
-                            piNumber : piNumber,
-                            top : directionalDatas[0],
-                            right : directionalDatas[1],
-                            bottom : directionalDatas[2],
-                            left : directionalDatas[3]
+                            let pi ={
+                                piNumber : piNumber,
+                                top : directionalDatas[0],
+                                right : directionalDatas[1],
+                                bottom : directionalDatas[2],
+                                left : directionalDatas[3]
+                            };
+                            pis.push(pi);
                         }
-                        firebase.database().ref('bottomup').push(pi)
-                            // 이곳에 원하는 요소 추가하면 된다.
-                         .then(() => {
-                            console.log('INSERTED!');
-                        }).catch((error) => {
-                            console.log(error);
-                        })
                     }
                 }
-            }
 
+                firebase.database().ref('bottomup').push(pis)
+                // 이곳에 원하는 요소 추가하면 된다.
+                    .then(() => {
+                        console.log(pis);
+                        console.log('INSERTED!');
+                    }).catch((error) => {
+                    console.log(error);
+                })
+            }
         }
     }
 }
