@@ -18,7 +18,7 @@ class Connect:
 
         result = self.firebase.get('/bottomup', None)
 
-        tables = [[] for index in range(len(result))]
+        tables = [[] for _ in range(len(result))]
 
         insertIndex = 0
 

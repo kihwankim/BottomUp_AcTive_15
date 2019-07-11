@@ -6,7 +6,7 @@ class Controller:
         self.connect = Connect()
 
     def run(self):
-        print(self.connect.get_data());
+        print(self.connect.get_data())
 
 
 controller = Controller()
