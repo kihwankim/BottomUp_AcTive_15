@@ -8,8 +8,8 @@ class Controller(object):
 
     def run(self):
         tables = self.connect.get_data()
+        print(tables)
         self.graph = Graph(tables)  # path 구하는 cㅣass 생성
-
 
 controller = Controller()
 controller.run()
