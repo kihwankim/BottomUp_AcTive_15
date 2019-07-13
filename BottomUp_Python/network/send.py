@@ -1,13 +1,14 @@
 class SenderSocket:
-    def __init__(self, socket, addr):
+    def __init__(self, socket, pi_num):
         self.socket = socket
-        self.addr = addr
+        self.pi_num = pi_num
+        self.pi_num_byte = (self.pi_num).to_bytes(1, byteorder='big')
 
-    def send_data(self, data):
-        # 숫자하나를 chr로 인코딩해서 송신
-        data = chr(data)
-        #self.socket.send(bytes(data, encoding="utf-8"))
-        self.socket.send(data)
-
-    def get_addr(self):
-        return self.addr
+    def get_pi_num(self):
+        return self.pi_num
+        
+    # 전달할 message는 숫자 1바이트(0~255) 
+    # 255는 emergency를 의미
+    def send_data(self, message):
+        byte_message = (message).to_bytes(1, byteorder='big')
+        self.socket.send(self.pi_num_byte + byte_message)
