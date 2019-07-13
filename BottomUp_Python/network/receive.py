@@ -5,5 +5,11 @@ class ReceiverSocket:
 
     def receive_data(self):
         data = self.socket.recv(100)
-        return data
+        return str(data, encoding='utf-8')
+
+    def get_addr(self):
+        return self.addr
+
+    def close(self):
+        self.socket.close()
 

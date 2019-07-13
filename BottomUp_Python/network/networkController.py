@@ -108,11 +108,41 @@ class NetworkController:
                 # 해당 번호의 파이에게 가리킬 방향을 송신
                 self.senders[path[0]].send_data(path[1])
 
+    ### TEST ###
+
     def test_run_server(self):
-        self.t_server = Thread(target=self.accept_connect)
+        self.t_server = Thread(target=self.test_accept_connect)
         self.t_server.start()
         self.test_action_send()
 
+    def test_accept_connect(self):
+        while True:
+            # 새로운 클라이언트와 연결
+            client_socket, addr = self.server_socket.accept()
+
+            # 클라이언트에게서 수신할 객체, 클라이언트에게 송신할 객체 생성
+            new_receiver = ReceiverSocket(client_socket, addr)
+            new_sender = SenderSocket(client_socket, addr)
+
+
+            # 주기적으로 수신 시작
+            t_receive = Thread(target=self.test_action_receive, args=(new_receiver,))
+            t_receive.daemon = True # 부모가 종료되면 데몬스레드도 모두 종료(self.t_server 스레드가 종료되면, 수신 스레드도 모두 종료)
+            t_receive.start()
+
+            self.receivers.append(new_receiver)
+            self.senders.append(new_sender)
+
+    def test_action_receive(self, ReceiverSocket):
+        # 수신할때마다 if문 체크를 피하기 위해서, while문을 두 개로 분리
+        count = 0
+        while True:
+            data = ReceiverSocket.receive_data()
+            if data == '':
+                ReceiverSocket.close()
+                break
+            print(ReceiverSocket.get_addr(), data)
+            
     def test_action_send(self):
         while True:
             text = input("입력 : ")

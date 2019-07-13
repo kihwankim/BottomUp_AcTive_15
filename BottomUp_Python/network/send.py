@@ -5,3 +5,6 @@ class SenderSocket:
 
     def send_data(self, data):
         self.socket.send(bytes(data, encoding="utf-8"))
+
+    def get_addr(self):
+        return self.addr
