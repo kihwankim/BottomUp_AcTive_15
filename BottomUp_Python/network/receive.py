@@ -4,6 +4,6 @@ class ReceiverSocket:
         self.addr = addr
 
     def receive_data(self):
-        data = self.socket.recv()
+        data = self.socket.recv(100)
         return data
 
