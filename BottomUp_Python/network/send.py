@@ -4,7 +4,10 @@ class SenderSocket:
         self.addr = addr
 
     def send_data(self, data):
-        self.socket.send(bytes(data, encoding="utf-8"))
+        # 숫자하나를 chr로 인코딩해서 송신
+        data = chr(data)
+        #self.socket.send(bytes(data, encoding="utf-8"))
+        self.socket.send(data)
 
     def get_addr(self):
         return self.addr

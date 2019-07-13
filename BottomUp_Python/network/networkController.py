@@ -78,28 +78,28 @@ class NetworkController:
 
     # 주기적으로 수신받아서 self.safes 업데이트 (파이 하나당 스레드 하나로 사용)
     def action_receive(self, ReceiverSocket):
-        # 수신할때마다 if문 체크를 피하기 위해서, while문을 두 개로 분리
-        while True:
-            data = ReceiverSocket.receive_data()
-            # 큐에 아이템을 넣어, 메인 컨트롤러에서 emergency 상황을 인지하도록 함
-            if data[0]=='emergency':
-                self.queue.put('emergency')
-                break
-            # emergency 상황을 인지한 파이는, 서버에게 [파이번호, safe or unsafe] 데이터를 계속해서 송신
-            elif data[0]=='파이번호':
-                self.safes[data[0]] = data[1]
-                break
-            time.sleep(0.1)
+        data = ReceiverSocket.receive_data()
+        if data=='':
+            ReceiverSocket.close()
+            return
+        # 큐에 아이템을 넣어, 메인 컨트롤러에서 emergency 상황을 인지하도록 함
+        elif data=='emergency':
+            self.queue.put('emergency')
+        # emergency 상황을 인지한 파이는, 서버에게 [파이번호, safe or unsafe] 데이터를 계속해서 송신
+        else:
+            self.safes[ord(data[0])] = ord(data[1])
 
+        time.sleep(0.1)
         while True:
             data = ReceiverSocket.receive_data()
-            self.safes[data[0]] = data[1]
+            self.safes[ord(data[0])] = ord(data[1])
             time.sleep(0.1)
     
     # 각각의 파이에게 송신을 반복. (스레드 하나가 사용) 
     def action_send(self):
+        # 각각의 파이에게 0을 보내서 emergency 상황임을 알림
         for SenderSocket in self.senders:
-            SenderSocket.send_data('emergency')
+            SenderSocket.send_data(0)
 
         while True:
             list_path = self.queue.get()
