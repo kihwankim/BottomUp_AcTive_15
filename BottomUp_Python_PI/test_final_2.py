@@ -1,12 +1,12 @@
-########## HOW TO USE ###########
-# in terminal : python3 this-file.py target-ip target-port
-#     example) python3 test_final_2.py 168.188.127.74 8000
-
 import socket
 import time
 import sys
 from threading import Thread
 from queue import Queue
+
+# how to use
+# in terminal : python3 this-file.py target-ip target-port
+#      example) python3 test_final_2.py 168.188.127.74 8000
 
 PI_NUM = 0
 PI_NUM_BYTE = 0
@@ -14,7 +14,7 @@ emergency = False
 queue = Queue()
 
 def action_send(sock):
-    global emergency   ##### send, receive에서 같이 사용. 크리티컬 섹션?
+    global emergency   ##### send, receive에서 같이 건드림. 크리티컬 섹션 유의
 
     # 초기 : 0.5초 주기로 재난상황 발생 체크
     while check_safe() and not emergency:
@@ -26,7 +26,7 @@ def action_send(sock):
     # 재난상황 발생 : 0.1초 주기로 서버에 안전상태 송신
     while emergency:
         sock.send(encode_message(check_safe()))
-        time.sleep(0.1)
+        time.sleep(1)
 
     # yield   # for next?
 
@@ -85,21 +85,36 @@ def test_change_safety_status():
     while True:
         temp = int(input("입력. 1이면 안전, 0이면 미안전:"))
 
-if __name__ == '__main__':
-    PI_NUM = int(input("input pi number : "))
-    PI_NUM_BYTE = (PI_NUM).to_bytes(1, byteorder='big')
+def try_connect(sock):
+    pi_num = 0
+    pi_num_byte = 0
+    
+    while True:
+        data_receive = sock.recv(1024).decode()
+        
+        if data_receive == 'connect accept':
+            return pi_num, pi_num_byte
+        
+        print("currently remaining pi number", data_receive)
+        pi_num = int(input("choose your pi number :"))
+        pi_num_byte = (pi_num).to_bytes(1, byteorder='big')
+        
+        sock.send(pi_num_byte)
 
+if __name__ == '__main__':
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
         sock.connect((sys.argv[1], int(sys.argv[2])))
-        sock.send(PI_NUM_BYTE)
+
+        PI_NUM, PI_NUM_BYTE = try_connect(sock)
+        print("connect success, pi number is", PI_NUM)
 
         ### TEST ###
-        #t_test = Thread(target=test_change_safety_status)
-        #t_test.start()
-        ############
+        t_test = Thread(target=test_change_safety_status)
+        t_test.start()
 
+        ############
         # t_receive 스레드는 수신 담당
         t_receive = Thread(target=action_receive, args=(sock,))
         t_receive.start()
