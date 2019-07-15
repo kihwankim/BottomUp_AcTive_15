@@ -64,7 +64,6 @@ class SettingButton extends Component {
                     {height: height}
                 ];
 
-
                 $(`table#${height} tr`).each(function () {
                     let arrayOfThisRow = [];
                     let tableData = $(this).find('td');
@@ -121,7 +120,8 @@ class SettingButton extends Component {
                         }
                     }
                 }
-
+                pis.push({array : myTableArray});
+                console.log(myTableArray);
                 firebase.database().ref('bottomup').push(pis)
                 // 이곳에 원하는 요소 추가하면 된다.
                     .then(() => {
