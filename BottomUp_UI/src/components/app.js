@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import MainLayout from '../containers/main/main_layout'
-import ButtonList from '../containers/right-side/button_list'
+import MainLayout from '../containers/main/main_layout';
+import ButtonList from '../containers/right-side/button_list';
 import Header from '../containers/header_bar/header';
 
 class App extends Component {
@@ -29,7 +29,4 @@ class App extends Component {
     );
   }
 }
-
-
-
 export default App;
