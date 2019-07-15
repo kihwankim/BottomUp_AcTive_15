@@ -9,12 +9,16 @@ class ReceiverSocket:
     
     def receive_data(self):
         data = self.socket.recv(10)
-        if data == '':
-            return self.pi_num, 'disconnected'
         received_pi_num = data[0]
         message = data[1]
-        if message == 255:
-            message = 'emergency'
-        return received_pi_num, message
+        if received_pi_num != self.pi_num:
+            return received_pi_num, 'pi num error'
+        elif message < 254:
+            return received_pi_num, message
+        elif message == 254:
+            return received_pi_num, 'stop emergency'
+        elif message == 255:
+            return received_pi_num, 'emergency'
+        raise IndexError
     def close(self):
         self.socket.close()
