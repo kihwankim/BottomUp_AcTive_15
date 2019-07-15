@@ -39,6 +39,9 @@ class ButtonList extends Component{
         }
         tables.push(table);
       }
+      if(tables.length == 0){
+        alert("please insert correct data");
+      }
       this.props.makeArray(tables);
     }
 
