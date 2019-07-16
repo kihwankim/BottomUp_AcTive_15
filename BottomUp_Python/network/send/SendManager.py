@@ -12,6 +12,7 @@ class SendManager:
 
     def delete_sender(self, floor, pi_num):
         try:
+            self.senders[floor][pi_num].close()
             del self.senders[floor][pi_num]
         except NameError:
             pass
