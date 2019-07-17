@@ -106,15 +106,16 @@ class SettingButton extends Component {
                                         if(myTableArray[startRow][startCol] == "B"){
                                             ++weight;
                                             continue;
-                                        }else if($.isNumeric(myTableArray[startRow][startCol])){
+                                        }else if($.isNumeric(myTableArray[startRow][startCol]) && parseInt(myTableArray[startRow][startCol]) > 0){
                                             data = myTableArray[startRow][startCol];
+                                            break;
                                         }else{
                                             break;
                                         }
                                     }
                                 }
 
-                                if(data == ""){
+                                if(data == "" || data == "B"){
                                     data = "N";
                                 }else if($.isNumeric(data)){
                                     data = data + "," + weight;
