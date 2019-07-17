@@ -1,0 +1,14 @@
+BottomUp_UI/node_modules
+bundle.js
+npm-debug.log
+.DS_Store
+
+# Pycharm
+BottomUp_Python/.idea
+
+# BottomUp_Python_PI
+BottomUp_Python_PI/.idea
+
+# IntelliJ
+*.iml
+/.idea
