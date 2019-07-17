@@ -18,7 +18,7 @@ class Controller(object):
         print(tables)
         # pi_datas = self.connect.get_pi_tables  # 통신해서 setting해야할 부분들
         # building_height = 2 # 건물 높이(총 층수). DB에서 가져와야함
-        # self.graph = Graph(tables)  # path 구하는 class 생성
+        self.graph = Graph(tables, self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
 
         ### 통신 로직 ###
         # self.NetworkController = NetworkController(pi_datas, building_height, IP, PORT)  # 통신을 담당할 class 생성
