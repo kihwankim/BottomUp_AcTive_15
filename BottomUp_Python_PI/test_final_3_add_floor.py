@@ -6,7 +6,7 @@ from queue import Queue
 
 # how to use
 # in terminal : python3 this-file.py target-ip target-port
-#      example) python3 test_final_2.py 168.188.127.74 8000
+#      example) python3 test_final_3_add_floor.py 168.188.127.74 8000
 
 PI_FLOOR = 0
 PI_FLOOR_BYTE = 0
