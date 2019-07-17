@@ -1,10 +1,10 @@
-class Door(object):
-    def __init__(self, pi):
-        self.doorNumber = pi['doorNumber']
-        self.top = pi['top'].split(",")
-        self.right = pi['right'].split(",")
-        self.left = pi['left'].split(",")
-        self.bottom = pi['bottom'].split(",")
+from connectDB.Vertex import Vertex
+
+
+class Door(Vertex):
+    def __init__(self, direction_data):
+        super().__init__(0, direction_data)
+        self.doorNumber = direction_data['doorNumber']
         self.height = 0
 
     @property
@@ -16,4 +16,5 @@ class Door(object):
         self.height = input_height
 
     def __str__(self):
-        return "{ height : " + str(self.get_height) + ", piNumber : " + self.piNumber + ", top : " + self.top + ", right : " + self.right + ", left : " + self.left + ", bottom : " + self.bottom + " }"
+        return "{ height : " + str(
+            self.get_height) + ", piNumber : " + self.piNumber + ", top : " + self.top + ", right : " + self.right + ", left : " + self.left + ", bottom : " + self.bottom + " }"

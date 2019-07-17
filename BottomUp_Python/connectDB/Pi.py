@@ -1,11 +1,10 @@
-class Pi(object):
-    def __init__(self, pi):
-        self.piNumber = pi['piNumber']
-        self.top = pi['top']
-        self.right = pi['right']
-        self.left = pi['left']
-        self.bottom = pi['bottom']
-        self.height = 0
+from connectDB.Vertex import Vertex
+
+
+class Pi(Vertex):
+    def __init__(self, direction_data):
+        super().__init__(0, direction_data)
+        self.piNumber = direction_data['piNumber']
 
     @property
     def get_height(self):
