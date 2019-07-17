@@ -55,12 +55,13 @@ class SettingButton extends Component {
 
                 // document.getElementById("table-body")
                 let myTableArray = [];
-                let piCount = 1;
+                let piCount = 1, doorCount = -1;
+                let doors = [];
 
 
                 // 테이블을 2차원 배열로 생성
                 // 동시에 라즈베리파이 인덱싱
-                let pis = [
+                let tableToObject = [
                     {height: height}
                 ];
 
@@ -72,7 +73,10 @@ class SettingButton extends Component {
                             if($(this).text() == "Pi"){
                                 arrayOfThisRow.push(piCount.toString());
                                 ++piCount;
-                            }else{
+                            }else if($(this).text() == "D"){
+                                arrayOfThisRow.push(doorCount.toString());
+                                --doorCount;
+                            } else {
                                 arrayOfThisRow.push($(this).text());
                             }
                         });
@@ -85,7 +89,7 @@ class SettingButton extends Component {
                 for(let i = 0; i < myTableArray.length; i++){
                     for(let j = 0; j < myTableArray[i].length; j++){
                         if($.isNumeric(myTableArray[i][j])){
-                            let piNumber = myTableArray[i][j];
+                            let objectNumber = myTableArray[i][j];
                             let startRow, startCol, data;
                             let directionalDatas = [];
                             for (let direction = 0; direction < 4; direction++) {
@@ -106,26 +110,45 @@ class SettingButton extends Component {
                                         }
                                     }
                                 }
+
+                                if(data == ""){
+                                    data = "N";
+                                }
+
                                 directionalDatas.push(data);
                             }
 
-                            let pi ={
-                                piNumber : piNumber,
-                                top : directionalDatas[0],
-                                right : directionalDatas[1],
-                                bottom : directionalDatas[2],
-                                left : directionalDatas[3]
-                            };
-                            pis.push(pi);
+                            if(objectNumber > 0){
+                                let pi ={
+                                    piNumber : objectNumber,
+                                    top : directionalDatas[0],
+                                    right : directionalDatas[1],
+                                    bottom : directionalDatas[2],
+                                    left : directionalDatas[3]
+                                };
+                                tableToObject.push(pi);
+                            }else if(objectNumber < 0){
+                                let door ={
+                                    doorNumber : objectNumber,
+                                    top : directionalDatas[0],
+                                    right : directionalDatas[1],
+                                    bottom : directionalDatas[2],
+                                    left : directionalDatas[3]
+                                };
+                                doors.push(door);
+                            }
+
                         }
                     }
                 }
-                pis.push({array : myTableArray});
+
+                tableToObject.push({doors : doors});
+                tableToObject.push({array : myTableArray});
                 console.log(myTableArray);
-                firebase.database().ref('bottomup').push(pis)
+                firebase.database().ref('bottomup').push(tableToObject)
                 // 이곳에 원하는 요소 추가하면 된다.
                     .then(() => {
-                        console.log(pis);
+                        console.log(tableToObject);
                         console.log('INSERTED!');
                     }).catch((error) => {
                     console.log(error);
