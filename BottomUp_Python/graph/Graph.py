@@ -20,9 +20,11 @@ class Graph(object):
         self.find_path()
 
     def find_path(self):
-        path = [[] for _ in range(self.max_height)]
+        path = []
         for floor in range(self.max_height):
-            path = self.find_path_on_floor(floor)
+            path.append(self.find_path_on_floor(floor))
+
+        return path
 
     def find_path_on_floor(self, height):
         doors_on_floor = self.doors[height]
@@ -37,6 +39,7 @@ class Graph(object):
                 if(door.cross_datas[direction][0] != 'N'):
                     pi_number = int(door.cross_datas[direction][0])
                     weight = door.cross_datas[direction][1]
+                    result_pi[pi_number-1][(direction+2)%4] = 1
                     queue.append([pis_for_bfs[pi_number -1], weight, door.doorNumber])
 
             while queue:
@@ -60,10 +63,8 @@ class Graph(object):
 
                             pi.cross_datas[direction][1] = pi.cross_datas[direction][1] + node[1]
                             target_pi = pis_for_bfs[target_pi_number - 1]
-                            if target_pi.piNumber in visit and pi.cross_datas[direction][1] > target_pi.cross_datas[(direction + 2)%4][1]:
-                                pi.cross_datas[direction][1] = target_pi.cross_datas[(direction + 2)%4][1]
-                            else:
-                                queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
+                            queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
 
         print(pis_for_bfs)
+        return result_pi
 
