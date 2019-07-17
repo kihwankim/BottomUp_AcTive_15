@@ -93,8 +93,10 @@ class SettingButton extends Component {
                             let startRow, startCol, data;
                             let directionalDatas = [];
                             for (let direction = 0; direction < 4; direction++) {
+                                let weight = 1;
                                 data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
                                     myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
+
                                 if(data == "B"){
                                     startRow = i;
                                     startCol = j;
@@ -102,6 +104,7 @@ class SettingButton extends Component {
                                         startRow = startRow+directionInfo[direction][0];
                                         startCol = startCol+directionInfo[direction][1];
                                         if(myTableArray[startRow][startCol] == "B"){
+                                            ++weight;
                                             continue;
                                         }else if($.isNumeric(myTableArray[startRow][startCol])){
                                             data = myTableArray[startRow][startCol];
@@ -113,6 +116,8 @@ class SettingButton extends Component {
 
                                 if(data == ""){
                                     data = "N";
+                                }else if($.isNumeric(data)){
+                                    data = data + "," + weight;
                                 }
 
                                 directionalDatas.push(data);
