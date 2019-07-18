@@ -72,6 +72,8 @@ GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
 - https://moondals.wordpress.com/2016/05/01/raspberry-pi%EC%99%80-python%EC%9C%BC%EB%A1%9C-1602-lcd-%EB%AC%B8%EC%9E%90-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/
 - https://www.raspberrypi-spy.co.uk/2015/05/using-an-i2c-enabled-lcd-screen-with-the-raspberry-pi/
 - https://torrms.tistory.com/42
+5. LCD I2C 테스팅 완료(출력 디자인 완성)
+- 참고: 6개의 LCD 중 4개 불량
 참고사항
 ---
 코드중 #####는 에러 유망주
