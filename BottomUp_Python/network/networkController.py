@@ -49,7 +49,7 @@ class NetworkController:
                 # 새로운 클라이언트와 연결
                 client_socket, addr = self.server_socket.accept()
                 
-                t_judge_accpet = Thread(target=self.judge_connect, args=(client_socket, addr))
+                t_judge_accpet = Thread(target=self.__judge_connect, args=(client_socket, addr))
                 # 데몬 True : 부모 스레드가 종료되면 자신도 종료
                 t_judge_accpet.daemon = True
                 t_judge_accpet.start()
@@ -74,14 +74,14 @@ class NetworkController:
     def stop_emergency(self):
         self.SendManager.send_All_stop_checking()
 
-    def judge_connect(self, client_socket, addr):
+    def __judge_connect(self, client_socket, addr):
         try:
             self.size_connection += 1
             print(addr, "연결 시도")
-            pi_floor, pi_num = self.judge_connect_piNum(client_socket)
+            pi_floor, pi_num = self.__judge_connect_piNum(client_socket)
             
             print("%s 접속, %d층 %d번 :" %(addr, pi_floor, pi_num))
-            print("현재 접속 상태 \n"+self.string_extra_seat())
+            print("현재 접속 상태 \n"+self.__string_extra_seat())
                     
             # 클라이언트에게서 수신할 객체, 클라이언트에게 송신할 객체 생성
             new_sender = Sender(client_socket, pi_floor, pi_num)
@@ -93,7 +93,7 @@ class NetworkController:
             
             # 연결 끊킨 파이 제거
             if message_return == 'delete this connection':
-                self.delete_disconnected_client(client_socket, pi_floor, pi_num)
+                self.__delete_disconnected_client(client_socket, pi_floor, pi_num)
                 del new_sender
                 del new_receiver
         except ConnectionError:
@@ -104,14 +104,14 @@ class NetworkController:
         finally:
             self.size_connection -= 1
 
-    def judge_connect_piNum(self, sock):
+    def __judge_connect_piNum(self, sock):
         while True:
             if self.capacity == self.size_connection:
                 sock.send('[!!!] No extra seat'.encode())
                 print("자리 부족. 접속 거부.")
                 raise ConnectionError
             try:
-                sock.send(self.string_extra_seat().encode())
+                sock.send(self.__string_extra_seat().encode())
                 data_received = int.from_bytes(sock.recv(3), byteorder='big')
                 pi_floor = data_received//256
                 pi_num = data_received%256
@@ -135,7 +135,7 @@ class NetworkController:
         self.SendManager.send_All_path(list_path)
 
     # 현재 빌딩의 남는 파이 자리를 문자열로 리턴
-    def string_extra_seat(self):
+    def __string_extra_seat(self):
         ret = str()
         for height, pi_dict in enumerate(self.safes_height):
             if height==0:
@@ -145,7 +145,7 @@ class NetworkController:
         return ret     
 
     # 연결 끊킨 파이 처리
-    def delete_disconnected_client(self, client_socket, floor, pi_num):
+    def __delete_disconnected_client(self, client_socket, floor, pi_num):
         try:
             # 소켓 close
             client_socket.close()
@@ -161,8 +161,8 @@ class NetworkController:
 
 #------------------------------------#
     
-    def start_server_by_admin(self):
-        self.wait_YES_with_query("Start Server?")
+    def __start_server_by_admin(self):
+        self.__wait_YES_with_query("Start Server?")
 
         # 서버 소켓 설정
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -170,12 +170,12 @@ class NetworkController:
         self.server_socket.listen(0)
 
 
-    def stop_server_by_admin(self):
-        self.wait_YES_with_query("Stop Server?")
+    def __stop_server_by_admin(self):
+        self.__wait_YES_with_query("Stop Server?")
         self.server_socket.close()
     
     # query(질문)에 대한 관리자의 YES 입력 대기
-    def wait_YES_with_query(self, query):
+    def __wait_YES_with_query(self, query):
         while True:
             try:
                 order = input(str(query)+"? (YES or NO) :")
