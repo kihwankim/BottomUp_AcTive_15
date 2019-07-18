@@ -3,7 +3,8 @@
 # sys.path.append('D:\project\BottomUp_AcTive_15\BottomUp_Python')
 from connectDB.Connect import Connect
 from graph.Graph import Graph
-from network.networkController import NetworkController
+
+# from network.networkController import NetworkController
 
 IP = '168.188.127.74'
 PORT = 8000
@@ -20,9 +21,11 @@ class Controller(object):
         # building_height = 2 # 건물 높이(총 층수). DB에서 가져와야함
         self.graph = Graph(tables, self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
 
+        paths = self.graph.find_path()
+        print(paths)
         ### 통신 로직 ###
         # self.NetworkController = NetworkController(pi_datas, building_height, IP, PORT)  # 통신을 담당할 class 생성
-        #self.NetworkController.run_server()  # 스레드를 생성하며 통신 시작, 메인 스레드는 emergency 신호가 올때까지 여기서 멈춤
+        # self.NetworkController.run_server()  # 스레드를 생성하며 통신 시작, 메인 스레드는 emergency 신호가 올때까지 여기서 멈춤
 
         # self.NetworkController.test_run_server()
 
@@ -35,6 +38,11 @@ class Controller(object):
         # self.safes_height = self.NetworkController.get_safes_height()
 
 
-controller = Controller()
-controller.run()
-print("print for debug")
+def main():
+    controller = Controller()
+    controller.run()
+    print("print for debug")
+
+
+if __name__ == "__main__":  # 메인문
+    main()
