@@ -62,9 +62,16 @@ GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
  - 새로운 연결을 받아 들일때마다 Sender 생성해서 SendManager에 추가, Recevier 생성해서 스레드로 수신시작
 
 ### 7/19(배지훈)
-7/16일 작업내용 참고 사이트 https://m.blog.naver.com/chandong83/220902795488
-온습도센서 DHT11 측정가능 온도 섭씨 0도 ~ 50도 (오차 범위 +,- 2도)
-온습도센서 DHT22 측정가능 온도 섭씨 -40도 ~ 80도 (오차 범위, +,-0.5도)
+1. 7/16일 작업내용 참고 사이트 https://m.blog.naver.com/chandong83/220902795488
+2. 온습도센서 DHT11 
+- 측정가능 온도: 섭씨 0도 ~ 50도 (오차 범위 +,- 2도)
+3. 온습도센서 DHT22
+- 측정가능 온도: 섭씨 -40도 ~ 80도 (오차 범위, +,-0.5도)
+- 측정 간격 : 0.1도
+4. LCD I2C 작동 환경 구현 참고사이트
+- https://moondals.wordpress.com/2016/05/01/raspberry-pi%EC%99%80-python%EC%9C%BC%EB%A1%9C-1602-lcd-%EB%AC%B8%EC%9E%90-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/
+- https://www.raspberrypi-spy.co.uk/2015/05/using-an-i2c-enabled-lcd-screen-with-the-raspberry-pi/
+- https://torrms.tistory.com/42
 참고사항
 ---
 코드중 #####는 에러 유망주
