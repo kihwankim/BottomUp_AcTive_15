@@ -14,7 +14,6 @@ class Connect(object):
         tables = [[] for _ in range(len(result))]
         self.__doors = [[] for _ in range(len(result))]
         self.__pis = [[] for _ in range(len(result))]
-
         self.set_max_height = len(result)
 
         for key, value in result.items():
@@ -35,7 +34,6 @@ class Connect(object):
                         self.__doors[insertIndex].append(Door(door))
         return tables
 
-
     @property
     def get_doors(self):
         return self.__doors
@@ -43,7 +41,6 @@ class Connect(object):
     @get_doors.setter
     def set_doors(self, input_doors):
         self.__doors = input_doors
-
 
     @property
     def get_pis(self):
