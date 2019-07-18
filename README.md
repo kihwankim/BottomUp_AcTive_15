@@ -28,6 +28,20 @@ Python 통신 및 메인 알고리즘
 1. react db upload 정보 수정
 2. python db 데이터 가공 수정
 
+### 2019/07/17 (양명우)
+
+작업내용
+
+1. graph class 작성
+2. shortest path 알고리즘 작성
+
+### 2019/07/18 (김기환)
+
+작업내용
+
+1. shortest path 알고리즘 리팩토링
+2. 테스팅
+
 라즈베리파이
 ===
 

@@ -3,7 +3,7 @@ from connectDB.Vertex import Vertex
 
 class Door(Vertex):
     def __init__(self, direction_data):
-        super().__init__(0, direction_data)
+        super().__init__(1, direction_data)
         self.doorNumber = direction_data['doorNumber']
         self.height = 0
 
