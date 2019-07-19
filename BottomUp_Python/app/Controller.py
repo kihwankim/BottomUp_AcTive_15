@@ -25,9 +25,15 @@ class Controller(object):
         print(paths)
         ### 통신 로직 ###
         # self.NetworkController = NetworkController(pi_datas, building_height, IP, PORT)  # 통신을 담당할 class 생성
-        # self.NetworkController.run_server()  # 스레드를 생성하며 통신 시작, 메인 스레드는 emergency 신호가 올때까지 여기서 멈춤
+        # self.NetworkController.start_accpet() # 스레드를 생성하며 통신 시작, 메인 스레드는 emergency 신호가 올때까지 여기서 멈춤
 
-        # self.NetworkController.test_run_server()
+        # msg_from_admin = 'start checking'
+        # if msg_from_admin == 'start checking':
+        #     self.NetworkController.stop_accept()
+        #     self.NetworkController.start_checking()
+
+        #     if self.NetworkController.get_status() == 'emergency':
+        #         self.NetworkController.start_emergency()
 
         # 각 층별로, 파이가 안전한지 나타냄.
         # [0] = 사용 X
