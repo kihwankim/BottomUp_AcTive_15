@@ -39,12 +39,12 @@ class Graph(object):
                 if door.cross_datas[direction][0] != 'N':
                     pi_number = int(door.cross_datas[direction][0])
                     weight = door.cross_datas[direction][1]
-                    result_pi[pi_number - 1][(direction + 2) % 4] = 1
-                    queue.append([pis_for_bfs[pi_number - 1], weight, door.doorNumber])
+                    result_pi[pi_number-1][(direction+2)%4] = 1
+                    queue.append([pis_for_bfs[pi_number -1], weight, door.doorNumber])
 
             while queue:
-                node = queue.pop()
-                if isinstance(node[0], Pi) and node[0].piNumber not in visit and node[0].broken == 1:
+                node = queue.pop(0)
+                if isinstance(node[0], Pi) and node[0].piNumber not in visit:
                     pi = node[0]
                     pi_number = int(pi.piNumber)
                     visit.append(pi.piNumber)
