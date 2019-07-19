@@ -10,20 +10,19 @@ class Connect(object):
 
     def get_data(self):
         result = self.firebase.get('/bottomup', None)
-        print(result)
-        tables = [[] for _ in range(len(result))]
+        tables = []
         self.__doors = [[] for _ in range(len(result))]
         self.__pis = [[] for _ in range(len(result))]
         self.set_max_height = len(result)
 
-        for key, value in result.items():
-            for tableInfo in value:
-                if tableInfo is None:
+        for table in result.values():
+            for tableInfo in table:  # table : 각 층
+                if tableInfo is None:  # tableInfo : 각 각 의 컴포넌트
                     continue
                 elif 'height' in tableInfo.keys():
                     insertIndex = tableInfo['height'] - 1
                 elif 'array' in tableInfo.keys():
-                    tables[insertIndex].append(tableInfo['array'])
+                    tables.append(tableInfo['array'])
                 elif 'piNumber' in tableInfo.keys():
                     pi_data = Pi(tableInfo)
                     pi_data.set_height = insertIndex + 1

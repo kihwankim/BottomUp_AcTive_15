@@ -50,3 +50,8 @@ class SendManager:
     # 연결된 모든 파이에게 '상황시작' 송신
     def send_All_start_emergency(self):
         self.send_All(255) 
+
+    def send_All_path(self, list_path):
+        for floor in list_path:
+            for pi in floor:
+                self.send_message(pi.floor, pi.num, pi.message)
