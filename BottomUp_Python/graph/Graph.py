@@ -22,33 +22,6 @@ class Graph(object):
     def find_path(self):
         path = []
         for floor in range(self.max_height):
-<<<<<<< HEAD
-            path.append(self.find_path_on_floor(floor))
-
-        return path
-
-    def find_path_on_floor(self, height):
-        doors_on_floor = self.doors[height]
-        pis_on_floor = self.pis[height]
-        result_pi = [[-1 for _ in range(4)] for _ in range(len(pis_on_floor))]
-
-        for door in doors_on_floor:
-            visit = list()
-            queue = list()
-            pis_for_bfs = copy.deepcopy(pis_on_floor)
-            for direction in range(4):
-                if(door.cross_datas[direction][0] != 'N'):
-                    pi_number = int(door.cross_datas[direction][0])
-                    weight = door.cross_datas[direction][1]
-                    result_pi[pi_number-1][(direction+2)%4] = 1
-                    queue.append([pis_for_bfs[pi_number -1], weight, door.doorNumber])
-
-            while queue:
-                node = queue.pop(0)
-                if isinstance(node[0], Pi) and node[0].piNumber not in visit:
-                    pi = node[0]
-                    pi_number = int(pi.piNumber);
-=======
             path.append(self.__find_path_on_floor(floor))
 
         return path
@@ -74,26 +47,17 @@ class Graph(object):
                 if isinstance(node[0], Pi) and node[0].piNumber not in visit and node[0].broken == 1:
                     pi = node[0]
                     pi_number = int(pi.piNumber)
->>>>>>> a68b08d5cb64d90af6e563e952b18d1dbc4aa944
                     visit.append(pi.piNumber)
                     for direction in range(4):
                         if pi.cross_datas[direction][0] != 'N':
                             target_pi_number = int(pi.cross_datas[direction][0])
                             if target_pi_number < 0:
                                 continue
-<<<<<<< HEAD
-                            if pi.cross_datas[direction][0] == node[2] and int(node[2]) > 0:
-                                a = int(node[2]) - 1
-                                b = (direction + 2)%4
-                                pi.cross_datas[direction][1] = pis_for_bfs[int(node[2]) - 1].cross_datas[(direction + 2)%4][1]
-                                if(result_pi[pi_number-1][direction] == -1 or result_pi[pi_number-1][direction] > pi.cross_datas[direction][1]):
-=======
                             elif pi.cross_datas[direction][0] == node[2] and int(node[2]) > 0:
                                 pi.cross_datas[direction][1] = \
                                     pis_for_bfs[int(node[2]) - 1].cross_datas[(direction + 2) % 4][1]
                                 if result_pi[pi_number - 1][direction] == -1 or result_pi[pi_number - 1][direction] > \
                                         pi.cross_datas[direction][1]:
->>>>>>> a68b08d5cb64d90af6e563e952b18d1dbc4aa944
                                     result_pi[pi_number - 1][direction] = pi.cross_datas[direction][1]
                                 continue
 
@@ -102,10 +66,5 @@ class Graph(object):
                             queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
 
         print(pis_for_bfs)
-<<<<<<< HEAD
-        return result_pi
-
-=======
 
         return result_pi
->>>>>>> a68b08d5cb64d90af6e563e952b18d1dbc4aa944
