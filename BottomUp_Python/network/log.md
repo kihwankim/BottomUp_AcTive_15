@@ -23,6 +23,7 @@
 
 기록
 ---
+
 ### 7/13(전승민)
 사용모듈 : Queue, Thread  
 큰 그림의 로직 작성. 세부 로직은 계속 다듬어야함  
@@ -57,13 +58,32 @@
 ### 7/19(전승민)
 메인컨트롤러의 유동성 있는 동작을 위해, 네트워크를 다룰 수 있도록 수정
 
-=======
 ### 7/16(배지훈)
 GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
 1. 온도를 체크하고 안전여부 반환하는 함수 구현
 - Emergency Situation에서는 False를 반환, Normal Situation에서는 True를 반환
 2. 사용자의 입력값에 따른 LED Turn on 
 - 향후 데이터 값에 따른 센서 작동을 위한 코드 테스팅
+
+### 7/17(전승민)
+1. 네트워크 컨트롤러 코드 정리 : 송신, 수신을 담당할 클래스 작성
+ - 네트워크 컨트롤러에는 Sender들을 관리할 SendManager 싱글톤 객체 생성  
+ - 송신은 SendManager 하나를 통해서, 수신은 각각의 Receiver 스레드를 통해서.
+ - 새로운 연결을 받아 들일때마다 Sender 생성해서 SendManager에 추가, Recevier 생성해서 스레드로 수신시작
+
+### 7/19(배지훈)
+1. 7/16일 작업내용 참고 사이트 https://m.blog.naver.com/chandong83/220902795488
+2. 온습도센서 DHT11 
+- 측정가능 온도: 섭씨 0도 ~ 50도 (오차 범위 +,- 2도)
+3. 온습도센서 DHT22
+- 측정가능 온도: 섭씨 -40도 ~ 80도 (오차 범위, +,-0.5도)
+- 측정 간격 : 0.1도
+4. LCD I2C 작동 환경 구현 참고사이트
+- https://moondals.wordpress.com/2016/05/01/raspberry-pi%EC%99%80-python%EC%9C%BC%EB%A1%9C-1602-lcd-%EB%AC%B8%EC%9E%90-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B8%B0/
+- https://www.raspberrypi-spy.co.uk/2015/05/using-an-i2c-enabled-lcd-screen-with-the-raspberry-pi/
+- https://torrms.tistory.com/42
+5. LCD I2C 테스팅 완료(출력 디자인 완성)
+- 참고: 6개의 LCD 중 4개 불량
 
 참고사항
 ---
