@@ -1,6 +1,6 @@
 # 경로설정 에러시 추가
-# import sys
-# sys.path.append('D:\project\BottomUp_AcTive_15\BottomUp_Python')
+import sys
+sys.path.append('D:\project\BottomUp_AcTive_15\BottomUp_Python')
 from connectDB.Connect import Connect
 from connectDB.Door import Door
 from connectDB.Pi import Pi
@@ -8,7 +8,7 @@ from connectDB.Stair import Stair
 from connectDB.Windows import Windows
 from graph.Graph import Graph
 
-# from network.networkController import NetworkController
+from network.networkController import NetworkController
 
 IP = '168.188.127.74'
 PORT = 8000
@@ -106,7 +106,33 @@ class Controller(object):
 
     def run(self):
         self.__get_all_data_from_table()
-        print("window :", self.connect.get_windows)
+        
+
+        ##########결과 확인 코드
+
+        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
+        self.graph.find_path()
+    
+        ### 통신 로직 ###
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
+        self.NetworkController.print_all_seat()
+        self.NetworkController.start_accpet()
+
+        # self.NetworkController.test_run_server()
+
+def main():
+    controller = Controller()
+    controller.run()
+    print("print for debug")
+
+
+if __name__ == "__main__":  # 메인문
+    main()
+
+
+"""
+run에서 프린트문
+print("window :", self.connect.get_windows)
         print("stair :", self.connect.get_stairs)
         print("doors :", self.connect.get_doors)
         print("pies :", self.connect.get_pis)
@@ -134,35 +160,22 @@ class Controller(object):
             for number in range(len(self.connect.get_doors[height])):
                 print(self.connect.get_doors[height][number], end=" ")
             print()
+"""
 
-        ##########결과 확인 코드
+''' 통신 로직
+        # 각 층별로, 파이가 안전한지 나타냄.
+        # [0] = 사용 X
+        # [1] = {1:1, 2:0, 7:0}    : 1층. 1번 안전, 2번 위험, 7번 위험
+        # [2] = {1:1, 4:0}         : 2층. 1번 안전, 4번 위험
+        # 네트워크 객체의 safe_height가 실시간으로 업데이트 되니,
+        # .get_safes_hegiht()로 계속 갖다써서 그래프에 이용하면 됨
+        # self.safes_height = self.NetworkController.get_safes_height()
 
-        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
-        self.graph.find_path()
+        # msg_from_admin = 'start checking'
+        # if msg_from_admin == 'start checking':
+        #     self.NetworkController.stop_accept()
+        #     self.NetworkController.start_checking()
 
-    #
-    # paths = self.graph.find_path()
-    # print(paths)
-    ### 통신 로직 ###
-    # self.NetworkController = NetworkController(pi_datas, building_height, IP, PORT)  # 통신을 담당할 class 생성
-    # self.NetworkController.run_server()  # 스레드를 생성하며 통신 시작, 메인 스레드는 emergency 신호가 올때까지 여기서 멈춤
-
-    # self.NetworkController.test_run_server()
-
-    # 각 층별로, 파이가 안전한지 나타냄.
-    # [0] = 사용 X
-    # [1] = {1:1, 2:0, 7:0}    : 1층. 1번 안전, 2번 위험, 7번 위험
-    # [2] = {1:1, 4:0}         : 2층. 1번 안전, 4번 위험
-    # 네트워크 객체의 safe_height가 실시간으로 업데이트 되니,
-    # .get_safes_hegiht()로 계속 갖다써서 그래프에 이용하면 됨
-    # self.safes_height = self.NetworkController.get_safes_height()
-
-
-def main():
-    controller = Controller()
-    controller.run()
-    print("print for debug")
-
-
-if __name__ == "__main__":  # 메인문
-    main()
+        #     if self.NetworkController.get_status() == 'emergency':
+        #         self.NetworkController.start_emergency()
+'''
