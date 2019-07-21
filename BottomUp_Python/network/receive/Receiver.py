@@ -14,6 +14,8 @@ class Receiver:
     
     def receive_data(self):
         data = self.socket.recv(10)
+        if data == b'':
+            raise ConnectionError
         received_floor = data[0]
         received_pi_num = data[1]
         message = data[2]
@@ -26,7 +28,7 @@ class Receiver:
             return self.floor, self.pi_num, 'stop checking'
         elif message == 255:
             return self.floor, self.pi_num, 'emergency'
-        raise IndexError
+        raise ConnectionError
     
     def close(self):
         self.socket.close()
@@ -58,11 +60,9 @@ class Receiver:
                     #print("수신",pi_num,message) # debug
                     self.status_safes[pi_floor][pi_num] = message
         except IndexError:
-            #print("[수신 에러] Index Error")
             pass
         except OSError:
             pass
-            #print("[수신 에러] OS Error")
         finally:
             return 'delete this connection'
 
