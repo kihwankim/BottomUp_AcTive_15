@@ -1,23 +1,15 @@
-from connectDB.Pi import Pi
 import copy
-from connectDB.Vertex import Vertex
+
+from connectDB.Pi import Pi
 
 
 class Graph(object):
-    def __init__(self, tables, pi_table, door_table):
+    def __init__(self, pi_table, door_table):
         self.vertices = []
         self.number_of_vertices = 0
         self.pis = pi_table
         self.doors = door_table
         self.max_height = len(self.doors)
-        # for table in tables:
-        #     for vertex in table:
-        #         if type(vertex) is Pi:
-        #             new_vertex = Vertex(self.number_of_vertices, vertex)
-        #             self.vertices.append(new_vertex)
-        #             self.number_of_vertices += 1
-
-        self.find_path()
 
     def find_path(self):
         path = []
@@ -36,7 +28,8 @@ class Graph(object):
             queue = list()
             pis_for_bfs = copy.deepcopy(pis_on_floor)  # pi 객체 깊은 복사
             for direction in range(4):
-                if door.cross_datas[direction][0] != 'N':
+                get_door_cross_data_of_direction = door.cross_datas[direction][0]
+                if get_door_cross_data_of_direction != 'N' and get_door_cross_data_of_direction != 'S' and get_door_cross_data_of_direction != 'W':
                     pi_number = int(door.cross_datas[direction][0])
                     weight = door.cross_datas[direction][1]
                     result_pi[pi_number - 1][(direction + 2) % 4] = 1
@@ -49,7 +42,8 @@ class Graph(object):
                     pi_number = int(pi.piNumber)
                     visit.append(pi.piNumber)
                     for direction in range(4):
-                        if pi.cross_datas[direction][0] != 'N':
+                        get_pi_cross_data = pi.cross_datas[direction][0]
+                        if get_pi_cross_data != 'N' and get_pi_cross_data != 'S' and get_pi_cross_data != 'W':
                             target_pi_number = int(pi.cross_datas[direction][0])
                             if target_pi_number < 0:
                                 continue
@@ -64,7 +58,6 @@ class Graph(object):
                             pi.cross_datas[direction][1] = pi.cross_datas[direction][1] + node[1]
                             target_pi = pis_for_bfs[target_pi_number - 1]
                             queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
-
-        print(pis_for_bfs)
+            print(pis_for_bfs)
 
         return result_pi
