@@ -19,3 +19,6 @@ class Vertex:
         else:
             array[1] = int(array[1]);
             return array
+
+    def __str__(self):
+        return str(self.broken) + str(self.cross_datas)

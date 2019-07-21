@@ -18,30 +18,50 @@ PI_HEADER_BYTES = 0
 emergency = False
 queue = Queue()
 
-def action_send(sock):
+def action_check_send(sock):
     global emergency   ##### send, receive에서 같이 건드림. 크리티컬 섹션 유의
 
-    while True:
-        # 초기 : 0.5초 주기로 재난상황 발생 체크
-        while check_safe() and not emergency:
-            time.sleep(0.5)
+    # 초기 : 0.5초 주기로 재난상황 발생 체크
+    while check_safe() and not emergency:
+        time.sleep(0.5)
 
-        # 상황 발생 송신
-        sock.send(encode_message(255))
-        
-        queue.get() # 'change emergency complete' 기다림
-        
-        # 상황 발생 : 0.1초 주기로 서버에 안전상태 송신
-        while emergency:
-            sock.send(encode_message(check_safe()))
-            time.sleep(1)
-        
-        # 상황 종료 송신
-        sock.send(encode_message(254))
+    # 상황 발생 송신
+    sock.send(encode_message(255))
     
-        queue.get() # 'restart checking safety status' 기다림
+    queue.get() # 'change emergency complete' 기다림
+    
+    # 상황 발생 : 0.1초 주기로 서버에 안전상태 송신
+    while emergency:
+        sock.send(encode_message(check_safe()))
+        time.sleep(1)
+    
+    # 상황 종료 송신
+    sock.send(encode_message(254))
 
-def action_receive(sock):
+def interpret_message(message):
+    if message == 253:
+        return 'start checking'
+    if message == 254:
+        return 'stop checking'
+    if message == 255:
+        return 'emergency'
+    return message
+
+def wait_order(sock):
+    while True:
+        # 서버로부터 'start checking' 명령을 기다림 
+        _, _, message = decode_data(sock.recv(10))
+        print(message, interpret_message(message)) # for debug
+        if interpret_message(message) != 'start checking':
+            continue
+
+        # 상황 점검 시작
+        # 서버로부터 'stop checking' 메세지가 오면, send, recv 함수 둘 다 종료된다
+        t_send = Thread(target=action_check_send, args=(sock,))
+        t_send.start()
+        action_check_recv(sock)
+
+def action_check_recv(sock):
     global emergency
 
     while True:
@@ -54,26 +74,19 @@ def action_receive(sock):
 
         emergency = True
         queue.put('change emrgency complete')
-
         while emergency:
             data = sock.recv(10)
             recv_pi_floor, recv_pi_num, message = decode_data(data)
             print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
             
             if check_recv(recv_pi_floor, recv_pi_num):
-                if message < 250:
-                    ##### 방향 의미할  message 데이터 검사?
-                    show_direction(message)
+                msg_interpreted = interpret_message(message)
+                if type(msg_interpreted) is int:
+                    show_direction(msg_interpreted)
                 # 254는 상황 종료를 의미
-                elif message == 254:
+                elif msg_interpreted == 'stop checking':
                     emergency = False
-
-                    data = sock.recv(10)
-                    recv_pi_floor, recv_pi_num, message = decode_data(data)
-                    # 253은 상황 실시간 체크 시작
-                    if message == 253:
-                        queue.put('restart checking safety status')
-                        break
+                    return
         
 def encode_message(message):
     byte_message = (message).to_bytes(1, byteorder='big')
@@ -113,7 +126,9 @@ def try_connect(sock):
     pi_num = 0
     pi_num_byte = 0
     
-    while True:
+    count = 0
+    while count<10 :
+        count += 1 
         data_receive = sock.recv(1024).decode()
         
         if data_receive == 'connect accept':
@@ -125,8 +140,11 @@ def try_connect(sock):
 
         pi_floor_byte = (pi_floor).to_bytes(1, byteorder='big')
         pi_num_byte = (pi_num).to_bytes(1, byteorder='big')
-        
         sock.send(pi_floor_byte+pi_num_byte)
+        
+    # 10번 실패시 종료
+    sock.close()
+    sys.exit(0)
 
 if __name__ == '__main__':
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -142,13 +160,8 @@ if __name__ == '__main__':
         t_test = Thread(target=test_change_safety_status)
         t_test.start()
 
-        ############
-        # t_receive 스레드는 수신 담당
-        t_receive = Thread(target=action_receive, args=(sock,))
-        t_receive.start()
-
-        # 메인 스레드는 송신 담당
-        action_send(sock)
+        # 서버로부터 명령을 기다리고, 명령을 수행하는 함수
+        wait_order(sock)
 
     finally:
         sock.close()
