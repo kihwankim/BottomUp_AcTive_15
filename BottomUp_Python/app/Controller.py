@@ -1,6 +1,6 @@
 # 경로설정 에러시 추가
-import sys
-sys.path.append('D:\project\BottomUp_AcTive_15\BottomUp_Python')
+# import sys
+# sys.path.append('D:\project\BottomUp_AcTive_15\BottomUp_Python')
 from connectDB.Connect import Connect
 from connectDB.Door import Door
 from connectDB.Pi import Pi
@@ -8,7 +8,7 @@ from connectDB.Stair import Stair
 from connectDB.Windows import Windows
 from graph.Graph import Graph
 
-from network.networkController import NetworkController
+# from network.networkController import NetworkController
 
 IP = '168.188.127.74'
 PORT = 8000
@@ -107,9 +107,7 @@ class Controller(object):
     def run(self):
         self.__get_all_data_from_table()
         
-
         ##########결과 확인 코드
-
         self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
         self.graph.find_path()
     
@@ -117,8 +115,6 @@ class Controller(object):
         self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
         self.NetworkController.print_all_seat()
         self.NetworkController.start_accpet()
-
-        # self.NetworkController.test_run_server()
 
 def main():
     controller = Controller()
