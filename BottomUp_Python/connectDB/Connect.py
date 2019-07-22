@@ -7,6 +7,9 @@ class Connect(object):
 
     def get_data(self):
         result = self.firebase.get('/bottomup', None)
+        if not result:
+            return None
+
         tables = []
         self.__doors = [[] for _ in range(len(result))]
         self.__pis = [[] for _ in range(len(result))]
