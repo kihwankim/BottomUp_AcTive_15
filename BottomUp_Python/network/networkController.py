@@ -63,6 +63,8 @@ class NetworkController:
                     if self.q_from_Receiver.get('emergency'):
                         self.start_emergency()
                         self.q_from_Receiver.queue.clear()
+                        self.SendManager.send_message(1, 3, [0, 2, 4, 6])
+                        self.SendManager.send_message(1, 1, [5, 0, 2, 3])
                 ''' 
         except OSError:
             print("server stopped")
