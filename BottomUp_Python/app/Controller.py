@@ -24,6 +24,9 @@ class Controller(object):
         self.tables = self.connect.get_data()
         self.graph = None
         self.emergency = False
+        self.max_row = 0
+        self.max_col = 0
+        self.max_height = 0
 
     def __get_way_from_index(self, index):
         if index == 0:
@@ -35,15 +38,18 @@ class Controller(object):
         else:
             return 'left'
 
-    def __check_index(self, row, col, max_row, max_col):
-        if 0 <= row and row < max_row and 0 <= col and col < max_col:
+    def __check_index(self, row, col):
+        if 0 <= row < self.max_row and 0 <= col < self.max_col:
             return True
         return False
 
     def __get_all_data_from_table(self):
-        for height in range(len(self.tables)):
-            for row in range(len(self.tables[height])):
-                for col in range(len(self.tables[height][row])):
+        self.max_height = len(self.tables)
+        for height in range(self.max_height):
+            self.max_row = len(self.tables[height])
+            for row in range(self.max_row):
+                self.max_col = len(self.tables[height][row])
+                for col in range(self.max_col):
                     self.__get_loop_data(height, row, col)
 
     def __get_loop_data(self, height, row, col):  # loop 문에 들어갈 내용들 작성
@@ -54,8 +60,7 @@ class Controller(object):
                 changed_row_data = row + self.change_row[index_of_change]
                 changed_col_data = col + self.change_col[index_of_change]
                 way_data = self.__get_way_from_index(index_of_change)  # 위치에 따른 key 값 가져와짐 bottom, top 과같은
-                if self.__check_index(changed_row_data, changed_col_data,
-                                      len(self.tables[height]), len(self.tables[height][row])):  # 유효성 check
+                if self.__check_index(changed_row_data, changed_col_data):  # 유효성 check
                     changed_data = self.tables[height][changed_row_data][changed_col_data]
                     if changed_data == '':
                         dict_of_way[way_data] = 'N'
@@ -70,8 +75,7 @@ class Controller(object):
                                 index_of_change] * index_of_keep_going
                             after_keep_going_col = col + self.change_col[
                                 index_of_change] * index_of_keep_going
-                            if self.__check_index(after_keep_going_row, after_keep_going_col,
-                                                  len(self.tables[height]), len(self.tables[height][row])):  # 다시 체크
+                            if self.__check_index(after_keep_going_row, after_keep_going_col):  # 다시 체크
                                 changed_data_of_keep_going = self.tables[height][after_keep_going_row][
                                     after_keep_going_col]
                                 if changed_data_of_keep_going == '':
@@ -98,13 +102,37 @@ class Controller(object):
             if inner_data == 'W':
                 self.connect.get_windows[height].append(Windows(dict_of_way, height))
             elif inner_data == 'S':
-                self.connect.get_stairs[height].append(Stair(dict_of_way, height))
+                new_stair_obj = Stair(dict_of_way, height, -(len(self.connect.get_stairs[height]) + 1),
+                                      {'row': row, 'col': col, 'height': height})
+                self.connect.get_stairs[height].append(new_stair_obj)
             else:
                 pi_or_door_number = int(inner_data)
                 if pi_or_door_number > 0:  # pi
                     self.connect.get_pis[height].append(Pi(dict_of_way, height, inner_data))
                 else:  # door
-                    self.connect.get_doors[height].append(Door(dict_of_way, height, str(-pi_or_door_number)))
+                    self.connect.get_doors[height].append(Door(dict_of_way, height, str(pi_or_door_number)))
+
+    def __check_cant_go_anywhere_around_stair(self, path_data):
+        detect_stair_list = [[] for _ in range(self.max_height)]
+        changed = ([1, 0], [-1, 0], [0, 1], [0, -1])
+        for height_stair in self.connect.get_stairs:
+            for stair_vertex in height_stair:
+                is_way = True
+                for changed_way in changed:
+                    changed_row = stair_vertex.point['row'] + changed_way[0]
+                    changed_col = stair_vertex.point['col'] + changed_way[1]
+                    if self.__check_index(changed_row, changed_col):
+                        inner_data = self.tables[stair_vertex.point['height']][changed_row][changed_col]
+                        if inner_data != '' and inner_data != 'S' and inner_data != 'W' and int(inner_data) > 0:
+                            for index_of_pi in range(4):
+                                if path_data[stair_vertex.point['height']][int(inner_data)][index_of_pi] != -1:
+                                    is_way = False
+                                    break
+                    if not is_way:
+                        break
+                if is_way:
+                    detect_stair_list[stair_vertex.point['height']].append(stair_vertex)
+        return detect_stair_list
 
     def __excute_command(self, command):
         if command == 'exit':
@@ -141,8 +169,19 @@ class Controller(object):
                             self.NetworkController.send_All_path(self.graph.find_path())
 
     def run(self):
+        if not self.tables:
+            print("please setting first!!!")
+            return
+
         self.__get_all_data_from_table()
-        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
+
+        self.graph = Graph(self.connect, self.tables)  # path 구하는 class 생성
+        path_data = self.graph.find_path()
+        print(path_data)
+        empty_stair = self.__check_cant_go_anywhere_around_stair(path_data)
+        print(empty_stair)
+    
+    
         self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
 
         t_send = Thread(target=self.__action_send)
@@ -153,6 +192,7 @@ class Controller(object):
             num_menu, command = repeat_print(num_menu)
             self.__excute_command(command)
 
+
 def main():
     controller = Controller()
     controller.run()
@@ -161,7 +201,6 @@ def main():
 
 if __name__ == "__main__":  # 메인문
     main()
-
 
 """
 run에서 프린트문
