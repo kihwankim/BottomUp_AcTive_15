@@ -8,23 +8,25 @@ from network.send.SendManager import SendManager
 from network.send.Sender import Sender
 
 class NetworkController:
-    def __init__(self, pi_datas, building_height, ip, port):
+    def __init__(self, pi_datas, max_height, ip, port):
         self.ip = ip
         self.port = port
-        self.capacity = len(pi_datas) # 정점(파이) 수용량
+        self.capacity = 0 # 정점(파이) 수용량
+        for floor in pi_datas:
+            self.capacity += len(floor)
 
         # 각 층별로, 파이가 안전한지 나타냄. 값의 의미는 (-1:미연결, 0:위험, 1:안전)
         # [0] = 사용 X
         # [1] = {1:1, 2:0, 3:-1, 7:0}    : 1층. 1번 안전, 2번 위험, 3번 미연결, 7번 위험 
         # [2] = {1:1, 4:0}         : 2층. 1번 안전, 4번 위험
-        self.safes_height = [0]* (building_height+1)   # 각 파이별로 안전한지 나타냄.  [1]=1 : 1번 파이 safe,  [2]=0 : 2번 파이 unsafe
+        self.safes_height = [0]*(max_height+1)   # 각 파이별로 안전한지 나타냄.  [1]=1 : 1번 파이 safe,  [2]=0 : 2번 파이 unsafe
 
         # 송신을 담당할 객체 생성
-        self.SendManager = SendManager(building_height)
+        self.SendManager = SendManager(max_height)
         
         # 초기화
-        for height in range(1, building_height+1):
-            self.safes_height[height] = {int(x.piNumber):-1 for x in pi_datas if x.height==height}
+        for height in range(1, max_height+1):
+            self.safes_height[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
 
         self.size_connection = 0
 
@@ -53,6 +55,17 @@ class NetworkController:
                 # 데몬 True : 부모 스레드가 종료되면 자신도 종료
                 t_judge_accpet.daemon = True
                 t_judge_accpet.start()
+
+                ''' 조작 테스트
+                if self.size_connection == 3:
+                    self.start_checking()
+
+                    if self.q_from_Receiver.get('emergency'):
+                        self.start_emergency()
+                        self.q_from_Receiver.queue.clear()
+                        self.SendManager.send_message(1, 3, [0, 2, 4, 6])
+                        self.SendManager.send_message(1, 1, [5, 0, 2, 3])
+                ''' 
         except OSError:
             print("server stopped")
 
@@ -67,10 +80,12 @@ class NetworkController:
 
     def stop_checking(self):
         self.SendManager.send_All_stop_checking()
+        self.q_from_Receiver.queue.clear()
 
     def start_emergency(self):
         self.SendManager.send_All_start_emergency()
 
+    ### 필요? 
     def stop_emergency(self):
         self.SendManager.send_All_stop_checking()
 
@@ -80,8 +95,8 @@ class NetworkController:
             print(addr, "연결 시도")
             pi_floor, pi_num = self.__judge_connect_piNum(client_socket)
             
-            print("%s 접속, %d층 %d번 :" %(addr, pi_floor, pi_num))
-            print("현재 접속 상태 \n"+self.__string_extra_seat())
+            print("%s 접속 허가, %d층 %d번" %(addr, pi_floor, pi_num))
+            self.print_all_seat()
                     
             # 클라이언트에게서 수신할 객체, 클라이언트에게 송신할 객체 생성
             new_sender = Sender(client_socket, pi_floor, pi_num)
@@ -113,6 +128,8 @@ class NetworkController:
             try:
                 sock.send(self.__string_extra_seat().encode())
                 data_received = int.from_bytes(sock.recv(3), byteorder='big')
+                if data_received==0:
+                    raise ConnectionError
                 pi_floor = data_received//256
                 pi_num = data_received%256
 
@@ -128,13 +145,28 @@ class NetworkController:
                 pass
             except KeyError:
                 pass
-            finally:
-                print("%s의 번호 요청. %s층 %s번 할당 불가. 접속 거부" %(sock.getpeername(), pi_floor, pi_num))
+            print("%s의 번호 요청 (%s층 %s번) 할당 불가. 접속 거부" %(sock.getpeername(), pi_floor, pi_num))
   
     def send_All_path(self, list_path):
         self.SendManager.send_All_path(list_path)
 
-    # 현재 빌딩의 남는 파이 자리를 문자열로 리턴
+    # 건물의 모든 파이 자리. 접속 가능여부 출력
+    def print_all_seat(self):
+        ret = str()
+        for height, pi_dict in enumerate(self.safes_height):
+            if height==0:
+                continue
+            pi_seat_OX = dict()
+            for pi in pi_dict:
+                if pi_dict[pi] == -1:
+                    pi_seat_OX[pi] = 'O'
+                else:
+                    pi_seat_OX[pi] = 'X'
+            ret += ("%s층 : %s\n" %(height, pi_seat_OX))
+        print("현재 파이 접속 가능 여부('O':접속가능, 'X':접속불가)")
+        print(ret)
+
+    # 현재 건물의 남는 파이 자리를 문자열로 리턴
     def __string_extra_seat(self):
         ret = str()
         for height, pi_dict in enumerate(self.safes_height):
