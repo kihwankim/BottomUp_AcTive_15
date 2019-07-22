@@ -8,11 +8,12 @@ from connectDB.Stair import Stair
 from connectDB.Windows import Windows
 from graph.Graph import Graph
 
-# from network.networkController import NetworkController
+from interface.interface import *
 
-IP = '168.188.127.74'
+from threading import  Thread
+
+IP = '192.168.0.30'
 PORT = 8000
-
 
 class Controller(object):
     change_row = (1, -1, 0, 0)
@@ -22,6 +23,7 @@ class Controller(object):
         self.connect = Connect()
         self.tables = self.connect.get_data()
         self.graph = None
+        self.emergency = False
         self.max_row = 0
         self.max_col = 0
         self.max_height = 0
@@ -132,6 +134,40 @@ class Controller(object):
                     detect_stair_list[stair_vertex.point['height']].append(stair_vertex)
         return detect_stair_list
 
+    def __excute_command(self, command):
+        if command == 'exit':
+            exit(0)
+        if command == 'get DB':
+            self.__get_all_data_from_table()
+        elif command == 'print status':
+            self.NetworkController.print_all_seat()
+        elif command == 'start accept':
+            t_accept = Thread(target=self.NetworkController.start_accpet)
+            t_accept.start()
+        elif command == 'stop accept':
+            self.NetworkController.stop_accept()
+        elif command == 'start check':
+            self.NetworkController.stop_accept()
+            self.NetworkController.start_checking()
+        elif command == 'stop check':
+            self.NetworkController.stop_checking()
+            self.emergency = False
+
+    def __action_send(self):
+        #list_broken = []
+        while True:
+            self.NetworkController.wait_emergency()
+            self.emergency = True
+
+            while self.emergency:
+                for height, pis in enumerate(self.NetworkController.get_safe_status()):
+                    for pi_number in pis:
+                        if pis[pi_number] == 0:
+                            pis[pi_number]=-1
+                            self.connect.get_pis[height-1][pi_number-1].broken = 0
+                            self.graph.pis = self.connect.get_pis
+                            self.NetworkController.send_All_path(self.graph.find_path())
+
     def run(self):
         if not self.tables:
             print("please setting first!!!")
@@ -144,15 +180,17 @@ class Controller(object):
         print(path_data)
         empty_stair = self.__check_cant_go_anywhere_around_stair(path_data)
         print(empty_stair)
-        ##########결과 확인 코드
-        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
-        self.graph.find_path()
+    
+    
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
 
-        ### 통신 로직 ###
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP,
-                                                   PORT)  # 통신을 담당할 class 생성
-        self.NetworkController.print_all_seat()
-        self.NetworkController.start_accpet()
+        t_send = Thread(target=self.__action_send)
+        t_send.start()
+
+        num_menu = 1
+        while True:
+            num_menu, command = repeat_print(num_menu)
+            self.__excute_command(command)
 
 
 def main():
