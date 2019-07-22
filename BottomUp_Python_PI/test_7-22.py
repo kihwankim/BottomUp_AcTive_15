@@ -39,6 +39,8 @@ def action_check_send(sock):
     sock.send(encode_message(254))
 
 def interpret_message(message):
+    if type(message) == list:
+        return message
     if message == 253:
         return 'start checking'
     if message == 254:
@@ -68,7 +70,7 @@ def action_check_recv(sock):
         data = sock.recv(10)
         recv_pi_floor, recv_pi_num, message = decode_data(data)
         print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
-        if message != 255:
+        if interpret_message(message) != 'emergency':
             print("첫 수신 메시지 에러")
             return
 
@@ -81,7 +83,7 @@ def action_check_recv(sock):
             
             if check_recv(recv_pi_floor, recv_pi_num):
                 msg_interpreted = interpret_message(message)
-                if type(msg_interpreted) is int:
+                if type(msg_interpreted) is list:
                     show_direction(msg_interpreted)
                 # 254는 상황 종료를 의미
                 elif msg_interpreted == 'stop checking':
@@ -96,7 +98,10 @@ def encode_message(message):
 def decode_data(data):
     pi_floor = data[0]
     pi_num = data[1]
-    message = data[2]
+    if len(data)==3:
+        message = data[2]
+    else:
+        message = [int.from_bytes(data[x:x+2], byteorder='big') for x in range(2, len(data), 2)]
     return pi_floor, pi_num, message
 
 # 데이터 배송지가 맞는지 확인
@@ -111,7 +116,7 @@ temp = 1
 def check_safe():
     return temp
 
-# 수신한 데이터로 방향 표시
+# 수신한 데이터([시, 계, 방, 향] 숫자 리스트)로 방향 표시
 def show_direction(direction):
     return 1
 
