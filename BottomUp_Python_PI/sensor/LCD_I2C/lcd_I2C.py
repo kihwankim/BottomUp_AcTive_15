@@ -1,7 +1,7 @@
-import lcd_Driver
+from sensor.LCD_I2C.lcd_Driver import lcd
 from time import *
 
-lcd = lcd_Driver.lcd()
+lcd = lcd()
 lcd.lcd_clear()
 
 def lcd_Display_Clear():

@@ -1,8 +1,10 @@
 import socket
-import time
+from time import time
 import sys
 from threading import Thread
 from queue import Queue
+from sensor.LCD_I2C.lcd_I2C import * # LCD
+from sensor.Temperature_Check_DHT11.temp_Check import * # 온도
 
 # how to use
 # in terminal : python3 this-file.py target-ip target-port
@@ -23,7 +25,7 @@ def action_check_send(sock):
 
     # 초기 : 0.5초 주기로 재난상황 발생 체크
     while check_safe() and not emergency:
-        time.sleep(0.5)
+        sleep(0.5)
 
     # 상황 발생 송신
     sock.send(encode_message(255))
@@ -33,7 +35,7 @@ def action_check_send(sock):
     # 상황 발생 : 0.1초 주기로 서버에 안전상태 송신
     while emergency:
         sock.send(encode_message(check_safe()))
-        time.sleep(1)
+        sleep(1)
     
     # 상황 종료 송신
     sock.send(encode_message(254))
@@ -80,7 +82,7 @@ def action_check_recv(sock):
             data = sock.recv(10)
             recv_pi_floor, recv_pi_num, message = decode_data(data)
             print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
-            
+            print(message)
             if check_recv(recv_pi_floor, recv_pi_num):
                 msg_interpreted = interpret_message(message)
                 if type(msg_interpreted) is list:
@@ -114,11 +116,14 @@ def check_recv(recv_pi_floor, recv_pi_num):
 # 온도체크해서 안전하면 1, 위험하면 0 리턴
 temp = 1
 def check_safe():
-    return temp
+    print("check temperature")
+    value = check_Temperature()
+    print(value)
+    return False
 
 # 수신한 데이터([시, 계, 방, 향] 숫자 리스트)로 방향 표시
 def show_direction(direction):
-    return 1
+    lcd_Display_Write(direction)
 
 def test_change_safety_status():
     global temp
