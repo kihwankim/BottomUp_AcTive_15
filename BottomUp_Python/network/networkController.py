@@ -19,14 +19,14 @@ class NetworkController:
         # [0] = 사용 X
         # [1] = {1:1, 2:0, 3:-1, 7:0}    : 1층. 1번 안전, 2번 위험, 3번 미연결, 7번 위험 
         # [2] = {1:1, 4:0}         : 2층. 1번 안전, 4번 위험
-        self.safes_height = [0]*(max_height+1)   # 각 파이별로 안전한지 나타냄.  [1]=1 : 1번 파이 safe,  [2]=0 : 2번 파이 unsafe
+        self.safe_status = [0]*(max_height+1)   # 각 파이별로 안전한지 나타냄.  [1]=1 : 1번 파이 safe,  [2]=0 : 2번 파이 unsafe
 
         # 송신을 담당할 객체 생성
         self.SendManager = SendManager(max_height)
         
         # 초기화
         for height in range(1, max_height+1):
-            self.safes_height[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
+            self.safe_status[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
 
         self.size_connection = 0
 
@@ -34,11 +34,20 @@ class NetworkController:
          # 큐에서 아이템을 꺼낼 때, 비어있으면 꺼낼때까지 그대로 멈춘다. 이 특성을 이용해 작업 순서 조율
         self.q_from_Receiver = Queue()
 
-    def get_safes_height(self):
-        return self.safes_height
+    def get_safe_status(self):
+        return self.safe_status
 
-    def get_status(self):
-        return self.q_from_Receiver.get()
+    def reset_pi_datas(self, pi_datas, max_height):
+        self.safe_status = [0]*(max_height+1)
+        for height in range(1, max_height+1):
+            self.safe_status[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
+
+
+
+    def wait_emergency(self):
+        while True:
+            if self.q_from_Receiver.get() == 'emergency':
+                break
 
 #-----------------------------------#
     def start_accpet(self):
@@ -100,7 +109,7 @@ class NetworkController:
                     
             # 클라이언트에게서 수신할 객체, 클라이언트에게 송신할 객체 생성
             new_sender = Sender(client_socket, pi_floor, pi_num)
-            new_receiver = Receiver(client_socket, pi_floor, pi_num, self.safes_height, self.q_from_Receiver)
+            new_receiver = Receiver(client_socket, pi_floor, pi_num, self.safe_status, self.q_from_Receiver)
 
             # 송신, 수신
             self.SendManager.add_sender(new_sender)
@@ -133,10 +142,10 @@ class NetworkController:
                 pi_floor = data_received//256
                 pi_num = data_received%256
 
-                if self.safes_height[pi_floor][pi_num] !=-1:
+                if self.safe_status[pi_floor][pi_num] !=-1:
                     raise IndexError
                 
-                self.safes_height[pi_floor][pi_num]=1
+                self.safe_status[pi_floor][pi_num]=1
                 sock.send(('connect accept').encode())
                 return pi_floor, pi_num
             except TypeError:
@@ -153,7 +162,7 @@ class NetworkController:
     # 건물의 모든 파이 자리. 접속 가능여부 출력
     def print_all_seat(self):
         ret = str()
-        for height, pi_dict in enumerate(self.safes_height):
+        for height, pi_dict in enumerate(self.safe_status):
             if height==0:
                 continue
             pi_seat_OX = dict()
@@ -169,7 +178,7 @@ class NetworkController:
     # 현재 건물의 남는 파이 자리를 문자열로 리턴
     def __string_extra_seat(self):
         ret = str()
-        for height, pi_dict in enumerate(self.safes_height):
+        for height, pi_dict in enumerate(self.safe_status):
             if height==0:
                 continue
             height_remain_pi = [key for ix, key in enumerate(pi_dict) if pi_dict[key]==-1]
@@ -182,7 +191,7 @@ class NetworkController:
             # 소켓 close
             client_socket.close()
             # 미연결 상태로 변환
-            self.safes_height[floor][pi_num] = -1
+            self.safe_status[floor][pi_num] = -1
             # Sender 제거
             self.SendManager.delete_sender(floor, pi_num)
             # 소켓 제거
@@ -192,7 +201,19 @@ class NetworkController:
             pass
 
 #------------------------------------#
-    
+    def __start_check_by_admin(self):
+        self.__wait_YES_with_query("Start Checking?")
+        self.start_checking()
+
+        if self.q_from_Receiver.get('emergency'):
+            self.start_emergency()
+            self.q_from_Receiver.queue.clear()
+            self.SendManager.send_message(1, 3, [512, 55, 62, 7])
+            time.sleep(5)
+            self.SendManager.send_message(1, 1, [9999, 9999, 9999, 9999])
+
+
+
     def __start_server_by_admin(self):
         self.__wait_YES_with_query("Start Server?")
 
