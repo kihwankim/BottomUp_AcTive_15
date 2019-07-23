@@ -44,7 +44,7 @@ class NetworkController:
         self.capacity = 0 # 정점(파이) 수용량
         for floor in pi_datas:
             self.capacity += len(floor)
-
+            
         self.safe_status = [0]*(max_height+1)
         for height in range(1, max_height+1):
             self.safe_status[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
