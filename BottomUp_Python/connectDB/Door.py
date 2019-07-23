@@ -10,3 +10,6 @@ class Door(Vertex):
     @property
     def get_height(self):
         return self.height
+
+    def __str__(self):
+        return str(self.broken) + str(self.cross_datas) + ", door : " + self.doorNumber
