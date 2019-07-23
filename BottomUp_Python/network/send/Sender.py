@@ -1,4 +1,3 @@
-
 class Sender:
     def __init__(self, socket, floor, pi_num):
         self.socket = socket
