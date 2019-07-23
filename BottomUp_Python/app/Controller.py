@@ -139,6 +139,7 @@ class Controller(object):
             exit(0)
         if command == 'get DB':
             self.__get_all_data_from_table()
+            self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
         elif command == 'print status':
             self.NetworkController.print_all_seat()
         elif command == 'start accept':

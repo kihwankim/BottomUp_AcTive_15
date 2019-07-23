@@ -18,6 +18,19 @@ class SendManager:
             pass
         except KeyError:
             pass
+        
+    def reset_senders_list(self, building_height):
+        # 모든 소켓 닫고 self.senders 삭제
+        for floor, senders in enumerate(self.senders):
+            for sender in senders.values():
+                sender.close()
+                del sender
+        del self.senders
+
+        # self.senders 재생성
+        self.senders = [0]* (building_height+1)
+        for floor in range(1, building_height+1):
+            self.senders[floor] = {}
 
     # 층, 번호로 메세지 송신
     def send_message(self, floor, pi_num, message):
@@ -58,13 +71,3 @@ class SendManager:
         for floor, floor_pis in enumerate(list_path):
             for pi_num, message in enumerate(floor_pis):
                 self.send_message(floor+1, pi_num+1, message)
-
-    def clear_senders(self):
-        for floor, floor_senders in enumerate(self.senders, 0):
-            if floor == 0:
-                continue
-            for Sender in floor_senders.values():
-                try:
-                    Sender.send(message)
-                except OSError:
-                    list_disconnected.append(Sender)
