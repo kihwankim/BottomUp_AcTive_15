@@ -7,14 +7,14 @@ from connectDB.Pi import Pi
 from connectDB.Stair import Stair
 from connectDB.Windows import Windows
 from graph.Graph import Graph
-
+from network.networkController import NetworkController
 from interface.interface import *
 
-from threading import Thread
+from threading import  Thread
+from queue import  Queue
 
 IP = '192.168.0.30'
 PORT = 8000
-
 
 class Controller(object):
     change_row = (1, -1, 0, 0)
@@ -25,9 +25,7 @@ class Controller(object):
         self.tables = self.connect.get_data()
         self.graph = None
         self.emergency = False
-        self.max_row = 0
-        self.max_col = 0
-        self.max_height = 0
+        self.q_from_Network = Queue()
 
     def __get_way_from_index(self, index):
         if index == 0:
@@ -119,6 +117,8 @@ class Controller(object):
             exit(0)
         if command == 'get DB':
             self.__get_all_data_from_table()
+
+            # 인자 다 넘길 필요있나? 주소 복사?
             self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
         elif command == 'print status':
             self.NetworkController.print_all_seat()
@@ -135,36 +135,46 @@ class Controller(object):
             self.emergency = False
 
     def __action_send(self):
-        # list_broken = []
+        #list_broken = []
         while True:
-            self.NetworkController.wait_emergency()
+            # wait emergency
+            if self.q_from_Network.get() != 'emergency':
+                continue
             self.emergency = True
 
+            while self.emergency:
+                item = self.q_from_Network.get()
+                if item == 'emergency':
+                    continue
+                try:
+                    pi_floor = item[0]
+                    pi_num = item[1]
+                    self.pi_status[pi_floor][pi_num] = -1
+                    self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
+                    self.graph.pis = self.connect.get_pis
+
+
+                    self.NetworkController.send_All_path(self.graph.find_path())  # door 로 가는 경로
+                    self.NetworkController.send_All_path(self.graph.find_star_path()) # stair 로 가는 경로
+
+                except Exception:
+                    pass
+            '''
             while self.emergency:
                 for height, pis in enumerate(self.NetworkController.get_safe_status()):
                     for pi_number in pis:
                         if pis[pi_number] == 0:
-                            pis[pi_number] = -1
-                            self.connect.get_pis[height - 1][pi_number - 1].broken = 0
+                            pis[pi_number]=-1
+                            self.connect.get_pis[height-1][pi_number-1].broken = 0
                             self.graph.pis = self.connect.get_pis
                             self.NetworkController.send_All_path(self.graph.find_path())
+            '''
 
     def run(self):
-        if not self.tables:
-            print("please setting first!!!")
-            return
-
         self.__get_all_data_from_table()
-
-        self.graph = Graph(self.connect, self.tables)  # path 구하는 class 생성
-        path_data = self.graph.find_path()
-        print(path_data)
-
-        result_for_stairs = self.graph.find_stair_path(path_data)
-        for key, value in result_for_stairs.items():
-            print(key, " :", value)
-    
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
+        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
+        self.pi_status = self.NetworkController.get_safe_status() # 주소복사?
 
         t_send = Thread(target=self.__action_send)
         t_send.start()
@@ -173,7 +183,6 @@ class Controller(object):
         while True:
             num_menu, command = repeat_print(num_menu)
             self.__excute_command(command)
-
 
 def main():
     controller = Controller()
