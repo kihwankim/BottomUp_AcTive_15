@@ -1,4 +1,4 @@
-from sensor.LCD_I2C.lcd_Driver import lcd
+from lcd_Driver import lcd
 from time import *
 
 lcd = lcd()
@@ -7,7 +7,7 @@ lcd.lcd_clear()
 def lcd_Display_Clear():
     lcd.lcd_clear()
 
-def lcd_Display_Write(message_Value):
+def lcd_Display_Write_Direction(message_Value):
     up = message_Value[0]
     right = message_Value[1]
     down = message_Value[2]
@@ -45,3 +45,19 @@ def lcd_Display_Write(message_Value):
 
     lcd.lcd_display_string(first_Line_Message, 1)
     lcd.lcd_display_string(second_Line_Message, 2)
+
+def lcd_Display_Write_String(string):
+    str_Length = string.__len__()
+    
+    if str_Length < 17:
+        lcd.lcd_display_string(string, 1)
+    else:
+        first_Line_Message = ""
+        second_Line_Message = ""
+        for index in range(16):
+            first_Line_Message += string[index]
+        for index in range(16, str_Length):
+            second_Line_Message += string[index]
+
+        lcd.lcd_display_string(first_Line_Message, 1)
+        lcd.lcd_display_string(second_Line_Message, 2)
