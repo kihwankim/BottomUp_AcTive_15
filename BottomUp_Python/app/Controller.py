@@ -10,11 +10,12 @@ from graph.Graph import Graph
 from network.networkController import NetworkController
 from interface.interface import *
 
-from threading import  Thread
-from queue import  Queue
+from threading import Thread
+from queue import Queue
 
 IP = '192.168.0.30'
 PORT = 8000
+
 
 class Controller(object):
     change_row = (1, -1, 0, 0)
@@ -26,6 +27,9 @@ class Controller(object):
         self.graph = None
         self.emergency = False
         self.q_from_Network = Queue()
+        self.max_row = 0
+        self.max_col = 0
+        self.max_height = 0
 
     def __get_way_from_index(self, index):
         if index == 0:
@@ -135,7 +139,7 @@ class Controller(object):
             self.emergency = False
 
     def __action_send(self):
-        #list_broken = []
+        # list_broken = []
         while True:
             # wait emergency
             if self.q_from_Network.get() != 'emergency':
@@ -153,9 +157,8 @@ class Controller(object):
                     self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
                     self.graph.pis = self.connect.get_pis
 
-
                     self.NetworkController.send_All_path(self.graph.find_path())  # door 로 가는 경로
-                    self.NetworkController.send_All_path(self.graph.find_star_path()) # stair 로 가는 경로
+                    self.NetworkController.send_All_path(self.graph.find_star_path())  # stair 로 가는 경로
 
                 except Exception:
                     pass
@@ -170,11 +173,47 @@ class Controller(object):
                             self.NetworkController.send_All_path(self.graph.find_path())
             '''
 
+    def __make_format(self, path_door_data, path_stair_data):
+        result_path = []
+
+        for index_of_height in range(self.max_height):
+            row_array = []
+            result_path.append(row_array)
+            for index_of_row in range(len(path_door_data[index_of_height])):
+                col_array = [0 for _ in range(8)]
+                row_array.append(col_array)
+                for index_of_col in range(len(path_door_data[index_of_height][index_of_row])):
+                    door_inner_data = path_door_data[index_of_height][index_of_row][index_of_col]
+                    stair_inner_data = path_stair_data[index_of_height][index_of_row][index_of_col]
+                    if door_inner_data != -1:
+                        result_path[index_of_height][index_of_row][index_of_col] = door_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 1
+                    elif stair_inner_data != -1:
+                        result_path[index_of_height][index_of_row][index_of_col] = stair_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 2
+        return result_path
+
     def run(self):
+        if not self.tables:
+            print("please setting first!!!")
+            return
+
         self.__get_all_data_from_table()
+
         self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
-        self.pi_status = self.NetworkController.get_safe_status() # 주소복사?
+        path_data = self.graph.find_path()
+        print(path_data)
+
+        result_for_stairs = self.graph.find_stair_path(path_data)
+        for key, value in result_for_stairs.items():
+            print(key, ":", value)
+
+        send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
+        print(send_data)
+
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
+                                                   self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
+        self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
 
         t_send = Thread(target=self.__action_send)
         t_send.start()
@@ -183,6 +222,7 @@ class Controller(object):
         while True:
             num_menu, command = repeat_print(num_menu)
             self.__excute_command(command)
+
 
 def main():
     controller = Controller()
