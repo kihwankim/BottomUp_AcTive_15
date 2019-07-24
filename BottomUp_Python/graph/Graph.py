@@ -199,11 +199,7 @@ class Graph(object):
     def __check_is_way_stair(self, path_of_door_stairs, path_of_rooftop_stairs, stair):
         stair_number = -stair.get_stair_number - 1
         height = stair.get_height
-<<<<<<< HEAD
-        if path_of_door_stairs[height][stair_number][2] != 0:
-=======
         if path_of_door_stairs[height][stair_number][2] != 1:
->>>>>>> b16ba4bf170aaf6bd7f8daa55a1b851a32ffe997
             for index in range(2):
                 if path_of_door_stairs[height][stair_number][index] != -1 or \
                         path_of_rooftop_stairs[height][stair_number][index] != -1:
