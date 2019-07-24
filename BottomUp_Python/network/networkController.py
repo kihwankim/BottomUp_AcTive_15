@@ -37,11 +37,21 @@ class NetworkController:
     def get_safe_status(self):
         return self.safe_status
 
-    def reset_pi_datas(self, pi_datas, max_height):
+    # 객체 정보 리셋
+    def reset(self, pi_datas, max_height):
+        del self.safe_status
+
+        self.capacity = 0 # 정점(파이) 수용량
+        for floor in pi_datas:
+            self.capacity += len(floor)
+            
         self.safe_status = [0]*(max_height+1)
         for height in range(1, max_height+1):
             self.safe_status[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
 
+        self.size_connection = 0
+        self.q_from_Receiver.queue.clear()
+        self.SendManager.reset_senders_list(max_height)
 
 
     def wait_emergency(self):
@@ -64,17 +74,6 @@ class NetworkController:
                 # 데몬 True : 부모 스레드가 종료되면 자신도 종료
                 t_judge_accpet.daemon = True
                 t_judge_accpet.start()
-
-                ''' 조작 테스트
-                if self.size_connection == 3:
-                    self.start_checking()
-
-                    if self.q_from_Receiver.get('emergency'):
-                        self.start_emergency()
-                        self.q_from_Receiver.queue.clear()
-                        self.SendManager.send_message(1, 3, [0, 2, 4, 6])
-                        self.SendManager.send_message(1, 1, [5, 0, 2, 3])
-                ''' 
         except OSError:
             print("server stopped")
 
@@ -93,10 +92,6 @@ class NetworkController:
 
     def start_emergency(self):
         self.SendManager.send_All_start_emergency()
-
-    ### 필요? 
-    def stop_emergency(self):
-        self.SendManager.send_All_stop_checking()
 
     def __judge_connect(self, client_socket, addr):
         try:
@@ -200,33 +195,6 @@ class NetworkController:
             #print("[delete_disconnected_socket] 이미 삭제된 객체")
             pass
 
-#------------------------------------#
-    def __start_check_by_admin(self):
-        self.__wait_YES_with_query("Start Checking?")
-        self.start_checking()
-
-        if self.q_from_Receiver.get('emergency'):
-            self.start_emergency()
-            self.q_from_Receiver.queue.clear()
-            self.SendManager.send_message(1, 3, [512, 55, 62, 7])
-            time.sleep(5)
-            self.SendManager.send_message(1, 1, [9999, 9999, 9999, 9999])
-
-
-
-    def __start_server_by_admin(self):
-        self.__wait_YES_with_query("Start Server?")
-
-        # 서버 소켓 설정
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind((self.ip, self.port))
-        self.server_socket.listen(0)
-
-
-    def __stop_server_by_admin(self):
-        self.__wait_YES_with_query("Stop Server?")
-        self.server_socket.close()
-    
     # query(질문)에 대한 관리자의 YES 입력 대기
     def __wait_YES_with_query(self, query):
         while True:
