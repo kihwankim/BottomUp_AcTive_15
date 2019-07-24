@@ -93,11 +93,11 @@ class Graph(object):
         # 여기서 stair의 path를 찾아 줄 것이다
         path_of_stairs = []
         for index in range(self.max_height):
-            path_of_stairs.append([[-1 for _ in range(4)]
+            path_of_stairs.append([[-1, -1, -1, 65000]
                                    for _ in range(len(self.connect.get_stairs[index]))])
             # 모든 배열 형성 -> 접근은 stair 번호로 접근
         for stair_data in door_floor_stairs_with_way_pies:
-            path_of_stairs[stair_data.get_height][-stair_data.get_stair_number - 1][2] = 0
+            path_of_stairs[stair_data.get_height][-stair_data.get_stair_number - 1][2] = 1
             # 해당 stair가 존재하는 층은 door가 존재 한다고 것을 명시
 
         for stair in door_floor_stairs_with_way_pies:
@@ -188,21 +188,22 @@ class Graph(object):
                 return stair_vertex
         return None
 
-    def __delete__dont_use_data(self, path_data, dont_use_index):
+    def __delete_dont_use_data(self, path_data, dont_use_index):
         new_path_data = copy.deepcopy(path_data)
         for index_of_delete_floor in range(dont_use_index):
             for stair_way in new_path_data[index_of_delete_floor]:
-                for index in range(4):
+                for index in range(3):
                     stair_way[index] = -1
         return new_path_data
 
     def __check_is_way_stair(self, path_of_door_stairs, path_of_rooftop_stairs, stair):
         stair_number = -stair.get_stair_number - 1
         height = stair.get_height
-        for index in range(2):
-            if path_of_door_stairs[height][stair_number][index] != -1 or \
-                    path_of_rooftop_stairs[height][stair_number][index] != -1:
-                return True
+        if path_of_door_stairs[height][stair_number][2] != 1:
+            for index in range(2):
+                if path_of_door_stairs[height][stair_number][index] != -1 or \
+                        path_of_rooftop_stairs[height][stair_number][index] != -1:
+                    return True
         return False
 
     def __make_each_floor_path(self, path_of_door_stairs, path_of_rooftop_stairs):
@@ -220,9 +221,10 @@ class Graph(object):
 
             2.1 door 있으면 -> 해당층에 인접 pi가 방향 존재 여부 판별 -> 있으면 stair_bfs 배열에 추가
             2.2 없으면 해당 층 무시
-            2.3 옥상은 무조건 추가
 
-            3. 해당 stair에만 대한 bfs로 path 구하기
+            3.1 해당 stair에만 대한 bfs로 path 구하기
+            3.2 옥상에 대한 stair연결 여부 판별 후 bfs로 path 구한다
+            3.3 옥상 path에서 door로 연결 가능 한 path는 배제 한다
 
             4. path가 존재 하는 층에 bfs로 path 구하고 그 path를 리턴
         """
@@ -243,7 +245,7 @@ class Graph(object):
         path_data_to_top_floor = self.__find_path_of_stairs(top_floor_stairs)
         print("옥상과 연결된 모든 stair path를 추력 :", path_data_to_top_floor)
 
-        path_data_to_top_floor = self.__delete__dont_use_data(path_data_to_top_floor, floor_index_of_cant_move)
+        path_data_to_top_floor = self.__delete_dont_use_data(path_data_to_top_floor, floor_index_of_cant_move)
         # 사용 하지 않을 path 데이터 제거
 
         print("옥상으로 가는 경로 최적화 시킨것 -> door있는 경로와 비교 한것 :", path_data_to_top_floor)
@@ -255,88 +257,3 @@ class Graph(object):
 
         return {'stair_path': path_data_of_only_stairs, 'top_floor_stair_path': path_data_to_top_floor,
                 'floor_path_for_stair': path_of_stair_to_pies}
-
-    # path = []  # 리턴 해야하는 것
-    #
-    # for now_height_data in self.connect.get_stairs:
-    #     result_stair = [[-1 for _ in range(4)] for _ in range(len(now_height_data))]  # 4방향 배열 생성
-    #     for stair in now_height_data:
-    #         if stair.broken == 0:
-    #             continue
-    #         deep_copy_stair = copy.deepcopy(now_height_data)
-    #         visit = list()  # 공백의 list 생성
-    #         queue = list()
-    #         upper_stair = self.__find_stair(stair.point['row'], stair.point['col'], stair.point['height'] + 1,
-    #                                         deep_copy_stair)
-    #         under_stair = self.__find_stair(stair.point['row'], stair.point['col'], stair.point['height'] - 1,
-    #                                         deep_copy_stair)
-    #         visit.append(stair.get_stair_number)
-    #         if not upper_stair:
-    #             queue.append([upper_stair, 1, stair.get_stair_number])
-    #         if not under_stair:
-    #             queue.append([under_stair, 1, stair.get_stair_number])
-    #
-    #         while queue:
-    #             node = queue.pop(0)
-    #             if isinstance(node[0], Stair) and node[0].get_stair_number not in visit and node[0].broken == 1:
-    #                 now_stair = node[0]
-    #                 stair_number = int(now_stair.piNumber)
-    #                 visit.append(now_stair.get_stair_number)
-    #                 now_upper_stair = self.__find_stair(now_stair.point['row'], now_stair.point['col'],
-    #                                                     now_stair.point['height'] + 1, deep_copy_stair)
-    #                 now_under_stair = self.__find_stair(now_stair.point['row'], now_stair.point['col'],
-    #                                                     now_stair.point['height'] - 1, deep_copy_stair)
-    #                 if not now_upper_stair:
-    #                     pass
-    #                 if not now_under_stair:
-    #                     pass
-
-    # for direction in range(4):
-    #     get_pi_cross_data = pi.cross_datas[direction][0]
-    #     if get_pi_cross_data != 'N' and get_pi_cross_data != 'S' and get_pi_cross_data != 'W':
-    #         target_pi_number = int(pi.cross_datas[direction][0])
-    #         if target_pi_number < 0:
-    #             continue
-    #         elif pi.cross_datas[direction][0] == node[2] and int(node[2]) > 0:  # door번호랑
-    #             pi.cross_datas[direction][1] = \
-    #                 pis_for_bfs[int(node[2]) - 1].cross_datas[(direction + 2) % 4][1]
-    #             if result_pi[pi_number - 1][direction] == -1 or result_pi[pi_number - 1][
-    #                 direction] > \
-    #                     pi.cross_datas[direction][1]:
-    #                 result_pi[pi_number - 1][direction] = pi.cross_datas[direction][1]
-    #             continue
-    #
-    #         pi.cross_datas[direction][1] = pi.cross_datas[direction][1] + node[1]
-    #         target_pi = pis_for_bfs[target_pi_number - 1]
-    #         queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
-
-# def make_stair_path(self, empty_stair):
-#     path = []
-#     path_of_stair = []
-#     for floor in range(self.max_height):
-#         path.append(self.__find_path_on_floor(empty_stair[floor], self.pis[floor]))
-#         path_of_stair.append(self.__find_path_stair(empty_stair))
-#     return {'floor_path': path, 'stair_path': path_of_stair}
-#
-# def __find_path_stair(self, empty_stair):
-#     now_height_stair_way = []
-#     for floor_of_empty_stair in empty_stair:
-#         for stair_vertex in floor_of_empty_stair:  # stair 하나씩 가져온다
-#             can_upper = 0
-#             can_under = 0
-#             if stair_vertex.broken == 1:
-#                 now_row = stair_vertex.point['row']
-#                 now_col = stair_vertex.point['col']
-#                 now_height = stair_vertex.point['height']
-#                 if 0 <= now_height + 1 < self.max_height and self.tables[now_height + 1][now_row][now_col] == 'S':
-#                     upper_stair = self.__find_stair(now_row, now_col, now_height + 1)
-#                     if upper_stair and upper_stair.broken == 1:
-#                         can_upper = 1
-#                 elif 0 <= now_height - 1 < self.max_height:
-#                     under_stair = self.__find_stair(now_row, now_col, now_height - 1)
-#                     if under_stair and under_stair.broken == 1:
-#                         can_under = 1
-#             now_stair_way = [can_under, can_upper, -1, -1]
-#             now_height_stair_way.append(now_stair_way)
-#     return now_height_stair_way
-#
