@@ -4,6 +4,7 @@ from firebase import firebase
 class Connect(object):
     def __init__(self):
         self.firebase = firebase.FirebaseApplication('https://bottomup-sync.firebaseio.com/', None)
+        
 
     def get_data(self):
         result = self.firebase.get('/bottomup', None)
@@ -16,6 +17,7 @@ class Connect(object):
         self.__windows = [[] for _ in range(len(result))]
         self.__stairs = [[] for _ in range(len(result))]
         self.set_max_height = len(result)
+        self.is_door = [False for _ in range(len(result))]
 
         for table in result.values():
             for tableInfo in table:  # table : 각 층
