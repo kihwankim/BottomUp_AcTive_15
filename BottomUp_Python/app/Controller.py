@@ -163,9 +163,8 @@ class Controller(object):
         result_for_stairs = self.graph.find_stair_path(path_data)
         for key, value in result_for_stairs.items():
             print(key, " :", value)
-
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP,
-                                                   PORT)  # 통신을 담당할 class 생성
+    
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
 
         t_send = Thread(target=self.__action_send)
         t_send.start()
