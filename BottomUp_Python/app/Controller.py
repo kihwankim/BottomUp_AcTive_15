@@ -7,10 +7,11 @@ from connectDB.Pi import Pi
 from connectDB.Stair import Stair
 from connectDB.Windows import Windows
 from graph.Graph import Graph
-
+from network.networkController import NetworkController
 from interface.interface import *
 
 from threading import Thread
+from queue import Queue
 
 IP = '192.168.0.30'
 PORT = 8000
@@ -25,6 +26,7 @@ class Controller(object):
         self.tables = self.connect.get_data()
         self.graph = None
         self.emergency = False
+        self.q_from_Network = Queue()
         self.max_row = 0
         self.max_col = 0
         self.max_height = 0
@@ -119,6 +121,8 @@ class Controller(object):
             exit(0)
         if command == 'get DB':
             self.__get_all_data_from_table()
+
+            # 인자 다 넘길 필요있나? 주소 복사?
             self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
         elif command == 'print status':
             self.NetworkController.print_all_seat()
@@ -137,17 +141,57 @@ class Controller(object):
     def __action_send(self):
         # list_broken = []
         while True:
-            self.NetworkController.wait_emergency()
+            # wait emergency
+            if self.q_from_Network.get() != 'emergency':
+                continue
             self.emergency = True
 
+            while self.emergency:
+                item = self.q_from_Network.get()
+                if item == 'emergency':
+                    continue
+                try:
+                    pi_floor = item[0]
+                    pi_num = item[1]
+                    self.pi_status[pi_floor][pi_num] = -1
+                    self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
+                    self.graph.pis = self.connect.get_pis
+
+                    self.NetworkController.send_All_path(self.graph.find_path())  # door 로 가는 경로
+                    self.NetworkController.send_All_path(self.graph.find_star_path())  # stair 로 가는 경로
+
+                except Exception:
+                    pass
+            '''
             while self.emergency:
                 for height, pis in enumerate(self.NetworkController.get_safe_status()):
                     for pi_number in pis:
                         if pis[pi_number] == 0:
-                            pis[pi_number] = -1
-                            self.connect.get_pis[height - 1][pi_number - 1].broken = 0
+                            pis[pi_number]=-1
+                            self.connect.get_pis[height-1][pi_number-1].broken = 0
                             self.graph.pis = self.connect.get_pis
                             self.NetworkController.send_All_path(self.graph.find_path())
+            '''
+
+    def __make_format(self, path_door_data, path_stair_data):
+        result_path = []
+
+        for index_of_height in range(self.max_height):
+            row_array = []
+            result_path.append(row_array)
+            for index_of_row in range(len(path_door_data[index_of_height])):
+                col_array = [0 for _ in range(8)]
+                row_array.append(col_array)
+                for index_of_col in range(len(path_door_data[index_of_height][index_of_row])):
+                    door_inner_data = path_door_data[index_of_height][index_of_row][index_of_col]
+                    stair_inner_data = path_stair_data[index_of_height][index_of_row][index_of_col]
+                    if door_inner_data != -1:
+                        result_path[index_of_height][index_of_row][index_of_col] = door_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 1
+                    elif stair_inner_data != -1:
+                        result_path[index_of_height][index_of_row][index_of_col] = stair_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 2
+        return result_path
 
     def run(self):
         if not self.tables:
@@ -162,9 +206,14 @@ class Controller(object):
 
         result_for_stairs = self.graph.find_stair_path(path_data)
         for key, value in result_for_stairs.items():
-            print(key, " :", value)
-    
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP, PORT)  # 통신을 담당할 class 생성
+            print(key, ":", value)
+
+        send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
+        print(send_data)
+
+        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
+                                                   self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
+        self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
 
         t_send = Thread(target=self.__action_send)
         t_send.start()

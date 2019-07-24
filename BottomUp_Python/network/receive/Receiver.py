@@ -1,13 +1,13 @@
 import time
 class Receiver:
-    def __init__(self, socket, floor, pi_num, status_safes, q_to_Net):
+    def __init__(self, socket, floor, pi_num, status_safes, q_to_Main):
         self.socket = socket
         self.floor = floor
         self.pi_num = pi_num
 
         # 네트워크컨트롤러, 모든 Receiver가 공유
         self.status_safes = status_safes # 주소 복사
-        self.q_to_Net = q_to_Net # 주소 복사
+        self.q_to_Main = q_to_Main # 주소 복사
 
     def get_pi_info(self):
         return self.floor, self.pi_num
@@ -42,7 +42,7 @@ class Receiver:
                 print("첫 수신. %d층 %d번 : %s" %(pi_floor,pi_num,message)) # debug
                 # 큐에 아이템을 넣어, 메인 컨트롤러에서 emergency 상황을 인지하도록 함
                 if message =='emergency':
-                    self.q_to_Net.put('emergency')
+                    self.q_to_Main.put('emergency')
                 # emergency 상황을 인지한 파이는, 서버에게 [파이번호, safe or unsafe] 데이터를 계속해서 송신
                 elif message =='stop checking':
                     continue
@@ -55,7 +55,9 @@ class Receiver:
                 while True:
                     time.sleep(0.1)
                     pi_floor, pi_num, message = self.receive_data()
-                    if message == 'stop checking':
+                    if message == 0:  # 부서지면 연결을 끊게한다
+                        raise OSError
+                    elif message == 'stop checking':
                         break
                     #print("수신",pi_num,message) # debug
                     self.status_safes[pi_floor][pi_num] = message
