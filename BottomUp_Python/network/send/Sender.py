@@ -19,6 +19,8 @@ class Sender:
         # 방향, 거리
         elif type(message) is list:
             for direction in message:
+                if direction == -1:
+                    direction = 0
                 byte_message += (direction).to_bytes(2, byteorder='big')
         self.socket.send(self.pi_header + byte_message)
     def close(self):
