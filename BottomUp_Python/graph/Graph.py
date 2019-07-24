@@ -93,11 +93,11 @@ class Graph(object):
         # 여기서 stair의 path를 찾아 줄 것이다
         path_of_stairs = []
         for index in range(self.max_height):
-            path_of_stairs.append([[-1 for _ in range(4)]
+            path_of_stairs.append([[-1, -1, -1, 65000]
                                    for _ in range(len(self.connect.get_stairs[index]))])
             # 모든 배열 형성 -> 접근은 stair 번호로 접근
         for stair_data in door_floor_stairs_with_way_pies:
-            path_of_stairs[stair_data.get_height][-stair_data.get_stair_number - 1][2] = 0
+            path_of_stairs[stair_data.get_height][-stair_data.get_stair_number - 1][2] = 1
             # 해당 stair가 존재하는 층은 door가 존재 한다고 것을 명시
 
         for stair in door_floor_stairs_with_way_pies:
@@ -188,18 +188,22 @@ class Graph(object):
                 return stair_vertex
         return None
 
-    def __delete__dont_use_data(self, path_data, dont_use_index):
+    def __delete_dont_use_data(self, path_data, dont_use_index):
         new_path_data = copy.deepcopy(path_data)
         for index_of_delete_floor in range(dont_use_index):
             for stair_way in new_path_data[index_of_delete_floor]:
-                for index in range(4):
+                for index in range(3):
                     stair_way[index] = -1
         return new_path_data
 
     def __check_is_way_stair(self, path_of_door_stairs, path_of_rooftop_stairs, stair):
         stair_number = -stair.get_stair_number - 1
         height = stair.get_height
+<<<<<<< HEAD
         if path_of_door_stairs[height][stair_number][2] != 0:
+=======
+        if path_of_door_stairs[height][stair_number][2] != 1:
+>>>>>>> b16ba4bf170aaf6bd7f8daa55a1b851a32ffe997
             for index in range(2):
                 if path_of_door_stairs[height][stair_number][index] != -1 or \
                         path_of_rooftop_stairs[height][stair_number][index] != -1:
@@ -245,7 +249,7 @@ class Graph(object):
         path_data_to_top_floor = self.__find_path_of_stairs(top_floor_stairs)
         print("옥상과 연결된 모든 stair path를 추력 :", path_data_to_top_floor)
 
-        path_data_to_top_floor = self.__delete__dont_use_data(path_data_to_top_floor, floor_index_of_cant_move)
+        path_data_to_top_floor = self.__delete_dont_use_data(path_data_to_top_floor, floor_index_of_cant_move)
         # 사용 하지 않을 path 데이터 제거
 
         print("옥상으로 가는 경로 최적화 시킨것 -> door있는 경로와 비교 한것 :", path_data_to_top_floor)
