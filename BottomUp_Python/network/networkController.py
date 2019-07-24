@@ -8,7 +8,7 @@ from network.send.SendManager import SendManager
 from network.send.Sender import Sender
 
 class NetworkController:
-    def __init__(self, pi_datas, max_height, ip, port):
+    def __init__(self, pi_datas, max_height, q_to_Main, ip, port):
         self.ip = ip
         self.port = port
         self.capacity = 0 # 정점(파이) 수용량
@@ -32,7 +32,7 @@ class NetworkController:
 
          # 작업 Queue.
          # 큐에서 아이템을 꺼낼 때, 비어있으면 꺼낼때까지 그대로 멈춘다. 이 특성을 이용해 작업 순서 조율
-        self.q_from_Receiver = Queue()
+        self.q_to_Main = q_to_Main
 
     def get_safe_status(self):
         return self.safe_status
@@ -48,16 +48,6 @@ class NetworkController:
         self.safe_status = [0]*(max_height+1)
         for height in range(1, max_height+1):
             self.safe_status[height] = {int(pi.piNumber):-1 for pi in pi_datas[height-1]}
-
-        self.size_connection = 0
-        self.q_from_Receiver.queue.clear()
-        self.SendManager.reset_senders_list(max_height)
-
-
-    def wait_emergency(self):
-        while True:
-            if self.q_from_Receiver.get() == 'emergency':
-                break
 
 #-----------------------------------#
     def start_accpet(self):
@@ -88,23 +78,23 @@ class NetworkController:
 
     def stop_checking(self):
         self.SendManager.send_All_stop_checking()
-        self.q_from_Receiver.queue.clear()
 
     def start_emergency(self):
         self.SendManager.send_All_start_emergency()
 
     def __judge_connect(self, client_socket, addr):
+        self.size_connection += 1
         try:
-            self.size_connection += 1
             print(addr, "연결 시도")
             pi_floor, pi_num = self.__judge_connect_piNum(client_socket)
             
             print("%s 접속 허가, %d층 %d번" %(addr, pi_floor, pi_num))
+            self.safe_status[pi_floor][pi_num] = 1
             self.print_all_seat()
                     
             # 클라이언트에게서 수신할 객체, 클라이언트에게 송신할 객체 생성
             new_sender = Sender(client_socket, pi_floor, pi_num)
-            new_receiver = Receiver(client_socket, pi_floor, pi_num, self.safe_status, self.q_from_Receiver)
+            new_receiver = Receiver(client_socket, pi_floor, pi_num, self.safe_status, self.q_to_Main)
 
             # 송신, 수신
             self.SendManager.add_sender(new_sender)
@@ -121,7 +111,9 @@ class NetworkController:
         else:
             print("%d층 %d번 파이 연결 끊킴. 파손 예상" %(pi_floor, pi_num))
         finally:
+            self.safe_status[pi_floor][pi_num] = -1
             self.size_connection -= 1
+            self.q_to_Main.put([pi_floor, pi_num])
 
     def __judge_connect_piNum(self, sock):
         while True:
@@ -139,8 +131,7 @@ class NetworkController:
 
                 if self.safe_status[pi_floor][pi_num] !=-1:
                     raise IndexError
-                
-                self.safe_status[pi_floor][pi_num]=1
+
                 sock.send(('connect accept').encode())
                 return pi_floor, pi_num
             except TypeError:
