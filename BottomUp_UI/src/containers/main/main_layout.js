@@ -14,7 +14,7 @@ class MainLayout extends Component {
         return (
           <div key={data}>
             {number}
-            <table key={number} className="main-layout" id={number}>
+            <table key={number} className="main-layout table table-bordered table-striped" id={number}>
               <thead></thead>
               <tbody>
                   {table}

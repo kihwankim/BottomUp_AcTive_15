@@ -5,12 +5,12 @@ table {
 }
 /* Zebra striping */
 tr:nth-of-type(odd) {
-    background: #eee;
+    /*background: #eee;*/
 }
 
 td, th {
     padding: 6px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     text-align: center;
     height: 60px;
     width: 100px;
@@ -35,8 +35,22 @@ td, th {
     grid-row: 1;
 }
 
+
+#container-for-input {
+    max-width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns:  repeat(3, 1fr);
+}
+
+#container-for-input > div {
+    width: 200px;
+    height: 50px;
+}
+
+
 .left {
-    background-color: aquamarine;
+    /*background-color: aquamarine;*/
     grid-row: 2 / 5;
     grid-column: 1 / 2;
 }
@@ -55,6 +69,17 @@ html, body {
     height: 100%;
 }
 
+li > a{
+    margin: 0;
+    width: 200px;
+}
+
+li{
+    padding: 0;
+    margin: 0;
+
+}
+
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -64,22 +89,28 @@ html, body {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     width: 140px;
     cursor: pointer;
 }
 
 
 .row{
-    float: left;
+    margin-left: 5px;
+    max-width: 200px;
+    height: 100%;
 }
 
 .col{
-    float: left;
+    max-width: 200px;
     margin-left: 30px;
 }
 
 .width{
-    float: left;
+    margin-left: 30px;
+    max-width: 200px;
+}
+
+.max-height{
+    max-width: 200px;
     margin-left: 30px;
 }
