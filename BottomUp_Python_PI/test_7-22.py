@@ -42,14 +42,17 @@ def action_check_send(sock):
 
 def interpret_message(message):
     if type(message) == list:
-        return message
+        if len(list)==4:
+            return 'msg for stair'
+        if len(list)==8:
+            return 'msg for non-stair'
     if message == 253:
         return 'start checking'
     if message == 254:
         return 'stop checking'
     if message == 255:
         return 'emergency'
-    return message
+    return 'cant interpret'
 
 def wait_order(sock):
     while True:
@@ -74,7 +77,7 @@ def action_check_recv(sock):
         print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
         if interpret_message(message) != 'emergency':
             print("첫 수신 메시지 에러")
-            return
+            continue
 
         emergency = True
         queue.put('change emrgency complete')
@@ -85,8 +88,11 @@ def action_check_recv(sock):
             print(message)
             if check_recv(recv_pi_floor, recv_pi_num):
                 msg_interpreted = interpret_message(message)
-                if type(msg_interpreted) is list:
-                    show_direction(msg_interpreted)
+                if msg_interpreted == 'msg for stair':
+                    show_direction(message)
+                elif msg_interpreted == 'msg for non-stair':
+                    show_direction(message[:4])
+                    show_LED(message[4:])
                 # 254는 상황 종료를 의미
                 elif msg_interpreted == 'stop checking':
                     emergency = False
@@ -124,6 +130,10 @@ def check_safe():
 # 수신한 데이터([시, 계, 방, 향] 숫자 리스트)로 방향 표시
 def show_direction(direction):
     lcd_Display_Write(direction)
+
+# 수신한 데이터([시, 계, 방, 향]) 으로 LED 표시
+def show_LED(info):
+    lcd_Display_LED(info)
 
 def test_change_safety_status():
     global temp
