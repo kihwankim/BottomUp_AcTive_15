@@ -12,8 +12,9 @@ from interface.interface import *
 
 from threading import Thread
 from queue import Queue
+import sys
 
-IP = '192.168.0.30'
+IP = '192.168.0.127'
 PORT = 8000
 
 
@@ -22,9 +23,10 @@ class Controller(object):
     change_col = (0, 0, 1, -1)
 
     def __init__(self):
-        self.connect = Connect()
-        self.tables = self.connect.get_data()
+        self.connect = None
+        self.tables = None
         self.graph = None
+        self.NetworkController = None
         self.emergency = False
         self.q_from_Network = Queue()
         self.max_row = 0
@@ -119,14 +121,25 @@ class Controller(object):
     def __excute_command(self, command):
         if command == 'exit':
             exit(0)
+            sys.exit(0)
         if command == 'get DB':
-            self.__get_all_data_from_table()
-
+            self.__excute_for_get_DB()  # 초기화 해주는 곳
             # 인자 다 넘길 필요있나? 주소 복사?
-            self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
+            if not self.NetworkController:
+                self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
+                                                           self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
+                self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
+            else:
+                self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
         elif command == 'print status':
+            if not self.tables:
+                print("please setting first!!!")
+                return False
             self.NetworkController.print_all_seat()
         elif command == 'start accept':
+            if not self.tables:
+                print("please setting first!!!")
+                return False
             t_accept = Thread(target=self.NetworkController.start_accpet)
             t_accept.start()
         elif command == 'stop accept':
@@ -137,6 +150,24 @@ class Controller(object):
         elif command == 'stop check':
             self.NetworkController.stop_checking()
             self.emergency = False
+        return True
+
+    def __excute_for_get_DB(self):
+        self.connect = Connect()
+        self.tables = self.connect.get_data()
+
+        self.__get_all_data_from_table()
+
+        self.graph = Graph(self.connect, self.tables)  # path 구하는 class 생성
+        path_data = self.graph.find_path()
+        print(path_data)
+
+        result_for_stairs = self.graph.find_stair_path(path_data)
+        for key, value in result_for_stairs.items():
+            print(key, ":", value)
+
+        send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
+        print(send_data)
 
     def __action_send(self):
         # list_broken = []
@@ -194,34 +225,20 @@ class Controller(object):
         return result_path
 
     def run(self):
-        if not self.tables:
-            print("please setting first!!!")
-            return
-
-        self.__get_all_data_from_table()
-
-        self.graph = Graph(self.connect, self.tables)  # path 구하는 class 생성
-        path_data = self.graph.find_path()
-        print(path_data)
-
-        result_for_stairs = self.graph.find_stair_path(path_data)
-        for key, value in result_for_stairs.items():
-            print(key, ":", value)
-
-        send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
-        print(send_data)
-
-        self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
-                                                   self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
-        self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
+        # self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
+        #                                            self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
+        # self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
 
         t_send = Thread(target=self.__action_send)
+        t_send.daemon = True
         t_send.start()
 
         num_menu = 1
         while True:
-            num_menu, command = repeat_print(num_menu)
-            self.__excute_command(command)
+
+            new_num_menu, command = repeat_print(num_menu)
+            if self.__excute_command(command):
+                num_menu = new_num_menu
 
 
 def main():
