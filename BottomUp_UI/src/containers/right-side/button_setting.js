@@ -164,21 +164,17 @@ class SettingButton extends Component {
             }
 
             alert("셋팅이 완료되었습니다.");
-            for (let i = 0; i < this.props.maxNumber; i++) {
-                console.log(tables[i]);
-            }
 
-            // firebase.database().ref('bottomup').remove();
-            // for (let i = 0; i < this.props.maxNumber; i++) {
-            //     firebase.database().ref('bottomup').push(tables[i])
-            //     // 이곳에 원하는 요소 추가하면 된다.
-            //         .then(() => {
-            //             console.log(tables[i]);
-            //             console.log('INSERTED!');
-            //         }).catch((error) => {
-            //         console.log(error);
-            //     })
-            // }
+            firebase.database().ref('bottomup').remove();
+            for (let i = 0; i < this.props.maxNumber; i++) {
+                firebase.database().ref('bottomup').push(tables[i])
+                // 이곳에 원하는 요소 추가하면 된다.
+                    .then(() => {
+                        console.log('INSERTED!');
+                    }).catch((error) => {
+                    console.log(error);
+                })
+            }
 
         }
     }
