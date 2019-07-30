@@ -167,6 +167,7 @@ class Controller(object):
             print(key, ":", value)
 
         send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
+        send_data = self.__make_format_top_floor(send_data, result_for_stairs['top_floor_path'])
         print(send_data)
 
     def __action_send(self):
@@ -222,6 +223,26 @@ class Controller(object):
                     elif stair_inner_data != -1:
                         result_path[index_of_height][index_of_row][index_of_col] = stair_inner_data
                         result_path[index_of_height][index_of_row][index_of_col + 4] = 2
+        return result_path
+
+    def __make_format_top_floor(self, path_door_data, path_stair_data):
+        result_path = []
+
+        for index_of_height in range(self.max_height):
+            row_array = []
+            result_path.append(row_array)
+            for index_of_row in range(len(path_stair_data[index_of_height])):
+                col_array = [0 for _ in range(8)]
+                row_array.append(col_array)
+                for index_of_col in range(len(path_stair_data[index_of_height][index_of_row])):
+                    door_inner_data = path_door_data[index_of_height][index_of_row][index_of_col]
+                    stair_inner_data = path_stair_data[index_of_height][index_of_row][index_of_col]
+                    if door_inner_data != 0:
+                        result_path[index_of_height][index_of_row][index_of_col] = door_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 1
+                    elif stair_inner_data != -1:
+                        result_path[index_of_height][index_of_row][index_of_col] = stair_inner_data
+                        result_path[index_of_height][index_of_row][index_of_col + 4] = 3
         return result_path
 
     def run(self):
