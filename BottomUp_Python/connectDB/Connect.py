@@ -27,24 +27,6 @@ class Connect(object):
                     tables.append(tableInfo['array'])
         return tables
 
-
-    @property
-    def get_doors(self):
-        return self.__doors
-
-    @get_doors.setter
-    def set_doors(self, input_doors):
-        self.__doors = input_doors
-
-
-    @property
-    def get_pis(self):
-        return self.__pis
-
-    @get_pis.setter
-    def set_max_height(self, input_pis):
-        self.__pis = input_pis
-
     @property
     def get_doors(self):
         return self.__doors
