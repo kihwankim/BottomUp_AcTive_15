@@ -274,6 +274,7 @@ if __name__ == "__main__":  # 메인문
 """
 run에서 프린트문
 print("window :", self.connect.get_windows)
+>>>>>>> 2b0fe4e8903ee7cc1afcb5812ed268ee53bdf555
         print("stair :", self.connect.get_stairs)
         print("doors :", self.connect.get_doors)
         print("pies :", self.connect.get_pis)
@@ -301,7 +302,26 @@ print("window :", self.connect.get_windows)
             for number in range(len(self.connect.get_doors[height])):
                 print(self.connect.get_doors[height][number], end=" ")
             print()
-"""
+
+        ##########결과 확인 코드
+        self.graph = Graph(self.connect.get_pis, self.connect.get_doors)  # path 구하는 class 생성
+        self.graph.find_path()
+
+    ### 통신 로직 ###
+    # self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height, IP,
+    #                                        PORT)  # 통신을 담당할 class 생성
+    # self.NetworkController.print_all_seat()
+    # self.NetworkController.start_accpet()
+
+
+def main():
+    controller = Controller()
+    controller.run()
+    print("print for debug")
+
+
+if __name__ == "__main__":  # 메인문
+    main()
 
 ''' 통신 로직
         # 각 층별로, 파이가 안전한지 나타냄.

@@ -13,12 +13,11 @@ class Vertex:
         self.left = direction_data['left'].split(",")
         self.bottom = direction_data['bottom'].split(",")
         self.height = 0
-
     def __weight_to_int(self, array):
         if len(array) < 2:
             return array
         else:
-            array[1] = int(array[1])
+            array[1] = int(array[1]);
             return array
 
     def __str__(self):

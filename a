@@ -1,0 +1,475 @@
+[33mcommit bfb5bc68033816236b7aaa851f9de0b2e43cb169[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Reflog: HEAD@{0} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to bfb5bc68033816236b7aaa851f9de0b2e43cb169
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 20:09:24 2019 +0900
+
+    resolve validation using initBinder
+
+[33mcommit 2d0ec0d7800c378bc0f7210553df4100933e4907[m
+Reflog: HEAD@{1} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: 6a724ac 973b9da
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:26:11 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit bfb5bc68033816236b7aaa851f9de0b2e43cb169[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Reflog: HEAD@{2} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to bfb5bc68033816236b7aaa851f9de0b2e43cb169
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 20:09:24 2019 +0900
+
+    resolve validation using initBinder
+
+[33mcommit 2d0ec0d7800c378bc0f7210553df4100933e4907[m
+Reflog: HEAD@{3} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: 6a724ac 973b9da
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:26:11 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit bfb5bc68033816236b7aaa851f9de0b2e43cb169[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Reflog: HEAD@{4} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: resolve validation using initBinder
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 20:09:24 2019 +0900
+
+    resolve validation using initBinder
+
+[33mcommit 2d0ec0d7800c378bc0f7210553df4100933e4907[m
+Reflog: HEAD@{5} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Merge made by the 'recursive' strategy.
+Merge: 6a724ac 973b9da
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:26:11 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit 6a724ac405ffca51ffad788ad6b49f65f3c477e7[m
+Reflog: HEAD@{6} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): rebase
+Merge: e1c17df 5f65702
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:26:02 2019 +0900
+
+    rebase
+
+[33mcommit e1c17df94ede0328a8eb4a6386e1bd94ae8296c3[m
+Reflog: HEAD@{7} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: rebase
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:22:11 2019 +0900
+
+    rebase
+
+[33mcommit 3054c2fc12d4029dc5f9a797431924a0b1a710a5[m
+Reflog: HEAD@{8} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:17:47 2019 +0900
+
+    reabse that displays a screen
+
+[33mcommit 3054c2fc12d4029dc5f9a797431924a0b1a710a5[m
+Reflog: HEAD@{9} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:17:47 2019 +0900
+
+    reabse that displays a screen
+
+[33mcommit 85347426a5d1243d080efbd0a94684c874f0269e[m
+Reflog: HEAD@{10} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Merge made by the 'recursive' strategy.
+Merge: 3054c2f 973b9da
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:18:21 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit 3054c2fc12d4029dc5f9a797431924a0b1a710a5[m
+Reflog: HEAD@{11} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: reabse that displays a screen
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Sat Jul 20 05:17:47 2019 +0900
+
+    reabse that displays a screen
+
+[33mcommit 0a5709f63abbc97a80f0538a9ec7a2be34536fb4[m
+Reflog: HEAD@{12} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): merge
+Merge: f9c4494 a68b08d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 19:01:09 2019 +0900
+
+    merge
+
+[33mcommit f9c44945d912f766ccc7a46b80c3d56d6f17190d[m
+Reflog: HEAD@{13} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: remove idea to resolve confilct
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 05:14:23 2019 +0900
+
+    remove idea to resolve confilct
+
+[33mcommit 1aa408bedae7cc388d147a23481edb2cbac8e4c1[m
+Reflog: HEAD@{14} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add bfs search in python
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 05:11:42 2019 +0900
+
+    add bfs search in python
+
+[33mcommit ed010da791e0f9fd29be74bb616e950af694741b[m
+Reflog: HEAD@{15} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from allCheck to master
+Merge: c8fa2fa 74de42d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 04:12:24 2019 +0900
+
+    Merge branch 'allCheck'
+
+[33mcommit 74de42dba2e99612ac8989cdbdbc8993ea88cb06[m[33m ([m[1;32mallCheck[m[33m)[m
+Reflog: HEAD@{16} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from master to allCheck
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 04:09:57 2019 +0900
+
+    save
+
+[33mcommit ed010da791e0f9fd29be74bb616e950af694741b[m
+Reflog: HEAD@{17} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: merge allCheck: Merge made by the 'recursive' strategy.
+Merge: c8fa2fa 74de42d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 04:12:24 2019 +0900
+
+    Merge branch 'allCheck'
+
+[33mcommit c8fa2fac7992632f5af23904ee975a7a29cc5698[m
+Reflog: HEAD@{18} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: resolve conflict
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 04:12:17 2019 +0900
+
+    resolve conflict
+
+[33mcommit 0af1f71d916c880a402d319d71c78259debd47b3[m
+Reflog: HEAD@{19} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from allCheck to master
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 01:30:43 2019 +0900
+
+    add bfs search
+
+[33mcommit 74de42dba2e99612ac8989cdbdbc8993ea88cb06[m[33m ([m[1;32mallCheck[m[33m)[m
+Reflog: HEAD@{20} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: save
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 04:09:57 2019 +0900
+
+    save
+
+[33mcommit 0af1f71d916c880a402d319d71c78259debd47b3[m
+Reflog: HEAD@{21} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from master to allCheck
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 01:30:43 2019 +0900
+
+    add bfs search
+
+[33mcommit 0af1f71d916c880a402d319d71c78259debd47b3[m
+Reflog: HEAD@{22} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add bfs search
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Thu Jul 18 01:30:43 2019 +0900
+
+    add bfs search
+
+[33mcommit 0afd782dfa293d5a19a3386450290349a402ca8b[m
+Reflog: HEAD@{23} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Merge made by the 'recursive' strategy.
+Merge: 24e49f8 db4e534
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:57:08 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit 24e49f8c0e279311461f116f2a6023bf91055114[m
+Reflog: HEAD@{24} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): add git ignore
+Merge: 79f1b93 2ef1d96
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:57:00 2019 +0900
+
+    add git ignore
+
+[33mcommit 79f1b9316665f8681c999fac4737a86e3cc2304a[m
+Reflog: HEAD@{25} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): add
+Merge: c69dc2b 3b94228
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:47:51 2019 +0900
+
+    add
+
+[33mcommit c69dc2bd1d24e9c1fd6766f2f5babdf5e92b3bb8[m
+Reflog: HEAD@{26} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: resolve all
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:42:39 2019 +0900
+
+    resolve all
+
+[33mcommit acdc628a2898cbbd48fa1000fed762484c0c9169[m
+Reflog: HEAD@{27} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: rebase
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:40:48 2019 +0900
+
+    rebase
+
+[33mcommit 406ddaa626e7cef27bc2576a8736795e6f72c31b[m
+Reflog: HEAD@{28} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add door data connect in python
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 16:37:22 2019 +0900
+
+    add door data connect in python
+
+[33mcommit 343ff2f858db558f8b8f944a12c16962aaa98a9d[m
+Reflog: HEAD@{29} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add weight data to firebase
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 04:36:54 2019 +0900
+
+    add weight data to firebase
+
+[33mcommit 50bcf0e9b3b1512ebf4957b7fda152c007059ff9[m
+Reflog: HEAD@{30} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: b8cdbfd e73d78d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 04:17:44 2019 +0900
+
+    Merge branch 'master' of github.com:myungwoo-Y/BottomUp_AcTive_15
+
+[33mcommit 278d5bcc94ed7c709af2349a73afc558a79de83a[m
+Reflog: HEAD@{31} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add weight data
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 04:36:22 2019 +0900
+
+    add weight data
+
+[33mcommit 50bcf0e9b3b1512ebf4957b7fda152c007059ff9[m
+Reflog: HEAD@{32} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull origin master: Merge made by the 'recursive' strategy.
+Merge: b8cdbfd e73d78d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 04:17:44 2019 +0900
+
+    Merge branch 'master' of github.com:myungwoo-Y/BottomUp_AcTive_15
+
+[33mcommit b8cdbfdb920abf594e2e9cfeebc63f374d7783f9[m
+Reflog: HEAD@{33} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): add door data to firebase
+Merge: 5782e1d a32a698
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 17 04:11:16 2019 +0900
+
+    add door data to firebase
+
+[33mcommit 5782e1d13b6015cece8c7ad82c2f1d373502901a[m
+Reflog: HEAD@{34} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 19:02:46 2019 +0900
+
+    add all
+
+[33mcommit 5782e1d13b6015cece8c7ad82c2f1d373502901a[m
+Reflog: HEAD@{35} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 19:02:46 2019 +0900
+
+    add all
+
+[33mcommit e73d78d91dacf5343dee11dd9bc34d4abbe8a792[m
+Reflog: HEAD@{36} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD
+Merge: 5782e1d 2f130e3
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 19:03:53 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit e73d78d91dacf5343dee11dd9bc34d4abbe8a792[m
+Reflog: HEAD@{37} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Merge made by the 'recursive' strategy.
+Merge: 5782e1d 2f130e3
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 19:03:53 2019 +0900
+
+    Merge branch 'master' of github.com:kihwankim/BottomUp_AcTive_15
+
+[33mcommit 5782e1d13b6015cece8c7ad82c2f1d373502901a[m
+Reflog: HEAD@{38} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add all
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 19:02:46 2019 +0900
+
+    add all
+
+[33mcommit 498596dcafaf09964b4d9a93a082afbd933171c8[m
+Reflog: HEAD@{39} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): add raspberryPi code
+Merge: 0b456bc ce65dc8
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 00:30:11 2019 +0900
+
+    add raspberryPi code
+
+[33mcommit 0b456bc9a3a524667e97ca163785b84bd72d5392[m
+Reflog: HEAD@{40} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add python communication
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 15 00:28:56 2019 +0900
+
+    add python communication
+
+[33mcommit f7b8731161725f80381a2eaaaad587112f9d6877[m
+Reflog: HEAD@{41} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Fast-forward
+Merge: 6a55ddf 86b0a5b
+Author: kihwankim <clack2933@gmail.com>
+Date:   Thu Jul 11 19:46:23 2019 +0900
+
+    Merge pull request #31 from kihwankim/clear_pythonModeling
+    
+    delete file
+
+[33mcommit 19f9ff74e1191e534cd260da87134a68e1e76f80[m
+Reflog: HEAD@{42} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add getting firebsae data in python
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 10 02:06:44 2019 +0900
+
+    add getting firebsae data in python
+
+[33mcommit 488b735dd106958688f74a31892c8f3e84e8b085[m
+Reflog: HEAD@{43} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit (merge): remove new line
+Merge: fafd2e1 31ea61d
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 10 02:05:16 2019 +0900
+
+    remove new line
+
+[33mcommit fafd2e1d2b13abf2ec3bc2a8cc538404a18afe57[m
+Reflog: HEAD@{44} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: remove new line
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 10 02:03:10 2019 +0900
+
+    remove new line
+
+[33mcommit e7fe842b45b45462c0929058dcacb8d35fa63e5e[m
+Reflog: HEAD@{45} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: 3d9510d eb9a4ec
+Author: kihwankim <clack2933@gmail.com>
+Date:   Tue Jul 9 14:10:50 2019 +0900
+
+    Merge pull request #28 from kihwankim/clear_addMaxData
+    
+    add data
+
+[33mcommit 8573c3cd610a910794547f5cd10d90feb7874d53[m
+Reflog: HEAD@{46} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add getting firebase data in python
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 10 01:59:35 2019 +0900
+
+    add getting firebase data in python
+
+[33mcommit e7fe842b45b45462c0929058dcacb8d35fa63e5e[m
+Reflog: HEAD@{47} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: 3d9510d eb9a4ec
+Author: kihwankim <clack2933@gmail.com>
+Date:   Tue Jul 9 14:10:50 2019 +0900
+
+    Merge pull request #28 from kihwankim/clear_addMaxData
+    
+    add data
+
+[33mcommit 8714174e417f6a3b3f86abcb2ef91b54af0ea49f[m
+Reflog: HEAD@{48} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: add get firebase data in python
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Wed Jul 10 01:57:40 2019 +0900
+
+    add get firebase data in python
+
+[33mcommit e7fe842b45b45462c0929058dcacb8d35fa63e5e[m
+Reflog: HEAD@{49} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: reset: moving to HEAD^
+Merge: 3d9510d eb9a4ec
+Author: kihwankim <clack2933@gmail.com>
+Date:   Tue Jul 9 14:10:50 2019 +0900
+
+    Merge pull request #28 from kihwankim/clear_addMaxData
+    
+    add data
+
+[33mcommit 31ea61d781a05a1fc0dd0fbc96aaaffdf5776c26[m
+Reflog: HEAD@{50} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: commit: insert height object to database
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Tue Jul 9 16:00:08 2019 +0900
+
+    insert height object to database
+
+[33mcommit e7fe842b45b45462c0929058dcacb8d35fa63e5e[m
+Reflog: HEAD@{51} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull upstream master: Fast-forward
+Merge: 3d9510d eb9a4ec
+Author: kihwankim <clack2933@gmail.com>
+Date:   Tue Jul 9 14:10:50 2019 +0900
+
+    Merge pull request #28 from kihwankim/clear_addMaxData
+    
+    add data
+
+[33mcommit b0f584161143bf5da234ff63564751c2d226d741[m
+Reflog: HEAD@{52} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: pull git@github.com:kihwankim/BottomUp_AcTive_15.git master: Fast-forward
+Merge: 6fbe633 16ed3b9
+Author: kihwankim <clack2933@gmail.com>
+Date:   Mon Jul 8 23:52:37 2019 +0900
+
+    Merge pull request #25 from kihwankim/clear_addMaxData
+    
+    add stair button
+
+[33mcommit 16364e6877e6a5f5249c7d8a57e2dfcee48fcc07[m[33m ([m[1;32msearchVertical[m[33m, [m[1;32mnotHeight[m[33m)[m
+Reflog: HEAD@{53} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from notHeight to master
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 8 23:18:29 2019 +0900
+
+    add vertical search
+
+[33mcommit 16364e6877e6a5f5249c7d8a57e2dfcee48fcc07[m[33m ([m[1;32msearchVertical[m[33m, [m[1;32mnotHeight[m[33m)[m
+Reflog: HEAD@{54} (myungwoo-Y <auddn6676@naver.com>)
+Reflog message: checkout: moving from master to notHeight
+Author: myungwoo-Y <auddn6676@naver.com>
+Date:   Mon Jul 8 23:18:29 2019 +0900
+
+    add vertical search

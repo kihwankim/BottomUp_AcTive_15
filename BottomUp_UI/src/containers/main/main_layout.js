@@ -3,26 +3,29 @@ import { connect } from 'react-redux';
 
 class MainLayout extends Component {
     constructor(props){
-      super(props);
+        super(props);
     }
 
     renderTables(){
-      let number = 0;
-      return this.props.activeArray.map((table) => {
-        number +=1;
-        let data = number.toString() + "-1";
-        return (
-          <div key={data}>
-            {number}
-            <table key={number} className="main-layout" id={number}>
-              <thead></thead>
-              <tbody>
-                  {table}
-              </tbody>
-            </table>
-          </div>
-        );
-      });
+        let number = 0;
+        return this.props.activeArray.map((table) => {
+            number +=1;
+            let fullName = number.toString() + "층"
+            let data = number.toString() + "-1";
+            return (
+                <div key={data}>
+                    <div className="border-bottom border-primary text-center">
+                        <h6 className="mb-0">{fullName}</h6>
+                    </div>
+                    <table key={number} className="main-layout table table-striped table-bordered" id={number}>
+                        <thead></thead>
+                        <tbody>
+                        {table}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        });
     }
 
     render() {
@@ -32,16 +35,16 @@ class MainLayout extends Component {
 
         return (
             <div>
-              { this.renderTables() }
+                { this.renderTables() }
             </div>
         );
     }
 }
 
 function mapStateToProps(state){
-  return {
-    activeArray: state.activeArray
-  };
+    return {
+        activeArray: state.activeArray
+    };
 }//객체 상태로 넘겨줘야함
 
 export default connect(mapStateToProps)(MainLayout);

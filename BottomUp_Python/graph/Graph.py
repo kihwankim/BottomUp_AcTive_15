@@ -40,6 +40,7 @@ class Graph(object):
                 if get_door_cross_data_of_direction != 'N' and get_door_cross_data_of_direction != 'S' and get_door_cross_data_of_direction != 'W':
                     pi_number = int(door.cross_datas[direction][0])
                     weight = door.cross_datas[direction][1]
+
                     result_pi[pi_number - 1][(direction + 2) % 4] = 1
                     queue.append([pis_for_bfs[pi_number - 1], weight, door.doorNumber])
                     # pis_for_bfs : 파이 객체 배열, weight : 가중치, doorNumber : 해당 위치에 접근 가능한 door
@@ -68,6 +69,7 @@ class Graph(object):
                             target_pi = pis_for_bfs[target_pi_number - 1]
                             queue.append([target_pi, pi.cross_datas[direction][1], pi.piNumber])
             print(pis_for_bfs)
+
         return result_pi
 
     def __get_is_door_floor_stairs(self):  # door가 존재 하는 stair들만 가져온다
