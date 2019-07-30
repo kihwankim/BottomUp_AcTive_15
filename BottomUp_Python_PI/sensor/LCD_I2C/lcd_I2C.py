@@ -8,6 +8,9 @@ def lcd_Display_Clear():
     lcd.lcd_clear()
 
 def lcd_Display_Write_Direction(direction_Information):
+    if direction_Information.__len__() is not 8:
+        return
+
     up_Length = direction_Information[0]
     right_Length = direction_Information[1]
     down_Length = direction_Information[2]
@@ -75,3 +78,33 @@ def lcd_Display_Write_String(string):
 
         lcd.lcd_display_string(first_Line_Message, 1)
         lcd.lcd_display_string(second_Line_Message, 2)
+
+def lcd_Display_Write_Stair(stair_Information):
+    if stair_Information.__len__() is not 4:
+        return
+
+    down = stair_Information[0]
+    up = stair_Information[1]
+    enter = stair_Information[2]
+    # stair_Information[3] 은 무시한다.
+
+    first_Line_Message = ""
+    second_Line_Message = ""
+
+    if enter is 1:
+        first_Line_Message = "    Enter(O)    "
+    else:
+        first_Line_Message = "    Enter(X)    "
+
+    if up is not 0:
+        second_Line_Message = "U " + ("%03d"%up)
+    else:
+        second_Line_Message = "U  (X)  "
+
+    if down is not 0:
+        second_Line_Message += "D" + ("%03d"%down)
+    else:
+        second_Line_Message += "D  (X)  "
+
+    lcd.lcd_display_string(first_Line_Message, 1)
+    lcd.lcd_display_string(second_Line_Message, 2)
