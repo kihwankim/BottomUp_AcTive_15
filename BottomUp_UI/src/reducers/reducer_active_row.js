@@ -1,4 +1,4 @@
-export default function(state = '0', action){
+export default function(state = '', action){
   switch(action.type){
     case 'CHANGE_ROW':
       return action.payload;

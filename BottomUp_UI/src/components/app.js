@@ -19,7 +19,7 @@ class App extends Component {
           <div className="head">
               <Header />
           </div>
-          <div className="left">
+          <div className="left border shadow">
               <MainLayout isSetting={ this.state.isSetting }/>
           </div>
           <div className="right">

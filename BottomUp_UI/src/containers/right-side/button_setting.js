@@ -26,16 +26,23 @@ class SettingButton extends Component {
 
     render() {
         return (
-            <input
-                type="button"
-                className="button"
-                value="Setting"
-                onClick={() => this.onClickAndStoreAtDB()}
-            />
+            <li className="nav-item list-group-item p-0 shadow" onClick={() => this.onClickAndStoreAtDB()}>
+                <a href="#" className="nav-link p-4" data-toggle="pill" >Setting</a>
+            </li>
         );
     }
 
     onClickAndStoreAtDB() {
+        function nearObject(directionalDatas){
+            let isNearObject = false;
+            for (let direction = 0; direction < 4; direction++) {
+                if($.isNumeric(directionalDatas[direction].split(",")[0]) || directionalDatas[direction]=="S"){
+                    isNearObject = true;
+                }
+            }
+            return isNearObject;
+        }
+
         function indexGuard(row, col, maxRow, maxCol) {
             if(row < 0 || col < 0 || row >= maxRow || col >= maxCol){
                 return false;
@@ -43,21 +50,20 @@ class SettingButton extends Component {
                 return true;
             }
         }
+
         if (!this.props.activeArray || this.props.activeArray.length == 0) {
             alert("this is not correct data or Empty data");
         } else {
             // 기존 데이터 베이스 삭제
-            firebase.database().ref('bottomup').remove();
 
             let directionInfo=[[-1,0],[0,1],[1,0], [0,-1]];
+            let tables = [];
 
             for (let height = 1; height <= this.props.maxNumber; height++) {
 
                 // document.getElementById("table-body")
                 let myTableArray = [];
                 let piCount = 1, doorCount = -1;
-                let doors = [];
-
 
                 // 테이블을 2차원 배열로 생성
                 // 동시에 라즈베리파이 인덱싱
@@ -83,11 +89,26 @@ class SettingButton extends Component {
                         myTableArray.push(arrayOfThisRow);
                     }
                 });
-
+                console.log(myTableArray);
                 // 라즈베리파이 주변 값 확인
                 // 동시에 객체 생성하여 데이터 베이스에 업로드
                 for(let i = 0; i < myTableArray.length; i++){
                     for(let j = 0; j < myTableArray[i].length; j++){
+                        if(myTableArray[i][j] == "S"){
+                            let isCorrectStair = false;
+                            for (let direction = 0; direction < 4; direction++) {
+                                if(indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length)){
+                                    if($.isNumeric(myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]])){
+                                        isCorrectStair = true;
+                                    }
+                                }
+                            }
+                            if(!isCorrectStair){
+                                return alert("Stair 주변에 PI가 있어야 합니다.");
+                            }
+                            continue;
+                        }
+
                         if($.isNumeric(myTableArray[i][j])){
                             let objectNumber = myTableArray[i][j];
                             let startRow, startCol, data;
@@ -96,6 +117,11 @@ class SettingButton extends Component {
                                 let weight = 1;
                                 data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
                                     myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
+
+                                if(data == "S"){
+                                    directionalDatas.push(data);
+                                    continue;
+                                }
 
                                 if(data == "B"){
                                     startRow = i;
@@ -106,7 +132,7 @@ class SettingButton extends Component {
                                         if(myTableArray[startRow][startCol] == "B"){
                                             ++weight;
                                             continue;
-                                        }else if($.isNumeric(myTableArray[startRow][startCol]) && parseInt(myTableArray[startRow][startCol]) > 0){
+                                        }else if($.isNumeric(myTableArray[startRow][startCol]) && objectNumber > 0){
                                             data = myTableArray[startRow][startCol];
                                             break;
                                         }else{
@@ -114,52 +140,42 @@ class SettingButton extends Component {
                                         }
                                     }
                                 }
-
                                 if(data == "" || data == "B"){
                                     data = "N";
                                 }else if($.isNumeric(data)){
                                     data = data + "," + weight;
                                 }
-
                                 directionalDatas.push(data);
                             }
-
                             if(objectNumber > 0){
-                                let pi ={
-                                    piNumber : objectNumber,
-                                    top : directionalDatas[0],
-                                    right : directionalDatas[1],
-                                    bottom : directionalDatas[2],
-                                    left : directionalDatas[3]
-                                };
-                                tableToObject.push(pi);
+                                if(!nearObject(directionalDatas)){
+                                    return alert("PI 주변에 아무것도 없습니다.");
+                                }
                             }else if(objectNumber < 0){
-                                let door ={
-                                    doorNumber : objectNumber,
-                                    top : directionalDatas[0],
-                                    right : directionalDatas[1],
-                                    bottom : directionalDatas[2],
-                                    left : directionalDatas[3]
-                                };
-                                doors.push(door);
+                                if(!nearObject(directionalDatas)){
+                                    return alert("Door 주변에 PI를 연결해야합니다.");
+                                }
                             }
-
                         }
                     }
                 }
-
-                tableToObject.push({doors : doors});
                 tableToObject.push({array : myTableArray});
-                console.log(myTableArray);
-                firebase.database().ref('bottomup').push(tableToObject)
+                tables.push(tableToObject);
+            }
+
+            alert("셋팅이 완료되었습니다.");
+
+            firebase.database().ref('bottomup').remove();
+            for (let i = 0; i < this.props.maxNumber; i++) {
+                firebase.database().ref('bottomup').push(tables[i])
                 // 이곳에 원하는 요소 추가하면 된다.
                     .then(() => {
-                        console.log(tableToObject);
                         console.log('INSERTED!');
                     }).catch((error) => {
                     console.log(error);
                 })
             }
+
         }
     }
 }

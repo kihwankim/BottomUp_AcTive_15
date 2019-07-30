@@ -22,6 +22,8 @@ class SendManager:
     def reset_senders_list(self, building_height):
         # 모든 소켓 닫고 self.senders 삭제
         for floor, senders in enumerate(self.senders):
+            if floor is 0:
+                continue
             for sender in senders.values():
                 sender.close()
                 del sender
