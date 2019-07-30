@@ -93,7 +93,7 @@ class Graph(object):
         # 여기서 stair의 path를 찾아 줄 것이다
         path_of_stairs = []
         for index in range(self.max_height):
-            path_of_stairs.append([[-1, -1, -1, 65000]
+            path_of_stairs.append([[-1, -1, -1, -1]
                                    for _ in range(len(self.connect.get_stairs[index]))])
             # 모든 배열 형성 -> 접근은 stair 번호로 접근
         for stair_data in door_floor_stairs_with_way_pies:
@@ -196,22 +196,21 @@ class Graph(object):
                     stair_way[index] = -1
         return new_path_data
 
-    def __check_is_way_stair(self, path_of_door_stairs, path_of_rooftop_stairs, stair):
+    def __check_is_way_stair(self, path_of_door_stairs, stair):
         stair_number = -stair.get_stair_number - 1
         height = stair.get_height
         if path_of_door_stairs[height][stair_number][2] != 1:
             for index in range(2):
-                if path_of_door_stairs[height][stair_number][index] != -1 or \
-                        path_of_rooftop_stairs[height][stair_number][index] != -1:
+                if path_of_door_stairs[height][stair_number][index] != -1:
                     return True
         return False
 
-    def __make_each_floor_path(self, path_of_door_stairs, path_of_rooftop_stairs):
+    def __make_each_floor_path(self, path_of_door_stairs):
         stairs_in_each_height = [[] for _ in range(len(self.connect.get_stairs))]
         for index_of_height in range(len(self.connect.get_stairs)):
             for index_of_row in range(len(self.connect.get_stairs[index_of_height])):
                 stair = self.connect.get_stairs[index_of_height][index_of_row]
-                if self.__check_is_way_stair(path_of_door_stairs, path_of_rooftop_stairs, stair):
+                if self.__check_is_way_stair(path_of_door_stairs, stair):
                     stairs_in_each_height[index_of_height].append(stair)
         return stairs_in_each_height
 
@@ -250,10 +249,12 @@ class Graph(object):
 
         print("옥상으로 가는 경로 최적화 시킨것 -> door있는 경로와 비교 한것 :", path_data_to_top_floor)
 
-        stairs_to_find_path = self.__make_each_floor_path(path_data_of_only_stairs, path_data_to_top_floor)  # 배열을 가져옴
+        stairs_to_find_path = self.__make_each_floor_path(path_data_of_only_stairs)  # 배열을 가져옴
+        stairs_to_top_floor = self.__make_each_floor_path(path_data_to_top_floor)
 
         path_of_stair_to_pies = self.__find_path_of_connected_stair(stairs_to_find_path)
+        path_of_stair_to_top_pies = self.__find_path_of_connected_stair(stairs_to_top_floor)
         print("해당 stair에 대해 내부 층의 path들 : ", path_of_stair_to_pies)
 
         return {'stair_path': path_data_of_only_stairs, 'top_floor_stair_path': path_data_to_top_floor,
-                'floor_path_for_stair': path_of_stair_to_pies}
+                'floor_path_for_stair': path_of_stair_to_pies, 'top_floor_path': path_of_stair_to_top_pies}
