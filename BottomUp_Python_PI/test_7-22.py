@@ -129,11 +129,19 @@ def check_safe():
 
 # 수신한 데이터([시, 계, 방, 향] 숫자 리스트)로 방향 표시
 def show_direction(direction):
-    lcd_Display_Write(direction)
+    lcd_Display_Write_Direction(direction)
+
+# Message를 LCD에 표시
+def show_Message(message):
+    lcd_Display_Write_String(message)
 
 # 수신한 데이터([시, 계, 방, 향]) 으로 LED 표시
 def show_LED(info):
-    lcd_Display_LED(info)
+    light_On_LED(info)
+
+# LED를 Off 시키는 함수
+def turn_Off_LED():
+    light_Off()
 
 def test_change_safety_status():
     global temp
