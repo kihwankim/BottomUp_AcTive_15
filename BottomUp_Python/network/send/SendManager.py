@@ -18,10 +18,28 @@ class SendManager:
             pass
         except KeyError:
             pass
+        
+    def reset_senders_list(self, building_height):
+        # 모든 소켓 닫고 self.senders 삭제
+        for floor, senders in enumerate(self.senders):
+            if floor is 0:
+                continue
+            for sender in senders.values():
+                sender.close()
+                del sender
+        del self.senders
+
+        # self.senders 재생성
+        self.senders = [0]* (building_height+1)
+        for floor in range(1, building_height+1):
+            self.senders[floor] = {}
 
     # 층, 번호로 메세지 송신
     def send_message(self, floor, pi_num, message):
-        self.senders[floor][pi_num].send(message)
+        try:
+            self.senders[floor][pi_num].send(message)
+        except KeyError:
+            print("[ERROR]존재 하지 않는 파이(%d층 %d번)에게 송신시도." %(floor, pi_num))
 
     # 연결된 모든 파이에게 메세지 송신
     def send_All(self, message):
@@ -52,6 +70,6 @@ class SendManager:
         self.send_All(255) 
 
     def send_All_path(self, list_path):
-        for floor in list_path:
-            for pi in floor:
-                self.send_message(pi.floor, pi.num, pi.message)
+        for floor, floor_pis in enumerate(list_path):
+            for pi_num, message in enumerate(floor_pis):
+                self.send_message(floor+1, pi_num+1, message)

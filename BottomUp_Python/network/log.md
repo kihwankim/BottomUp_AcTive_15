@@ -36,7 +36,7 @@
 로컬<->파이2개 양방향 동시 통신완료
 
 라즈베리파이에서 센서를 이용하여  
-온도를 체크하고 안전여부 반환하는 함수와, 입력이 주어지면 방향을 표시하는 함수 필요 
+온도를 체크하고 안전여부 반환하는 함수와, 입력이 주어지면 방향을 표시하는 함수 필요
 
 ### 7/15(전승민)
 사용모듈 : Queue, Thread  
@@ -62,7 +62,7 @@
 GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
 1. 온도를 체크하고 안전여부 반환하는 함수 구현
 - Emergency Situation에서는 False를 반환, Normal Situation에서는 True를 반환
-2. 사용자의 입력값에 따른 LED Turn on 
+2. 사용자의 입력값에 따른 LED Turn on
 - 향후 데이터 값에 따른 센서 작동을 위한 코드 테스팅
 
 ### 7/17(전승민)
@@ -73,7 +73,7 @@ GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
 
 ### 7/19(배지훈)
 1. 7/16일 작업내용 참고 사이트 https://m.blog.naver.com/chandong83/220902795488
-2. 온습도센서 DHT11 
+2. 온습도센서 DHT11
 - 측정가능 온도: 섭씨 0도 ~ 50도 (오차 범위 +,- 2도)
 3. 온습도센서 DHT22
 - 측정가능 온도: 섭씨 -40도 ~ 80도 (오차 범위, +,-0.5도)
@@ -84,6 +84,19 @@ GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
 - https://torrms.tistory.com/42
 5. LCD I2C 테스팅 완료(출력 디자인 완성)
 - 참고: 6개의 LCD 중 4개 불량
+
+### 7/22 (배지훈)
+1. LCD I2C 모듈 Direction 표시 테스트 성공
+2. GPIO 참고사이트 추가 https://m.blog.naver.com/audiendo/220771658560
+3. DHT11 온습도 센서 추가 정보 사이트 http://blog.foobargem.com/blog/2016/03/27/how-to-read-dht-series-of-humidity-and-temperature-sensors-on-a-raspberry-pi/
+
+### 7/24 (배지훈)
+1. LCD I2C 모듈 Direction 표시 및 String 표시 테스트 완료
+2. 온습도 센서(DHT11, DHT22) 조사자료 정리
+
+### 7/25 (배지훈)
+1. LED 모듈 연결 및 테스트(성공)
+2. LED 모듈과 LCD 모듈 동시 테스트 완료(성공)
 
 참고사항
 ---

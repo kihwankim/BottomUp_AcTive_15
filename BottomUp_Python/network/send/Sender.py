@@ -1,4 +1,3 @@
-
 class Sender:
     def __init__(self, socket, floor, pi_num):
         self.socket = socket
@@ -13,7 +12,16 @@ class Sender:
     # 255는 emergency를 의미
     # 254는 stop emergency를 의미
     def send(self, message):
-        byte_message = (message).to_bytes(1, byteorder='big')
+        byte_message = bytes()
+        # 명령
+        if type(message) is int:
+            byte_message = (message).to_bytes(1, byteorder='big')
+        # 방향, 거리
+        elif type(message) is list:
+            for direction in message:
+                if direction == -1:
+                    direction = 0
+                byte_message += (direction).to_bytes(2, byteorder='big')
         self.socket.send(self.pi_header + byte_message)
     def close(self):
         self.socket.close()    

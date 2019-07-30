@@ -1,8 +1,10 @@
 import socket
-import time
+from time import time
 import sys
 from threading import Thread
 from queue import Queue
+from sensor.LCD_I2C.lcd_I2C import * # LCD
+from sensor.Temperature_Check_DHT11.temp_Check import * # 온도
 
 # how to use
 # in terminal : python3 this-file.py target-ip target-port
@@ -23,7 +25,7 @@ def action_check_send(sock):
 
     # 초기 : 0.5초 주기로 재난상황 발생 체크
     while check_safe() and not emergency:
-        time.sleep(0.5)
+        sleep(0.5)
 
     # 상황 발생 송신
     sock.send(encode_message(255))
@@ -33,19 +35,24 @@ def action_check_send(sock):
     # 상황 발생 : 0.1초 주기로 서버에 안전상태 송신
     while emergency:
         sock.send(encode_message(check_safe()))
-        time.sleep(1)
+        sleep(1)
     
     # 상황 종료 송신
     sock.send(encode_message(254))
 
 def interpret_message(message):
+    if type(message) == list:
+        if len(list)==4:
+            return 'msg for stair'
+        if len(list)==8:
+            return 'msg for non-stair'
     if message == 253:
         return 'start checking'
     if message == 254:
         return 'stop checking'
     if message == 255:
         return 'emergency'
-    return message
+    return 'cant interpret'
 
 def wait_order(sock):
     while True:
@@ -68,9 +75,9 @@ def action_check_recv(sock):
         data = sock.recv(10)
         recv_pi_floor, recv_pi_num, message = decode_data(data)
         print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
-        if message != 255:
+        if interpret_message(message) != 'emergency':
             print("첫 수신 메시지 에러")
-            return
+            continue
 
         emergency = True
         queue.put('change emrgency complete')
@@ -78,11 +85,14 @@ def action_check_recv(sock):
             data = sock.recv(10)
             recv_pi_floor, recv_pi_num, message = decode_data(data)
             print("[DEBUG] %d층 %d번 수신 %s" %(recv_pi_floor, recv_pi_num, message))
-            
+            print(message)
             if check_recv(recv_pi_floor, recv_pi_num):
                 msg_interpreted = interpret_message(message)
-                if type(msg_interpreted) is int:
-                    show_direction(msg_interpreted)
+                if msg_interpreted == 'msg for stair':
+                    show_direction(message)
+                elif msg_interpreted == 'msg for non-stair':
+                    show_direction(message[:4])
+                    show_LED(message[4:])
                 # 254는 상황 종료를 의미
                 elif msg_interpreted == 'stop checking':
                     emergency = False
@@ -96,7 +106,10 @@ def encode_message(message):
 def decode_data(data):
     pi_floor = data[0]
     pi_num = data[1]
-    message = data[2]
+    if len(data)==3:
+        message = data[2]
+    else:
+        message = [int.from_bytes(data[x:x+2], byteorder='big') for x in range(2, len(data), 2)]
     return pi_floor, pi_num, message
 
 # 데이터 배송지가 맞는지 확인
@@ -109,11 +122,18 @@ def check_recv(recv_pi_floor, recv_pi_num):
 # 온도체크해서 안전하면 1, 위험하면 0 리턴
 temp = 1
 def check_safe():
-    return temp
+    print("check temperature")
+    value = check_Temperature()
+    print(value)
+    return False
 
-# 수신한 데이터로 방향 표시
+# 수신한 데이터([시, 계, 방, 향] 숫자 리스트)로 방향 표시
 def show_direction(direction):
-    return 1
+    lcd_Display_Write(direction)
+
+# 수신한 데이터([시, 계, 방, 향]) 으로 LED 표시
+def show_LED(info):
+    lcd_Display_LED(info)
 
 def test_change_safety_status():
     global temp

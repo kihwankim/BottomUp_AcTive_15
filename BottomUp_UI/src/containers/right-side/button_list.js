@@ -65,29 +65,30 @@ class ButtonList extends Component {
 
     render() {
         return (
-            <div className="container button-list">
+            <div className="container button-list sticky-top">
                 <ul className="nav nav-pills list-group-flush " role="tablist" aria-orientation="vertical">
-                    <li className="nav-item list-group-item p-0" onClick={() => this.setDataAndMakeArray(this.props.activeRow, this.props.activeCol, this.props.activeMaxHeight)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={() => this.setDataAndMakeArray(this.props.activeRow, this.props.activeCol, this.props.activeMaxHeight)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >data setting</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(0)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(0)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Window</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(1)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(1)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Door</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(2)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(2)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Pi</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(3)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(3)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Bridge</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(4)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(4)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Empty</a>
                     </li>
-                    <li className="nav-item list-group-item p-0" onClick={event => this.printCaseSelect(5)}>
+                    <li className="nav-item list-group-item p-0 shadow" onClick={event => this.printCaseSelect(5)}>
                         <a href="#" className="nav-link p-4" data-toggle="pill" >Stairs</a>
                     </li>
+                    <SettingButton />
                 </ul>
             </div>
 

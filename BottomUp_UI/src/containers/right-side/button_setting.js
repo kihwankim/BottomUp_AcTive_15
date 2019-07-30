@@ -26,12 +26,9 @@ class SettingButton extends Component {
 
     render() {
         return (
-            <input
-                type="button"
-                className="button  btn btn-success"
-                value="Setting"
-                onClick={() => this.onClickAndStoreAtDB()}
-            />
+            <li className="nav-item list-group-item p-0 shadow" onClick={() => this.onClickAndStoreAtDB()}>
+                <a href="#" className="nav-link p-4" data-toggle="pill" >Setting</a>
+            </li>
         );
     }
 
@@ -58,7 +55,6 @@ class SettingButton extends Component {
             alert("this is not correct data or Empty data");
         } else {
             // 기존 데이터 베이스 삭제
-            //firebase.database().ref('bottomup').remove();
 
             let directionInfo=[[-1,0],[0,1],[1,0], [0,-1]];
             let tables = [];
@@ -68,8 +64,6 @@ class SettingButton extends Component {
                 // document.getElementById("table-body")
                 let myTableArray = [];
                 let piCount = 1, doorCount = -1;
-                let doors = [];
-
 
                 // 테이블을 2차원 배열로 생성
                 // 동시에 라즈베리파이 인덱싱
@@ -95,7 +89,7 @@ class SettingButton extends Component {
                         myTableArray.push(arrayOfThisRow);
                     }
                 });
-
+                console.log(myTableArray);
                 // 라즈베리파이 주변 값 확인
                 // 동시에 객체 생성하여 데이터 베이스에 업로드
                 for(let i = 0; i < myTableArray.length; i++){
@@ -109,8 +103,10 @@ class SettingButton extends Component {
                                     }
                                 }
                             }
-                            if(!isCorrectStair)
-                                alert("Stair 주변에 PI가 있어야 합니다.")
+                            if(!isCorrectStair){
+                                return alert("Stair 주변에 PI가 있어야 합니다.");
+                            }
+                            continue;
                         }
 
                         if($.isNumeric(myTableArray[i][j])){
@@ -122,8 +118,10 @@ class SettingButton extends Component {
                                 data = indexGuard(i+directionInfo[direction][0], j+directionInfo[direction][1], myTableArray.length, myTableArray[i].length) ?
                                     myTableArray[i+directionInfo[direction][0]][j+directionInfo[direction][1]] : "N";
 
-                                if(data == "S")
+                                if(data == "S"){
+                                    directionalDatas.push(data);
                                     continue;
+                                }
 
                                 if(data == "B"){
                                     startRow = i;
@@ -151,35 +149,37 @@ class SettingButton extends Component {
                             }
                             if(objectNumber > 0){
                                 if(!nearObject(directionalDatas)){
-                                    alert("PI 주변에 아무것도 없습니다.");
+                                    return alert("PI 주변에 아무것도 없습니다.");
                                 }
-                                tableToObject.push(pi);
                             }else if(objectNumber < 0){
                                 if(!nearObject(directionalDatas)){
-                                    alert("Door 주변에 PI를 연결해야합니다.");
+                                    return alert("Door 주변에 PI를 연결해야합니다.");
                                 }
                             }
                         }
                     }
                 }
-
                 tableToObject.push({array : myTableArray});
                 tables.push(tableToObject);
             }
 
-            alert("셋팅이 완료되었습니다.")
+            alert("셋팅이 완료되었습니다.");
+            for (let i = 0; i < this.props.maxNumber; i++) {
+                console.log(tables[i]);
+            }
 
-
+            // firebase.database().ref('bottomup').remove();
             // for (let i = 0; i < this.props.maxNumber; i++) {
             //     firebase.database().ref('bottomup').push(tables[i])
             //     // 이곳에 원하는 요소 추가하면 된다.
             //         .then(() => {
-            //             console.log(tableToObject);
+            //             console.log(tables[i]);
             //             console.log('INSERTED!');
             //         }).catch((error) => {
             //         console.log(error);
             //     })
             // }
+
         }
     }
 }

@@ -2,15 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b693717-3429-40ad-a16c-115209d3da4d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/interface/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/interface/interface.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/haha.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/LED/led_Driver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/LED/led_Testing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/Temperature_Check_DHT11/temp_Check.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/test_Controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/containers/header_bar/header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/containers/header_bar/header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connectDB/Connect.py" beforeDir="false" afterPath="$PROJECT_DIR$/connectDB/Connect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connectDB/Door.py" beforeDir="false" afterPath="$PROJECT_DIR$/connectDB/Door.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connectDB/Pi.py" beforeDir="false" afterPath="$PROJECT_DIR$/connectDB/Pi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connectDB/Stair.py" beforeDir="false" afterPath="$PROJECT_DIR$/connectDB/Stair.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connectDB/Vertex.py" beforeDir="false" afterPath="$PROJECT_DIR$/connectDB/Vertex.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graph/Graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/graph/Graph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/log.md" beforeDir="false" afterPath="$PROJECT_DIR$/network/log.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/networkController.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/networkController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/receive/Receiver.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/receive/Receiver.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/send/SendManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/send/SendManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/network/send/Sender.py" beforeDir="false" afterPath="$PROJECT_DIR$/network/send/Sender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/LCD_I2C/lcd_I2C.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/LCD_I2C/lcd_I2C.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/lcd_I2C_Test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/led_Test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/temp_Check.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/sensor/temperature_Check.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_Python_PI/test_7-22.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_Python_PI/test_7-22.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/components/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/components/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/containers/main/main_layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/containers/main/main_layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/containers/right-side/button_list.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/containers/right-side/button_list.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/containers/right-side/button_setting.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/containers/right-side/button_setting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BottomUp_UI/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../BottomUp_UI/style/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/../BottomUp_UI/style/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/graph/Graph.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="46" column="80" selection-start-line="46" selection-start-column="80" selection-end-line="46" selection-end-column="80" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="197">
+              <caret line="225" lean-forward="true" selection-start-line="225" selection-end-line="225" />
             </state>
           </provider>
         </entry>
@@ -35,8 +55,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            <state relative-caret-position="520">
+              <caret line="163" lean-forward="true" selection-start-line="163" selection-end-line="163" />
               <folding>
                 <element signature="e#94#131#0" expanded="true" />
               </folding>
@@ -56,8 +76,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/network/networkController.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="304">
+              <caret line="23" selection-start-line="23" selection-end-line="23" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -69,7 +89,7 @@
         <entry file="file://$PROJECT_DIR$/connectDB/Connect.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="855">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
             </state>
           </provider>
         </entry>
@@ -143,10 +163,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="width" value="978" />
-    <option name="height" value="1039" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="952" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -161,6 +181,16 @@
               <item name="BottomUp_Python" type="b2602c69:ProjectViewProjectNode" />
               <item name="BottomUp_Python" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="BottomUp_Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BottomUp_Python" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BottomUp_Python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BottomUp_Python" type="462c0819:PsiDirectoryNode" />
+              <item name="graph" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -171,7 +201,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/temp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -243,16 +273,18 @@
       <workItem from="1563796932101" duration="723000" />
       <workItem from="1563807425363" duration="1520000" />
       <workItem from="1563972872452" duration="50000" />
+      <workItem from="1564493948308" duration="127000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22045000" />
+    <option name="totallyTimeSpent" value="22172000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25134048" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30294907" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -297,16 +329,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/network/receive.py" />
     <entry file="file://$PROJECT_DIR$/network/send.py" />
-    <entry file="file://$PROJECT_DIR$/graph/Graph.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="836">
-          <caret line="46" column="80" selection-start-line="46" selection-start-column="80" selection-end-line="46" selection-end-column="80" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/network/receive/Receiver.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -316,8 +338,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/network/networkController.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="304">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -327,7 +349,7 @@
     <entry file="file://$PROJECT_DIR$/connectDB/Connect.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="855">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
         </state>
       </provider>
     </entry>
@@ -355,10 +377,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/graph/Graph.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="225" lean-forward="true" selection-start-line="225" selection-end-line="225" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        <state relative-caret-position="520">
+          <caret line="163" lean-forward="true" selection-start-line="163" selection-end-line="163" />
           <folding>
             <element signature="e#94#131#0" expanded="true" />
           </folding>
