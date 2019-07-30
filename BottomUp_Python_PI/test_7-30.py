@@ -128,15 +128,15 @@ def check_safe():
 
 # 수신한 데이터(정수 4개를 가진 리스트)로 stair의 lcd 출력
 def lcd_show_stair(message):
-    lcd_Display_Write(message)
+    lcd_Display_Write_Stair(message)
 
 # 수신한 데이터(정수 8개를 가진 리스트) 로 non-stair의 lcd 출력
 def lcd_show_notstair(message):
-    lcd_Display_Write_notstair
+    lcd_Display_Write_Direction(message)
 
 # 인자로 들어오는 문자열을 lcd에 출력
 def show_message(message):
-    lcd_show(message)
+    lcd_Display_Write_String(message)
 
 def test_change_safety_status():
     global temp
