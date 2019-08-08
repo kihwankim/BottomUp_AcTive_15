@@ -32,33 +32,41 @@ def lcd_Display_Write_Direction(direction_Information):
     또한 아래의 코드는 출력값을 LCD에 보기좋게 출력하기 위해 줄맞춤을 하였다.
     '''
     if up_Length is 0:
-        first_Line_Message = "U  (X)  "
+        first_Line_Message = "U (X)   "
     else:
         first_Line_Message = "U " + ("%03d"%up_Length)
         if up_Direction_Info == 3:
             first_Line_Message += "(^)"
+        else:
+            first_Line_Message += "   "
 
 
     if down_Length is 0:
-        first_Line_Message += "D  (X)"
+        first_Line_Message += "D (X)"
     else:
         first_Line_Message += "D " + ("%03d"%down_Length)
         if down_Direction_Info == 3:
             first_Line_Message += "(^)"
+        else:
+            first_Line_Message += "   "
 
     if left_Length is 0:
-        second_Line_Message = "L  (X)  "
+        second_Line_Message = "L (X)   "
     else:
         second_Line_Message = "L " + ("%03d"%left_Length)
         if left_Direction_Info == 3:
             second_Line_Message += "(^)"
+        else:
+            second_Line_Message += "   "
 
     if right_Length is 0:
-        second_Line_Message += "R  (X)"
+        second_Line_Message += "R (X)"
     else:
         second_Line_Message += "R " + ("%03d"%right_Length)
         if right_Direction_Info == 3:
             second_Line_Message += "(^)"
+        else:
+            second_Line_Message += "   "
 
     lcd.lcd_display_string(first_Line_Message, 1)
     lcd.lcd_display_string(second_Line_Message, 2)
@@ -97,12 +105,12 @@ def lcd_Display_Write_Stair(stair_Information):
         first_Line_Message = "    Enter(X)    "
 
     if up is not 0:
-        second_Line_Message = "U " + ("%03d"%up)
+        second_Line_Message = "U " + ("%03d"%up) + "   "
     else:
         second_Line_Message = "U  (X)  "
 
     if down is not 0:
-        second_Line_Message += "D" + ("%03d"%down)
+        second_Line_Message += "D " + ("%03d"%down)
     else:
         second_Line_Message += "D  (X)  "
 
