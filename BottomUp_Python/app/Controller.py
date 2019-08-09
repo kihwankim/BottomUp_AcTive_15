@@ -163,12 +163,39 @@ class Controller(object):
         print(path_data)
 
         result_for_stairs = self.graph.find_stair_path(path_data)
-        for key, value in result_for_stairs.items():
-            print(key, ":", value)
 
-        send_data = self.__make_format(path_data, result_for_stairs['floor_path_for_stair'])
-        send_data = self.__make_format_top_floor(send_data, result_for_stairs['top_floor_path'])
-        print(send_data)
+        send_stair_data = self.__stair_path(result_for_stairs['stair_path'], result_for_stairs['top_floor_stair_path'])
+        print(send_stair_data)
+
+        send_data = self.__result_pi_direction(path_data, result_for_stairs['floor_path_for_stair'],
+                                               result_for_stairs['top_floor_path'])
+        print(send_data)  # send_data : 각각의 라즈베리파이에 대한 정보가 저장 되어있는것
+
+    def __result_pi_direction(self, path_data, for_floor_path, for_top_path):
+        send_data = self.__make_format(path_data, for_floor_path)
+        send_data = self.__make_format_top_floor(send_data, for_top_path)
+
+        return send_data
+
+    def __stair_path(self, door_path, top_path):
+        result_stair_path = []
+        for index_of_floor in range(len(door_path)):
+            each_floor = []
+            for index_of_stair_pi in range(len(door_path[index_of_floor])):
+                each_component = []
+                for index_of_component in range(4):
+                    door_data = door_path[index_of_floor][index_of_stair_pi][index_of_component]
+                    top_data = top_path[index_of_floor][index_of_stair_pi][index_of_component]
+                    if door_data > 0:
+                        each_component.append(door_data)
+                    elif top_data > 0:
+                        each_component.append(top_data)
+                    else:
+                        each_component.append(0)
+                each_floor.append(each_component)
+            result_stair_path.append(each_floor)
+
+        return result_stair_path
 
     def __action_send(self):
         # list_broken = []
@@ -188,9 +215,19 @@ class Controller(object):
                     self.pi_status[pi_floor][pi_num] = -1
                     self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
                     self.graph.pis = self.connect.get_pis
+                    new_path_data = self.graph.find_path()
+                    new_result_for_stairs = self.graph.find_stair_path(new_path_data)
 
-                    self.NetworkController.send_All_path(self.graph.find_path())  # door 로 가는 경로
-                    self.NetworkController.send_All_path(self.graph.find_star_path())  # stair 로 가는 경로
+                    # pi 에게 보낼 data
+                    new_path_send_data = self.__result_pi_direction(path_data,
+                                                                    new_result_for_stairs['floor_path_for_stair'],
+                                                                    new_result_for_stairs['top_floor_path'])
+                    # stair에게 보낼 data
+                    send_stair_data = self.__stair_path(result_for_stairs['stair_path'],
+                                                        result_for_stairs['top_floor_stair_path'])
+
+                    self.NetworkController.send_All_path(new_path_send_data)  # door 로 가는 경로
+                    self.NetworkController.send_All_path(send_stair_data)  # stair 로 가는 경로
 
                 except Exception:
                     pass
@@ -270,38 +307,6 @@ def main():
 
 if __name__ == "__main__":  # 메인문
     main()
-
-"""
-run에서 프린트문
-print("window :", self.connect.get_windows)
-        print("stair :", self.connect.get_stairs)
-        print("doors :", self.connect.get_doors)
-        print("pies :", self.connect.get_pis)
-
-        print("pi : ")
-        for height in range(len(self.connect.get_pis)):
-            for number in range(len(self.connect.get_pis[height])):
-                print(self.connect.get_pis[height][number], end=" ")
-            print()
-
-        print("windows : ")
-        for height in range(len(self.connect.get_windows)):
-            for number in range(len(self.connect.get_windows[height])):
-                print(self.connect.get_windows[height][number], end=" ")
-            print()
-
-        print("stairs : ")
-        for height in range(len(self.connect.get_stairs)):
-            for number in range(len(self.connect.get_stairs[height])):
-                print(self.connect.get_stairs[height][number], end=" ")
-            print()
-
-        print("doors : ")
-        for height in range(len(self.connect.get_doors)):
-            for number in range(len(self.connect.get_doors[height])):
-                print(self.connect.get_doors[height][number], end=" ")
-            print()
-"""
 
 ''' 통신 로직
         # 각 층별로, 파이가 안전한지 나타냄.
