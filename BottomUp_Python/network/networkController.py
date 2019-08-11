@@ -115,6 +115,7 @@ class NetworkController:
         finally:
             self.safe_status[pi_floor][pi_num] = -1
             self.size_connection -= 1
+            self.q_to_Main.put('emergency')
             self.q_to_Main.put([pi_floor, pi_num])
 
     def __judge_connect_piNum(self, sock):

@@ -66,7 +66,6 @@ class Receiver:
         except OSError:
             pass
         finally:
-            self.q_to_Main.put('emergency')
             return 'delete this connection'
 
     ##### '' 맞는지 확인필요 #####

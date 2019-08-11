@@ -204,6 +204,7 @@ class Controller(object):
             if self.q_from_Network.get() != 'emergency':
                 continue
             self.emergency = True
+            self.NetworkController.start_emergency()
 
             while self.emergency:
                 item = self.q_from_Network.get()
