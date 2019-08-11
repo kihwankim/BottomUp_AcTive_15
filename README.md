@@ -1,13 +1,13 @@
 # BottomUp_AcTive_15
 
-##main algorithm
+###main algorithm
 - python
 
-##UI - React
+###UI - React
 - react
 
-##raspberry pi
+###raspberry pi
 - python
 
-##data Communication
+###data Communication
 - python
