@@ -69,7 +69,12 @@ class SendManager:
     def send_All_start_emergency(self):
         self.send_All(255) 
 
-    def send_All_path(self, list_path):
+    def send_path_non_stair(self, list_path):
         for floor, floor_pis in enumerate(list_path):
             for pi_num, message in enumerate(floor_pis):
                 self.send_message(floor+1, pi_num+1, message)
+
+    def send_path_stair(self, list_path):
+        for floor, floor_pis in enumerate(list_path):
+            for pi_num, message in enumerate(floor_pis):
+                self.send_message(floor+1, pi_num+201, message)
