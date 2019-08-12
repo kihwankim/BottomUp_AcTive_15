@@ -125,7 +125,8 @@ class NetworkController:
 
     def __judge_connect_piNum(self, sock):
         while True:
-            if self.capacity == self.size_connection:
+            print(self.capacity, self.size_connection)
+            if self.capacity < self.size_connection:
                 sock.send('[!!!] No extra seat'.encode())
                 print("자리 부족. 접속 거부.")
                 raise ConnectionError
