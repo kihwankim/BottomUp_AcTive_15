@@ -14,7 +14,7 @@ from threading import Thread
 from queue import Queue
 import sys
 
-IP = '192.168.0.127'
+IP = '192.168.1.121'
 PORT = 8000
 
 
@@ -126,7 +126,7 @@ class Controller(object):
             self.__excute_for_get_DB()  # 초기화 해주는 곳
             # 인자 다 넘길 필요있나? 주소 복사?
             if not self.NetworkController:
-                self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_max_height,
+                self.NetworkController = NetworkController(self.connect.get_pis, self.connect.get_stairs, self.connect.get_max_height,
                                                            self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
                 self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
             else:
@@ -204,6 +204,7 @@ class Controller(object):
             if self.q_from_Network.get() != 'emergency':
                 continue
             self.emergency = True
+            self.NetworkController.start_emergency()
 
             while self.emergency:
                 item = self.q_from_Network.get()
@@ -213,21 +214,25 @@ class Controller(object):
                     pi_floor = item[0]
                     pi_num = item[1]
                     self.pi_status[pi_floor][pi_num] = -1
-                    self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
+                    if pi_num <= 200:
+                        self.connect.get_pis[pi_floor - 1][pi_num - 1].broken = 0
+                    else:
+                        self.connect.get_stairs[pi_floor - 1][pi_num - 201].broken = 0
+
                     self.graph.pis = self.connect.get_pis
                     new_path_data = self.graph.find_path()
                     new_result_for_stairs = self.graph.find_stair_path(new_path_data)
 
                     # pi 에게 보낼 data
-                    new_path_send_data = self.__result_pi_direction(path_data,
+                    new_path_send_data = self.__result_pi_direction(new_path_data,
                                                                     new_result_for_stairs['floor_path_for_stair'],
                                                                     new_result_for_stairs['top_floor_path'])
                     # stair에게 보낼 data
-                    send_stair_data = self.__stair_path(result_for_stairs['stair_path'],
-                                                        result_for_stairs['top_floor_stair_path'])
+                    send_stair_data = self.__stair_path(new_result_for_stairs['stair_path'],
+                                                        new_result_for_stairs['top_floor_stair_path'])
 
-                    self.NetworkController.send_All_path(new_path_send_data)  # door 로 가는 경로
-                    self.NetworkController.send_All_path(send_stair_data)  # stair 로 가는 경로
+                    self.NetworkController.send_path_non_stair(new_path_send_data)  # door 로 가는 경로
+                    self.NetworkController.send_path_stair(send_stair_data)  # stair 로 가는 경로
 
                 except Exception:
                     pass
@@ -307,21 +312,3 @@ def main():
 
 if __name__ == "__main__":  # 메인문
     main()
-
-''' 통신 로직
-        # 각 층별로, 파이가 안전한지 나타냄.
-        # [0] = 사용 X
-        # [1] = {1:1, 2:0, 7:0}    : 1층. 1번 안전, 2번 위험, 7번 위험
-        # [2] = {1:1, 4:0}         : 2층. 1번 안전, 4번 위험
-        # 네트워크 객체의 safe_height가 실시간으로 업데이트 되니,
-        # .get_safes_hegiht()로 계속 갖다써서 그래프에 이용하면 됨
-        # self.safes_height = self.NetworkController.get_safes_height()
-
-        # msg_from_admin = 'start checking'
-        # if msg_from_admin == 'start checking':
-        #     self.NetworkController.stop_accept()
-        #     self.NetworkController.start_checking()
-
-        #     if self.NetworkController.get_status() == 'emergency':
-        #         self.NetworkController.start_emergency()
-'''
