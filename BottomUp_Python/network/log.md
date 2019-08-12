@@ -71,6 +71,10 @@ GPIO를 이용한 온도센서 작동확인 및 LED전구 정상작동확인
  - 송신은 SendManager 하나를 통해서, 수신은 각각의 Receiver 스레드를 통해서.
  - 새로운 연결을 받아 들일때마다 Sender 생성해서 SendManager에 추가, Recevier 생성해서 스레드로 수신시작
 
+### ~8/12(전승민)
+1. 메인컨트롤러와 네트워크컨트롤러의 퍼즐 맞추기
+2. 라즈베리파이 ctrl+c 인터럽트 핸들러(sigint_handler()) 작성하여 lcd에 경고문 표시.
+
 ### 7/19(배지훈)
 1. 7/16일 작업내용 참고 사이트 https://m.blog.naver.com/chandong83/220902795488
 2. 온습도센서 DHT11

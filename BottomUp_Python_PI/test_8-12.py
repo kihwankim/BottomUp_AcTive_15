@@ -5,6 +5,7 @@ from threading import Thread
 from queue import Queue
 from sensor.LCD_I2C.lcd_I2C import * # LCD
 from sensor.Temperature_Check_DHT11.temp_Check import *
+import signal
 
 # how to use
 # in terminal : python3 this-file.py target-ip target-port
@@ -141,9 +142,7 @@ def check_recv(recv_pi_floor, recv_pi_num):
 temp = 1
 def check_safe():
     print("check temperature")
-    value = check_Temperature()
-    print(value)
-    return value
+    return check_Temperature()
 
 def lcd_show_stair(message):
     print("[DEBUG] lcd show stair", message)
@@ -185,7 +184,12 @@ def try_connect(sock):
     sock.close()
     sys.exit(0)
 
+def sigint_handler(signal, frame):
+    show_message("    WARNING!     GO OTHER WAY!!")
+    sys.exit(0)
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, sigint_handler)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
@@ -193,6 +197,11 @@ if __name__ == '__main__':
 
         PI_FLOOR, PI_FLOOR_BYTE, PI_NUM, PI_NUM_BYTE = try_connect(sock)
         PI_HEADER_BYTES = PI_FLOOR_BYTE + PI_NUM_BYTE
+
+        showing_message = "Floor  : " + ("%03d"%PI_FLOOR) + "    "
+        showing_message += "Number : " + ("%03d"%PI_NUM) + "    "
+        
+        show_message(showing_message) 
         print("connect success, %d층 %d번." %(PI_FLOOR, PI_NUM))
 
         wait_order(sock)
