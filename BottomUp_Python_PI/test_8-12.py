@@ -146,9 +146,11 @@ def check_safe():
     return value
 
 def lcd_show_stair(message):
+    print("[DEBUG] lcd show stair", message)
     lcd_Display_Write_Stair(message)
 
 def lcd_show_notstair(message):
+    print("[DEBUG] lcd show not stair", message)
     lcd_Display_Write_Direction(message)
 
 def show_message(message):
