@@ -14,10 +14,10 @@ class Sender:
     def send(self, message):
         byte_message = bytes()
         # 명령
-        if type(message) is int:
+        if type(message) == int:
             byte_message = (message).to_bytes(1, byteorder='big')
         # 방향, 거리
-        elif type(message) is list:
+        elif type(message) == list:
             for direction in message:
                 if direction == -1:
                     direction = 0
