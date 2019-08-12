@@ -9,11 +9,13 @@ from network.send.Sender import Sender
 
 
 class NetworkController:
-    def __init__(self, pi_datas, max_height, q_to_Main, ip, port):
+    def __init__(self, pi_datas, stair_datas, max_height, q_to_Main, ip, port):
         self.ip = ip
         self.port = port
         self.capacity = 0  # 정점(파이) 수용량
         for floor in pi_datas:
+            self.capacity += len(floor)
+        for floor in stair_datas:
             self.capacity += len(floor)
 
         # 각 층별로, 파이가 안전한지 나타냄. 값의 의미는 (-1:미연결, 0:위험, 1:안전)
@@ -28,6 +30,9 @@ class NetworkController:
         # 초기화
         for height in range(1, max_height + 1):
             self.safe_status[height] = {int(pi.piNumber): -1 for pi in pi_datas[height - 1]}
+
+            # 200+i는 계단의 파이번호
+            self.safe_status[height].update({200-int(stair.doorNumber): -1 for stair in stair_datas[height - 1]})
 
         self.size_connection = 0
 
@@ -145,8 +150,11 @@ class NetworkController:
                 pass
             print("%s의 번호 요청 (%s층 %s번) 할당 불가. 접속 거부" % (sock.getpeername(), pi_floor, pi_num))
 
-    def send_All_path(self, list_path):
-        self.SendManager.send_All_path(list_path)
+    def send_path_non_stair(self, list_path):
+        self.SendManager.send_path_non_stair(list_path)
+
+    def send_path_stair(self, list_path):
+        self.SendManager.send_path_stair(list_path)
 
     # 건물의 모든 파이 자리. 접속 가능여부 출력
     def print_all_seat(self):
