@@ -8,7 +8,7 @@ def lcd_Display_Clear():
     lcd.lcd_clear()
 
 def lcd_Display_Write_Direction(direction_Information):
-    if direction_Information.__len__() is not 8:
+    if direction_Information.__len__() != 8:
         return
 
     up_Length = direction_Information[0]
@@ -31,7 +31,7 @@ def lcd_Display_Write_Direction(direction_Information):
     거리의 단위는 M(Meter)이며 1000M를 넘길 수도 있는 경우를 고려하여 3자리의 정수로된 M값을 표시한다.
     또한 아래의 코드는 출력값을 LCD에 보기좋게 출력하기 위해 줄맞춤을 하였다.
     '''
-    if up_Length is 0:
+    if up_Length == 0:
         first_Line_Message = "U (X)   "
     else:
         first_Line_Message = "U " + ("%03d"%up_Length)
@@ -41,7 +41,7 @@ def lcd_Display_Write_Direction(direction_Information):
             first_Line_Message += "   "
 
 
-    if down_Length is 0:
+    if down_Length == 0:
         first_Line_Message += "D (X)"
     else:
         first_Line_Message += "D " + ("%03d"%down_Length)
@@ -50,7 +50,7 @@ def lcd_Display_Write_Direction(direction_Information):
         else:
             first_Line_Message += "   "
 
-    if left_Length is 0:
+    if left_Length == 0:
         second_Line_Message = "L (X)   "
     else:
         second_Line_Message = "L " + ("%03d"%left_Length)
@@ -59,7 +59,7 @@ def lcd_Display_Write_Direction(direction_Information):
         else:
             second_Line_Message += "   "
 
-    if right_Length is 0:
+    if right_Length == 0:
         second_Line_Message += "R (X)"
     else:
         second_Line_Message += "R " + ("%03d"%right_Length)
@@ -88,7 +88,7 @@ def lcd_Display_Write_String(string):
         lcd.lcd_display_string(second_Line_Message, 2)
 
 def lcd_Display_Write_Stair(stair_Information):
-    if stair_Information.__len__() is not 4:
+    if stair_Information.__len__() != 4:
         return
 
     down = stair_Information[0]
@@ -99,17 +99,17 @@ def lcd_Display_Write_Stair(stair_Information):
     first_Line_Message = ""
     second_Line_Message = ""
 
-    if enter is 1:
+    if enter == 1:
         first_Line_Message = "    Enter(O)    "
     else:
         first_Line_Message = "    Enter(X)    "
 
-    if up is not 0:
+    if up != 0:
         second_Line_Message = "U " + ("%03d"%up) + "   "
     else:
         second_Line_Message = "U  (X)  "
 
-    if down is not 0:
+    if down != 0:
         second_Line_Message += "D " + ("%03d"%down)
     else:
         second_Line_Message += "D  (X)  "
