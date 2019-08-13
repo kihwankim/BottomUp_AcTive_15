@@ -15,7 +15,7 @@ from queue import Queue
 import sys
 
 IP = '192.168.0.27'
-PORT = 8000
+PORT = 10000
 
 
 class Controller(object):
