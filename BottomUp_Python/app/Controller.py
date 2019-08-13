@@ -14,7 +14,7 @@ from threading import Thread
 from queue import Queue
 import sys
 
-IP = '192.168.1.121'
+IP = '192.168.0.27'
 PORT = 8000
 
 
@@ -208,6 +208,8 @@ class Controller(object):
 
             while self.emergency:
                 item = self.q_from_Network.get()
+                if item == 'stop checking':
+                    break
                 if item == 'emergency':
                     continue
                 try:
@@ -236,16 +238,6 @@ class Controller(object):
 
                 except Exception:
                     pass
-            '''
-            while self.emergency:
-                for height, pis in enumerate(self.NetworkController.get_safe_status()):
-                    for pi_number in pis:
-                        if pis[pi_number] == 0:
-                            pis[pi_number]=-1
-                            self.connect.get_pis[height-1][pi_number-1].broken = 0
-                            self.graph.pis = self.connect.get_pis
-                            self.NetworkController.send_All_path(self.graph.find_path())
-            '''
 
     def __make_format(self, path_door_data, path_stair_data):
         result_path = []

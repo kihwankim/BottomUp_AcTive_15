@@ -85,6 +85,7 @@ class NetworkController:
 
     def stop_checking(self):
         self.SendManager.send_All_stop_checking()
+        self.q_to_Main.put('stop checking')
 
     def start_emergency(self):
         self.SendManager.send_All_start_emergency()

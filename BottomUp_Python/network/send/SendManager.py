@@ -39,7 +39,8 @@ class SendManager:
         try:
             self.senders[floor][pi_num].send(message)
         except KeyError:
-            print("[ERROR]존재 하지 않는 파이(%d층 %d번)에게 송신시도." %(floor, pi_num))
+            pass
+            #print("[ERROR]존재 하지 않는 파이(%d층 %d번)에게 송신시도." %(floor, pi_num))
 
     # 연결된 모든 파이에게 메세지 송신
     def send_All(self, message):

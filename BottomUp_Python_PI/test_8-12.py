@@ -23,6 +23,38 @@ RECV_SIZE = 20
 emergency = False
 queue = Queue()
 
+def check_safe():
+    print("check temperature")
+    return check_Temperature()
+
+def show_message(message):
+    lcd_Display_Write_String(message)
+
+def lcd_show_stair(message):
+    print("[DEBUG] lcd show stair", message)
+    lcd_Display_Write_Stair(message)
+
+def lcd_show_notstair(message):
+    print("[DEBUG] lcd show not stair", message)
+    lcd_Display_Write_Direction(message)
+
+def lcd_show_pi_num():
+    showing_message = "Floor  : " + ("%03d"%PI_FLOOR) + "    "
+    showing_message += "Number : " + ("%03d"%PI_NUM) + "    "
+    show_message(showing_message) 
+
+def lcd_show_monitoring():
+    show_message("   monitoring      danger...")
+
+def sigint_handler(signal, frame):
+    show_message("    WARNING!     GO OTHER WAY!!")
+    sys.exit(0)
+
+def check_recv(recv_pi_floor, recv_pi_num):
+    if recv_pi_floor != PI_FLOOR or recv_pi_num != PI_NUM:
+        return False
+    return True
+    
 def encode_message(message):
     byte_message = (message).to_bytes(1, byteorder='big')
     print("[DEBUG] send this", PI_HEADER_BYTES + byte_message)
@@ -39,13 +71,6 @@ def decode_data(data):
     print("[DEBUG] decoded message is", type(message), message)
     return pi_floor, pi_num, message
 
-def start_check(sock):
-    t_send = Thread(target=start_send, args=(sock,))
-    t_send.daemon = True
-    t_send.start()
-    start_recv(sock)
-
-
 def interpret_message(message):
     if type(message) == list:
         if len(message)==4:
@@ -60,15 +85,6 @@ def interpret_message(message):
         return 'emergency'
     print("[DEBUG] can't interpret message", type(message), message)
     return 'cant interpret'
-
-def wait_order(sock):
-    while True:
-        _, _, message = decode_data(sock.recv(RECV_SIZE))
-        print(message, interpret_message(message)) # for debug
-        if interpret_message(message) != 'start checking':
-            continue
-
-        start_check(sock)
 
 def start_recv(sock):
     global emergency
@@ -110,8 +126,9 @@ def start_send(sock):
         while check_safe() and not emergency:
             try:
                 current_status = queue.get_nowait()
+                print('send get from queue :', current_status) 
                 if current_status == 'stop checking':
-                    raise InterruptedError
+                    return
                 elif current_status == 'change emrgency complete':
                     queue.put('change emrgency complete')
             except Exception:
@@ -127,33 +144,27 @@ def start_send(sock):
             if not check_safe():
                 sock.send(encode_message(False))
             sleep(1)
-
-
-    except InterruptedError:
+    except Exception:
         pass
     finally:
         sock.send(encode_message((254)))
 
-def check_recv(recv_pi_floor, recv_pi_num):
-    if recv_pi_floor != PI_FLOOR or recv_pi_num != PI_NUM:
-        return False
-    return True
+def start_check(sock):
+    t_send = Thread(target=start_send, args=(sock,))
+    t_send.daemon = True
+    t_send.start()
+    start_recv(sock)
 
-temp = 1
-def check_safe():
-    print("check temperature")
-    return check_Temperature()
+def wait_order(sock):
+    while True:
+        lcd_show_pi_num()
+        _, _, message = decode_data(sock.recv(RECV_SIZE))
+        print(message, interpret_message(message)) # for debug
+        if interpret_message(message) != 'start checking':
+            continue
 
-def lcd_show_stair(message):
-    print("[DEBUG] lcd show stair", message)
-    lcd_Display_Write_Stair(message)
-
-def lcd_show_notstair(message):
-    print("[DEBUG] lcd show not stair", message)
-    lcd_Display_Write_Direction(message)
-
-def show_message(message):
-    lcd_Display_Write_String(message)
+        lcd_show_monitoring()
+        start_check(sock)
 
 def try_connect(sock):
     pi_floor = 0
@@ -184,10 +195,6 @@ def try_connect(sock):
     sock.close()
     sys.exit(0)
 
-def sigint_handler(signal, frame):
-    show_message("    WARNING!     GO OTHER WAY!!")
-    sys.exit(0)
-
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, sigint_handler)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -198,10 +205,6 @@ if __name__ == '__main__':
         PI_FLOOR, PI_FLOOR_BYTE, PI_NUM, PI_NUM_BYTE = try_connect(sock)
         PI_HEADER_BYTES = PI_FLOOR_BYTE + PI_NUM_BYTE
 
-        showing_message = "Floor  : " + ("%03d"%PI_FLOOR) + "    "
-        showing_message += "Number : " + ("%03d"%PI_NUM) + "    "
-        
-        show_message(showing_message) 
         print("connect success, %d층 %d번." %(PI_FLOOR, PI_NUM))
 
         wait_order(sock)
