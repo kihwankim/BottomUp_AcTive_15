@@ -169,7 +169,6 @@ def wait_order(sock):
         print(message, interpret_message(message)) # for debug
         if interpret_message(message) != 'start checking':
             continue
-
         lcd_show_monitoring()
         start_check(sock)
 
@@ -211,6 +210,10 @@ def try_connect(sock):
             sock.send(pi_floor_byte+pi_num_byte)
 
     sock.close()
+    sys.exit(0)
+
+def sigint_handler(signal, frame):
+    show_message("    WARNING!     GO OTHER WAY!!")
     sys.exit(0)
 
 if __name__ == '__main__':
