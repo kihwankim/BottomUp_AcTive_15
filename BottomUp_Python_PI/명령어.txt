@@ -1,0 +1,2 @@
+﻿cd Desktop/BottomUp_AcTive_15/BottomUp_Python_PI/
+python3.5 test_8-12.py 192.168.0.27 10000

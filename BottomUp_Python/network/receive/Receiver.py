@@ -1,41 +1,73 @@
 import time
+import socket
+from threading import Thread
 class Receiver:
-    def __init__(self, socket, floor, pi_num, status_safes, q_to_Main):
-        self.socket = socket
+    def __init__(self, client_socket, floor, pi_num, status_safes, q_to_Main):
+        self.client_socket = client_socket
+        self.client_ip = client_socket.getpeername()[0]
         self.floor = floor
         self.pi_num = pi_num
+
+        self.client_socket.settimeout(1)
 
         # 네트워크컨트롤러, 모든 Receiver가 공유
         self.status_safes = status_safes # 주소 복사
         self.q_to_Main = q_to_Main # 주소 복사
+        self.alive = 1
 
     def get_pi_info(self):
         return self.floor, self.pi_num
     
     def receive_data(self):
-        data = self.socket.recv(10)
-        if data == b'':
-            raise ConnectionError
-        received_floor = data[0]
-        received_pi_num = data[1]
-        message = data[2]
-        print("received :", received_floor, received_pi_num, message)
-        if received_floor != self.floor or received_pi_num != self.pi_num:
-            return -1, -1, 'pi receive error'
-        elif message < 254:
-            return self.floor, self.pi_num, message
-        elif message == 254:
-            return self.floor, self.pi_num, 'stop checking'
-        elif message == 255:
-            return self.floor, self.pi_num, 'emergency'
-        raise ConnectionError
-    
+        while True:
+            try:
+                if self.alive == 0:
+                    raise ConnectionError
+                data = self.client_socket.recv(10)
+                if data == b'':
+                    raise ConnectionError
+                received_floor = data[0]
+                received_pi_num = data[1]
+                message = data[2]
+                print("received :", received_floor, received_pi_num, message)
+                if received_floor != self.floor or received_pi_num != self.pi_num:
+                    return -1, -1, 'pi receive error'
+                elif message < 254:
+                    return self.floor, self.pi_num, message
+                elif message == 254:
+                    return self.floor, self.pi_num, 'stop checking'
+                elif message == 255:
+                    return self.floor, self.pi_num, 'emergency'
+                raise ConnectionError
+            except socket.timeout:
+                pass
+
     def close(self):
-        self.socket.close()
+        self.client_socket.close()
+
+    def check_alive(self):
+        checking_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        checking_sock.settimeout(3)
+
+        # 0.2초마다 소통하며 생사확인
+        while True:
+            try:
+                time.sleep(0.5)
+                checking_sock.sendto(' '.encode(), (self.client_ip, 10001))
+                checking_sock.recv(5)
+            except socket.timeout:
+                # 2초간 대답이 없으면 끊킨 걸로 간주
+                print('생존신고 타임아웃. 파이 꺼짐')
+                self.alive = 0
+                return
 
     # 주기적으로 수신받아서 self.safes 업데이트 (파이 하나당 스레드 하나로 사용)
     def run(self):
         try:
+            t_check_alive = Thread(target=self.check_alive)
+            t_check_alive.daemon = True
+            t_check_alive.start()
+
             while True:
                 # 첫 수신 처리
                 pi_floor, pi_num, message = self.receive_data()
@@ -66,6 +98,7 @@ class Receiver:
         except OSError:
             pass
         finally:
+            self.alive = 0
             return 'delete this connection'
 
     ##### '' 맞는지 확인필요 #####
