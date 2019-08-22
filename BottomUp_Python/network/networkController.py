@@ -44,7 +44,7 @@ class NetworkController:
         return self.safe_status
 
     # 객체 정보 리셋
-    def reset(self, pi_datas, max_height):
+    def reset(self, pi_datas, stair_datas, max_height):
         del self.safe_status
 
         self.capacity = 0  # 정점(파이) 수용량
@@ -54,6 +54,8 @@ class NetworkController:
         self.safe_status = [0] * (max_height + 1)
         for height in range(1, max_height + 1):
             self.safe_status[height] = {int(pi.piNumber): -1 for pi in pi_datas[height - 1]}
+            # 200+i는 계단의 파이번호
+            self.safe_status[height].update({200-int(stair.doorNumber): -1 for stair in stair_datas[height - 1]})
 
         self.size_connection = 0
         self.SendManager.reset_senders_list(max_height)
