@@ -46,19 +46,23 @@ class Receiver:
         self.client_socket.close()
 
     def check_alive(self):
-        checking_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        checking_sock.settimeout(3)
+        checking_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        checking_sock.settimeout(5)
+        checking_sock.connect((self.client_ip, 10001))
 
         # 0.2초마다 소통하며 생사확인
         while True:
             try:
-                time.sleep(0.5)
-                checking_sock.sendto(' '.encode(), (self.client_ip, 10001))
+                checking_sock.send(' '.encode())
                 checking_sock.recv(5)
+                time.sleep(0.5)
             except socket.timeout:
                 # 2초간 대답이 없으면 끊킨 걸로 간주
                 print('생존신고 타임아웃. 파이 꺼짐')
                 self.alive = 0
+                return
+            except ConnectionAbortedError:
+                # print('인터럽트에 의해 소켓 중단')
                 return
 
     # 주기적으로 수신받아서 self.safes 업데이트 (파이 하나당 스레드 하나로 사용)

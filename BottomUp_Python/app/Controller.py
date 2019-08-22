@@ -130,7 +130,7 @@ class Controller(object):
                                                            self.q_from_Network, IP, PORT, )  # 통신을 담당할 class 생성
                 self.pi_status = self.NetworkController.get_safe_status()  # 주소복사?
             else:
-                self.NetworkController.reset(self.connect.get_pis, self.connect.get_max_height)
+                self.NetworkController.reset(self.connect.get_pis, self.connect.get_stairs, self.connect.get_max_height)
         elif command == 'print status':
             if not self.tables:
                 print("please setting first!!!")
